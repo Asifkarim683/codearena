@@ -38,19 +38,25 @@ public class JudgeService {
             }
 
             // Run against each test case
+            JudgeResult lastResult = null;
             for (int i = 0; i < testCases.size(); i++) {
                 TestCase tc = testCases.get(i);
-                JudgeResult result = runTestCase(
+                lastResult = runTestCase(
                         workDir, language, tc,
                         timeLimitMs, memoryLimitMb);
-                if (result.getVerdict() != Verdict.ACCEPTED) {
-                    return result;
+                if (lastResult.getVerdict() != Verdict.ACCEPTED) {
+                    return lastResult;
                 }
             }
 
-            return JudgeResult.builder()
-                    .verdict(Verdict.ACCEPTED)
-                    .build();
+            return lastResult != null
+                    ? JudgeResult.builder()
+                            .verdict(Verdict.ACCEPTED)
+                            .runtimeMs(lastResult.getRuntimeMs())
+                            .build()
+                    : JudgeResult.builder()
+                            .verdict(Verdict.ACCEPTED)
+                            .build();
 
         } catch (Exception e) {
             return JudgeResult.builder()
@@ -109,26 +115,51 @@ public class JudgeService {
             int timeLimitMs,
             int memoryLimitMb) {
         try {
-            ProcessBuilder pb = buildRunCommand(
-                    workDir, language);
+            ProcessBuilder pb = buildRunCommand(workDir, language);
             pb.directory(workDir.toFile());
-            pb.redirectErrorStream(false);
 
             long startTime = System.currentTimeMillis();
             Process process = pb.start();
 
-            // Send input to process
+            // Send input to process stdin
             try (OutputStream stdin = process.getOutputStream()) {
-                stdin.write(testCase.getInput()
-                        .getBytes());
+                stdin.write(testCase.getInput().getBytes());
                 stdin.flush();
             }
+
+            // Read output and error streams in parallel
+            // to prevent blocking
+            final StringBuilder output = new StringBuilder();
+            final StringBuilder error = new StringBuilder();
+
+            Thread outputThread = new Thread(() -> {
+                try {
+                    output.append(new String(
+                            process.getInputStream()
+                                    .readAllBytes()));
+                } catch (Exception ignored) {
+                }
+            });
+
+            Thread errorThread = new Thread(() -> {
+                try {
+                    error.append(new String(
+                            process.getErrorStream()
+                                    .readAllBytes()));
+                } catch (Exception ignored) {
+                }
+            });
+
+            outputThread.start();
+            errorThread.start();
 
             // Wait with time limit
             boolean finished = process.waitFor(
                     timeLimitMs, TimeUnit.MILLISECONDS);
-            long runtimeMs = System.currentTimeMillis()
-                    - startTime;
+            long runtimeMs = System.currentTimeMillis() - startTime;
+
+            outputThread.join(1000);
+            errorThread.join(1000);
 
             if (!finished) {
                 process.destroyForcibly();
@@ -138,22 +169,15 @@ public class JudgeService {
                         .build();
             }
 
-            // Check for runtime error
             if (process.exitValue() != 0) {
-                String error = new String(
-                        process.getErrorStream()
-                                .readAllBytes());
                 return JudgeResult.builder()
                         .verdict(Verdict.RUNTIME_ERROR)
                         .runtimeMs((int) runtimeMs)
-                        .errorMessage(error)
+                        .errorMessage(error.toString())
                         .build();
             }
 
-            // Get output
-            String actualOutput = new String(
-                    process.getInputStream().readAllBytes())
-                    .trim();
+            String actualOutput = output.toString().trim();
             String expectedOutput = testCase
                     .getExpectedOutput().trim();
 
