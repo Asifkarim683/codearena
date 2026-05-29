@@ -37,6 +37,8 @@ public class SecurityConfig {
             "/api/v1/problems/**",
             "/api/v1/leaderboard",
             "/api/v1/users/**",
+            "/api/v1/contests",
+            "/api/v1/contests/**",
             "/actuator/**",
             "/swagger-ui/**",
             "/v3/api-docs/**"
