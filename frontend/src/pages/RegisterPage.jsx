@@ -26,7 +26,7 @@ export default function RegisterPage() {
         try {
             await register(username, email, password)
             toast.success('Account created successfully!')
-            navigate('/')
+            navigate('/problems')
         } catch (error) {
             toast.error(
                 error.response?.data?.message || 'Registration failed')
@@ -41,8 +41,10 @@ export default function RegisterPage() {
 
                 {/* Logo */}
                 <div style={styles.logo}>
-                    <Code2 size={40} color="#3b82f6" />
-                    <h1 style={styles.logoText}>CodeArena</h1>
+                    <div style={styles.logoIcon}>
+                        <Code2 size={22} color="#3b82f6" />
+                    </div>
+                    <span style={styles.logoText}>CodeArena</span>
                 </div>
 
                 <h2 style={styles.title}>Create Account</h2>
@@ -56,7 +58,7 @@ export default function RegisterPage() {
                     <div style={styles.inputGroup}>
                         <label style={styles.label}>Username</label>
                         <div style={styles.inputWrapper}>
-                            <User size={18} color="#64748b"
+                            <User size={18} color="#6b7280"
                                 style={styles.icon} />
                             <input
                                 type="text"
@@ -72,7 +74,7 @@ export default function RegisterPage() {
                     <div style={styles.inputGroup}>
                         <label style={styles.label}>Email</label>
                         <div style={styles.inputWrapper}>
-                            <Mail size={18} color="#64748b"
+                            <Mail size={18} color="#6b7280"
                                 style={styles.icon} />
                             <input
                                 type="email"
@@ -88,16 +90,39 @@ export default function RegisterPage() {
                     <div style={styles.inputGroup}>
                         <label style={styles.label}>Password</label>
                         <div style={styles.inputWrapper}>
-                            <Lock size={18} color="#64748b"
+                            <Lock size={18} color="#6b7280"
                                 style={styles.icon} />
                             <input
                                 type="password"
-                                placeholder="Min 8 characters"
+                                placeholder="Minimum 8 characters"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 style={styles.input}
                             />
                         </div>
+                        {password.length > 0 && (
+                            <div style={styles.passwordStrength}>
+                                <div style={{
+                                    ...styles.strengthBar,
+                                    width: password.length >= 12 ? '100%'
+                                        : password.length >= 8 ? '66%' : '33%',
+                                    background: password.length >= 12
+                                        ? '#10b981'
+                                        : password.length >= 8
+                                            ? '#f59e0b' : '#ef4444'
+                                }} />
+                                <span style={{
+                                    ...styles.strengthText,
+                                    color: password.length >= 12 ? '#10b981'
+                                        : password.length >= 8
+                                            ? '#f59e0b' : '#ef4444'
+                                }}>
+                                    {password.length >= 12 ? 'Strong'
+                                        : password.length >= 8
+                                            ? 'Good' : 'Weak'}
+                                </span>
+                            </div>
+                        )}
                     </div>
 
                     {/* Submit Button */}
@@ -109,20 +134,24 @@ export default function RegisterPage() {
                             opacity: loading ? 0.7 : 1
                         }}>
                         {loading ? 'Creating account...' : (
-                            <>
-                                <UserPlus size={18} />
-                                Create Account
-                            </>
+                            <><UserPlus size={18} /> Create Account</>
                         )}
                     </button>
                 </form>
 
-                <p style={styles.footer}>
-                    Already have an account?{' '}
-                    <Link to="/login" style={styles.link}>
-                        Login here
-                    </Link>
-                </p>
+                {/* Divider */}
+                <div style={styles.divider}>
+                    <div style={styles.dividerLine} />
+                    <span style={styles.dividerText}>
+                        Already have an account?
+                    </span>
+                    <div style={styles.dividerLine} />
+                </div>
+
+                <Link to="/login" style={styles.loginBtn}>
+                    Sign In Instead
+                </Link>
+
             </div>
         </div>
     )
@@ -134,42 +163,53 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+        background: 'radial-gradient(ellipse at top, #1a2235 0%, #0a0e1a 70%)',
         padding: '20px',
     },
     card: {
-        background: '#1e293b',
-        borderRadius: '16px',
-        padding: '40px',
+        background: '#111827',
+        borderRadius: '20px',
+        padding: '48px 40px',
         width: '100%',
-        maxWidth: '420px',
-        border: '1px solid #334155',
-        boxShadow: '0 25px 50px rgba(0,0,0,0.5)',
+        maxWidth: '440px',
+        border: '1px solid #1e2d45',
+        boxShadow: '0 25px 60px rgba(0,0,0,0.6)',
     },
     logo: {
         display: 'flex',
         alignItems: 'center',
-        gap: '12px',
-        marginBottom: '24px',
+        gap: '10px',
+        marginBottom: '32px',
+        justifyContent: 'center',
+    },
+    logoIcon: {
+        width: '40px',
+        height: '40px',
+        background: 'rgba(59, 130, 246, 0.1)',
+        border: '1px solid rgba(59, 130, 246, 0.2)',
+        borderRadius: '12px',
+        display: 'flex',
+        alignItems: 'center',
         justifyContent: 'center',
     },
     logoText: {
-        fontSize: '28px',
-        fontWeight: '700',
-        color: '#f1f5f9',
+        fontSize: '26px',
+        fontWeight: '800',
+        color: '#f9fafb',
+        letterSpacing: '-0.5px',
     },
     title: {
-        fontSize: '22px',
-        fontWeight: '600',
-        color: '#f1f5f9',
+        fontSize: '24px',
+        fontWeight: '700',
+        color: '#f9fafb',
         textAlign: 'center',
         marginBottom: '8px',
     },
     subtitle: {
         fontSize: '14px',
-        color: '#64748b',
+        color: '#6b7280',
         textAlign: 'center',
-        marginBottom: '32px',
+        marginBottom: '36px',
     },
     form: {
         display: 'flex',
@@ -182,9 +222,11 @@ const styles = {
         gap: '8px',
     },
     label: {
-        fontSize: '14px',
-        fontWeight: '500',
-        color: '#94a3b8',
+        fontSize: '13px',
+        fontWeight: '600',
+        color: '#9ca3af',
+        textTransform: 'uppercase',
+        letterSpacing: '0.5px',
     },
     inputWrapper: {
         position: 'relative',
@@ -194,38 +236,80 @@ const styles = {
     icon: {
         position: 'absolute',
         left: '14px',
+        pointerEvents: 'none',
     },
     input: {
         width: '100%',
-        padding: '12px 14px 12px 42px',
-        background: '#0f172a',
-        border: '1px solid #334155',
-        borderRadius: '8px',
-        color: '#f1f5f9',
+        padding: '13px 14px 13px 44px',
+        background: '#0a0e1a',
+        border: '1px solid #1e2d45',
+        borderRadius: '10px',
+        color: '#f9fafb',
         fontSize: '14px',
+        transition: 'border-color 0.2s',
+    },
+    passwordStrength: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+        marginTop: '8px',
+    },
+    strengthBar: {
+        height: '4px',
+        borderRadius: '2px',
+        flex: 1,
+        transition: 'all 0.3s ease',
+        background: '#ef4444',
+    },
+    strengthText: {
+        fontSize: '12px',
+        fontWeight: '600',
+        minWidth: '40px',
     },
     button: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         gap: '8px',
-        padding: '13px',
-        background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+        padding: '14px',
+        background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
         color: 'white',
         border: 'none',
-        borderRadius: '8px',
+        borderRadius: '10px',
         fontSize: '15px',
-        fontWeight: '600',
+        fontWeight: '700',
         marginTop: '8px',
+        boxShadow: '0 4px 15px rgba(59, 130, 246, 0.3)',
+        transition: 'all 0.2s',
     },
-    footer: {
-        textAlign: 'center',
-        marginTop: '24px',
+    divider: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        margin: '24px 0 16px',
+    },
+    dividerLine: {
+        flex: 1,
+        height: '1px',
+        background: '#1e2d45',
+    },
+    dividerText: {
+        fontSize: '13px',
+        color: '#6b7280',
+        whiteSpace: 'nowrap',
+    },
+    loginBtn: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '13px',
+        background: 'transparent',
+        border: '1px solid #1e2d45',
+        borderRadius: '10px',
         fontSize: '14px',
-        color: '#64748b',
-    },
-    link: {
-        color: '#3b82f6',
-        fontWeight: '500',
+        fontWeight: '600',
+        color: '#9ca3af',
+        transition: 'all 0.2s',
+        textDecoration: 'none',
     },
 }
