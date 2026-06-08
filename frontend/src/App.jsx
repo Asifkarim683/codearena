@@ -1,30 +1,40 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
+import Navbar from './components/Navbar'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import ProblemListPage from './pages/ProblemListPage'
 
-// Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { isLoggedIn } = useAuth()
   return isLoggedIn ? children : <Navigate to="/login" />
 }
 
-// Admin Route Component
 const AdminRoute = ({ children }) => {
   const { isLoggedIn, isAdmin } = useAuth()
   if (!isLoggedIn) return <Navigate to="/login" />
-  if (!isAdmin) return <Navigate to="/" />
+  if (!isAdmin) return <Navigate to="/problems" />
   return children
 }
+
+const Layout = ({ children }) => (
+  <>
+    <Navbar />
+    <main>{children}</main>
+  </>
+)
 
 function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/" element={
+      <Route path="/" element={<Navigate to="/problems" />} />
+      <Route path="/problems" element={
         <ProtectedRoute>
-          <div>Home Page - Coming Soon</div>
+          <Layout>
+            <ProblemListPage />
+          </Layout>
         </ProtectedRoute>
       } />
     </Routes>
