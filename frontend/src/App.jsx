@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import ProblemListPage from './pages/ProblemListPage'
+import ProblemDetailPage from './pages/ProblemDetailPage'
 
 const ProtectedRoute = ({ children }) => {
   const { isLoggedIn } = useAuth()
@@ -34,6 +35,13 @@ function App() {
         <ProtectedRoute>
           <Layout>
             <ProblemListPage />
+          </Layout>
+        </ProtectedRoute>
+      } />
+      <Route path="/problems/:id" element={
+        <ProtectedRoute>
+          <Layout>
+            <ProblemDetailPage />
           </Layout>
         </ProtectedRoute>
       } />

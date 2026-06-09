@@ -23,8 +23,10 @@ export default function LoginPage() {
             toast.success('Welcome back!')
             navigate('/')
         } catch (error) {
-            toast.error(
-                error.response?.data?.message || 'Login failed')
+            const message = error.response?.data?.message
+                || error.response?.data?.error
+                || 'Invalid email or password'
+            toast.error(message)
         } finally {
             setLoading(false)
         }
