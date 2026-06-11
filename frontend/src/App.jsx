@@ -9,6 +9,8 @@ import ProfilePage from './pages/ProfilePage'
 import LeaderboardPage from './pages/LeaderboardPage'
 import AdminPage from './pages/AdminPage'
 import CreateProblemPage from './pages/CreateProblemPage'
+import ContestListPage from './pages/ContestListPage'
+import ContestDetailPage from './pages/ContestDetailPage'
 
 const ProtectedRoute = ({ children }) => {
   const { isLoggedIn } = useAuth()
@@ -64,6 +66,16 @@ function App() {
         <AdminRoute>
           <Layout><CreateProblemPage /></Layout>
         </AdminRoute>
+      } />
+      <Route path="/contests" element={
+        <ProtectedRoute>
+          <Layout><ContestListPage /></Layout>
+        </ProtectedRoute>
+      } />
+      <Route path="/contests/:id" element={
+        <ProtectedRoute>
+          <Layout><ContestDetailPage /></Layout>
+        </ProtectedRoute>
       } />
     </Routes>
   )

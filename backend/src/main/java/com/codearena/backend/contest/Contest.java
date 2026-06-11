@@ -35,8 +35,8 @@ public class Contest {
     @Column(nullable = false)
     private LocalDateTime endTime;
 
-    @Column(nullable = false)
-    private boolean isActive;
+    @Column(name = "is_active", nullable = false)
+    private boolean active;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
@@ -58,7 +58,7 @@ public class Contest {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
-        isActive = true;
+        active = true;
     }
 
     public ContestStatus getStatus() {

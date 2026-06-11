@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { adminService } from '../services/adminService'
 import { problemService } from '../services/problemService'
+import { contestService } from '../services/contestService'
 import toast from 'react-hot-toast'
 import {
     Users, Code2, BarChart2, Shield,
     CheckCircle2, XCircle, Clock, AlertCircle,
     ChevronLeft, ChevronRight, Loader2,
     UserCheck, UserX, Crown, Plus, Trash2,
-    LayoutDashboard, FileText, Settings
+    LayoutDashboard, FileText, Settings,
+    Trophy, X, Calendar
 } from 'lucide-react'
 
 export default function AdminPage() {
@@ -17,7 +19,17 @@ export default function AdminPage() {
     const [users, setUsers] = useState([])
     const [submissions, setSubmissions] = useState([])
     const [problems, setProblems] = useState([])
+    const [contests, setContests] = useState([])
+    const [showContestModal, setShowContestModal] = useState(false)
+    const [creatingContest, setCreatingContest] = useState(false)
     const [loading, setLoading] = useState(true)
+
+    // New contest form fields
+    const [contestTitle, setContestTitle] = useState('')
+    const [contestDesc, setContestDesc] = useState('')
+    const [contestStart, setContestStart] = useState('')
+    const [contestEnd, setContestEnd] = useState('')
+    const [selectedProblemIds, setSelectedProblemIds] = useState([])
     const [userPage, setUserPage] = useState(0)
     const [subPage, setSubPage] = useState(0)
     const [totalUserPages, setTotalUserPages] = useState(0)
@@ -37,6 +49,13 @@ export default function AdminPage() {
 
     useEffect(() => {
         if (activeTab === 'problems') fetchProblems()
+    }, [activeTab])
+
+    useEffect(() => {
+        if (activeTab === 'contests') {
+            fetchContests()
+            fetchProblems()
+        }
     }, [activeTab])
 
     const fetchStats = async () => {
@@ -86,6 +105,87 @@ export default function AdminPage() {
             toast.error('Failed to load problems')
         } finally {
             setLoading(false)
+        }
+    }
+
+    const fetchContests = async () => {
+        setLoading(true)
+        try {
+            const res = await contestService.getContests()
+            setContests(res.data || [])
+        } catch (error) {
+            toast.error('Failed to load contests')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const toggleProblemSelection = (problemId) => {
+        setSelectedProblemIds(prev =>
+            prev.includes(problemId)
+                ? prev.filter(id => id !== problemId)
+                : [...prev, problemId]
+        )
+    }
+
+    const resetContestForm = () => {
+        setContestTitle('')
+        setContestDesc('')
+        setContestStart('')
+        setContestEnd('')
+        setSelectedProblemIds([])
+    }
+
+    const handleCreateContest = async () => {
+        if (!contestTitle.trim()) {
+            toast.error('Contest title is required')
+            return
+        }
+        if (!contestDesc.trim()) {
+            toast.error('Description is required')
+            return
+        }
+        if (!contestStart || !contestEnd) {
+            toast.error('Start and end time are required')
+            return
+        }
+        if (new Date(contestEnd) <= new Date(contestStart)) {
+            toast.error('End time must be after start time')
+            return
+        }
+        if (selectedProblemIds.length === 0) {
+            toast.error('Select at least one problem')
+            return
+        }
+
+        setCreatingContest(true)
+        try {
+            await contestService.createContest({
+                title: contestTitle.trim(),
+                description: contestDesc.trim(),
+                startTime: new Date(contestStart).toISOString(),
+                endTime: new Date(contestEnd).toISOString(),
+                problemIds: selectedProblemIds,
+            })
+            toast.success('Contest created successfully!')
+            setShowContestModal(false)
+            resetContestForm()
+            fetchContests()
+        } catch (error) {
+            toast.error(
+                error.response?.data?.message || 'Failed to create contest')
+        } finally {
+            setCreatingContest(false)
+        }
+    }
+
+    const handleDeleteContest = async (id) => {
+        try {
+            await contestService.deleteContest(id)
+            toast.success('Contest deleted')
+            fetchContests()
+        } catch (error) {
+            toast.error('Failed to delete contest')
         }
     }
 
@@ -160,6 +260,7 @@ export default function AdminPage() {
         { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
         { id: 'users', label: 'Users', icon: Users },
         { id: 'problems', label: 'Problems', icon: Code2 },
+        { id: 'contests', label: 'Contests', icon: Trophy },
         { id: 'submissions', label: 'Submissions', icon: FileText },
     ]
 
@@ -554,6 +655,114 @@ export default function AdminPage() {
                     </div>
                 )}
 
+                {/* ── CONTESTS ── */}
+                {activeTab === 'contests' && (
+                    <div style={styles.content}>
+                        <div style={styles.contentHeader}>
+                            <div>
+                                <h1 style={styles.pageTitle}>Contests</h1>
+                                <p style={styles.pageSubtitle}>
+                                    Manage coding contests
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => setShowContestModal(true)}
+                                style={styles.createBtn}>
+                                <Plus size={16} />
+                                Create Contest
+                            </button>
+                        </div>
+
+                        <div style={styles.tableCard}>
+                            {loading ? (
+                                <div style={styles.loadingDiv}>
+                                    <Loader2 size={32} color="#3b82f6"
+                                        style={{
+                                            animation: 'spin 1s linear infinite'
+                                        }} />
+                                </div>
+                            ) : contests.length === 0 ? (
+                                <div style={styles.empty}>
+                                    <Trophy size={48} color="#374151" />
+                                    <p style={styles.emptyText}>
+                                        No contests yet
+                                    </p>
+                                </div>
+                            ) : (
+                                <table style={styles.table}>
+                                    <thead>
+                                        <tr>
+                                            <th style={styles.th}>Title</th>
+                                            <th style={styles.th}>Status</th>
+                                            <th style={styles.th}>Start Time</th>
+                                            <th style={styles.th}>End Time</th>
+                                            <th style={styles.th}>Problems</th>
+                                            <th style={styles.th}>Participants</th>
+                                            <th style={styles.th}>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {contests.map(contest => (
+                                            <tr key={contest.id} style={styles.row}>
+                                                <td style={styles.td}>
+                                                    <Link
+                                                        to={`/contests/${contest.id}`}
+                                                        style={styles.problemLink}>
+                                                        {contest.title}
+                                                    </Link>
+                                                </td>
+                                                <td style={styles.td}>
+                                                    <span style={{
+                                                        ...styles.statusBadge,
+                                                        ...(contest.status === 'ONGOING'
+                                                            ? { color: '#10b981', background: 'rgba(16,185,129,0.1)' }
+                                                            : contest.status === 'UPCOMING'
+                                                                ? { color: '#3b82f6', background: 'rgba(59,130,246,0.1)' }
+                                                                : { color: '#6b7280', background: 'rgba(107,114,128,0.1)' })
+                                                    }}>
+                                                        {contest.status}
+                                                    </span>
+                                                </td>
+                                                <td style={styles.td}>
+                                                    <span style={styles.date}>
+                                                        {formatDate(contest.startTime)}
+                                                    </span>
+                                                </td>
+                                                <td style={styles.td}>
+                                                    <span style={styles.date}>
+                                                        {formatDate(contest.endTime)}
+                                                    </span>
+                                                </td>
+                                                <td style={styles.td}>
+                                                    <span style={styles.date}>
+                                                        {contest.totalProblems}
+                                                    </span>
+                                                </td>
+                                                <td style={styles.td}>
+                                                    <span style={styles.date}>
+                                                        {contest.totalParticipants}
+                                                    </span>
+                                                </td>
+                                                <td style={styles.td}>
+                                                    <div style={styles.actions}>
+                                                        <button
+                                                            onClick={() =>
+                                                                handleDeleteContest(contest.id)}
+                                                            style={styles.dangerBtn}
+                                                            title="Delete contest">
+                                                            <Trash2 size={14} />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
+                        </div>
+                    </div>
+                )}
+
                 {/* ── SUBMISSIONS ── */}
                 {activeTab === 'submissions' && (
                     <div style={styles.content}>
@@ -677,6 +886,155 @@ export default function AdminPage() {
                     </div>
                 )}
             </div>
+
+            {/* ── CREATE CONTEST MODAL ── */}
+            {showContestModal && (
+                <div style={styles.modalOverlay}
+                    onClick={() => setShowContestModal(false)}>
+                    <div style={styles.modal}
+                        onClick={(e) => e.stopPropagation()}>
+
+                        <div style={styles.modalHeader}>
+                            <h2 style={styles.modalTitle}>
+                                <Trophy size={18} color="#f59e0b" />
+                                Create New Contest
+                            </h2>
+                            <button
+                                onClick={() => setShowContestModal(false)}
+                                style={styles.modalCloseBtn}>
+                                <X size={18} />
+                            </button>
+                        </div>
+
+                        <div style={styles.modalBody}>
+
+                            {/* Title */}
+                            <div style={styles.formGroup}>
+                                <label style={styles.label}>
+                                    Contest Title <span style={styles.required}>*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder="e.g. Weekly Contest 5"
+                                    value={contestTitle}
+                                    onChange={(e) => setContestTitle(e.target.value)}
+                                    style={styles.input}
+                                />
+                            </div>
+
+                            {/* Description */}
+                            <div style={styles.formGroup}>
+                                <label style={styles.label}>
+                                    Description <span style={styles.required}>*</span>
+                                </label>
+                                <textarea
+                                    placeholder="Brief description of the contest..."
+                                    value={contestDesc}
+                                    onChange={(e) => setContestDesc(e.target.value)}
+                                    style={{ ...styles.textarea, minHeight: '80px' }}
+                                />
+                            </div>
+
+                            {/* Time Range */}
+                            <div style={styles.timeGrid}>
+                                <div style={styles.formGroup}>
+                                    <label style={styles.label}>
+                                        Start Time <span style={styles.required}>*</span>
+                                    </label>
+                                    <input
+                                        type="datetime-local"
+                                        value={contestStart}
+                                        onChange={(e) => setContestStart(e.target.value)}
+                                        style={styles.input}
+                                    />
+                                </div>
+                                <div style={styles.formGroup}>
+                                    <label style={styles.label}>
+                                        End Time <span style={styles.required}>*</span>
+                                    </label>
+                                    <input
+                                        type="datetime-local"
+                                        value={contestEnd}
+                                        onChange={(e) => setContestEnd(e.target.value)}
+                                        style={styles.input}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Problem Selection */}
+                            <div style={styles.formGroup}>
+                                <label style={styles.label}>
+                                    Select Problems <span style={styles.required}>*</span>
+                                </label>
+                                <p style={styles.hint}>
+                                    {selectedProblemIds.length} problem(s) selected
+                                </p>
+                                <div style={styles.problemSelectList}>
+                                    {problems.length === 0 ? (
+                                        <p style={{
+                                            color: '#6b7280',
+                                            fontSize: '13px',
+                                            padding: '12px'
+                                        }}>
+                                            No problems available. Create a problem first.
+                                        </p>
+                                    ) : (
+                                        problems.map(p => (
+                                            <label
+                                                key={p.id}
+                                                style={{
+                                                    ...styles.problemCheckRow,
+                                                    ...(selectedProblemIds.includes(p.id)
+                                                        ? styles.problemCheckRowActive : {})
+                                                }}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedProblemIds.includes(p.id)}
+                                                    onChange={() =>
+                                                        toggleProblemSelection(p.id)}
+                                                    style={{ marginRight: '10px' }}
+                                                />
+                                                <span style={styles.problemCheckTitle}>
+                                                    {p.title}
+                                                </span>
+                                                <span style={{
+                                                    ...styles.diffBadge,
+                                                    color: getDiffStyle(p.difficulty).color,
+                                                    background: getDiffStyle(p.difficulty).bg,
+                                                }}>
+                                                    {p.difficulty}
+                                                </span>
+                                            </label>
+                                        ))
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style={styles.modalFooter}>
+                            <button
+                                onClick={() => {
+                                    setShowContestModal(false)
+                                    resetContestForm()
+                                }}
+                                style={styles.cancelBtn}>
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleCreateContest}
+                                disabled={creatingContest}
+                                style={{
+                                    ...styles.confirmBtn,
+                                    opacity: creatingContest ? 0.7 : 1
+                                }}>
+                                <Trophy size={15} />
+                                {creatingContest
+                                    ? 'Creating...' : 'Create Contest'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
@@ -1101,5 +1459,165 @@ const styles = {
     pageInfo: {
         fontSize: '14px',
         color: '#6b7280',
+    },
+    // Contest Modal
+    modalOverlay: {
+        position: 'fixed',
+        inset: 0,
+        background: 'rgba(0,0,0,0.6)',
+        backdropFilter: 'blur(4px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000,
+        padding: '20px',
+    },
+    modal: {
+        background: '#111827',
+        border: '1px solid #1e2d45',
+        borderRadius: '16px',
+        width: '100%',
+        maxWidth: '560px',
+        maxHeight: '85vh',
+        display: 'flex',
+        flexDirection: 'column',
+        boxShadow: '0 24px 60px rgba(0,0,0,0.5)',
+    },
+    modalHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '20px 24px',
+        borderBottom: '1px solid #1e2d45',
+    },
+    modalTitle: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        fontSize: '16px',
+        fontWeight: '700',
+        color: '#f9fafb',
+    },
+    modalCloseBtn: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '32px',
+        height: '32px',
+        background: '#0f172a',
+        border: '1px solid #1e2d45',
+        borderRadius: '8px',
+        color: '#9ca3af',
+        cursor: 'pointer',
+    },
+    modalBody: {
+        padding: '20px 24px',
+        overflowY: 'auto',
+        flex: 1,
+    },
+    modalFooter: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        gap: '12px',
+        padding: '16px 24px',
+        borderTop: '1px solid #1e2d45',
+    },
+    timeGrid: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '16px',
+    },
+    problemSelectList: {
+        maxHeight: '220px',
+        overflowY: 'auto',
+        border: '1px solid #1e2d45',
+        borderRadius: '10px',
+        background: '#0f172a',
+    },
+    problemCheckRow: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: '10px 14px',
+        borderBottom: '1px solid #1e2d45',
+        cursor: 'pointer',
+        transition: 'background 0.15s',
+    },
+    problemCheckRowActive: {
+        background: 'rgba(59,130,246,0.08)',
+    },
+    problemCheckTitle: {
+        flex: 1,
+        fontSize: '13px',
+        color: '#f9fafb',
+        fontWeight: '500',
+    },
+    cancelBtn: {
+        padding: '10px 20px',
+        background: 'transparent',
+        border: '1px solid #1e2d45',
+        borderRadius: '10px',
+        color: '#9ca3af',
+        fontSize: '14px',
+        fontWeight: '600',
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+    },
+    confirmBtn: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        padding: '10px 22px',
+        background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+        border: 'none',
+        borderRadius: '10px',
+        color: 'white',
+        fontSize: '14px',
+        fontWeight: '700',
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+        boxShadow: '0 4px 12px rgba(245,158,11,0.3)',
+    },
+    formGroup: {
+        marginBottom: '18px',
+    },
+    label: {
+        display: 'block',
+        fontSize: '12px',
+        fontWeight: '700',
+        color: '#9ca3af',
+        textTransform: 'uppercase',
+        letterSpacing: '0.5px',
+        marginBottom: '6px',
+    },
+    required: {
+        color: '#ef4444',
+    },
+    hint: {
+        fontSize: '12px',
+        color: '#4b5563',
+        marginBottom: '8px',
+    },
+    input: {
+        width: '100%',
+        padding: '10px 14px',
+        background: '#0f172a',
+        border: '1px solid #1e2d45',
+        borderRadius: '8px',
+        color: '#f9fafb',
+        fontSize: '14px',
+        fontFamily: 'inherit',
+        boxSizing: 'border-box',
+    },
+    textarea: {
+        width: '100%',
+        padding: '10px 14px',
+        background: '#0f172a',
+        border: '1px solid #1e2d45',
+        borderRadius: '8px',
+        color: '#f9fafb',
+        fontSize: '14px',
+        fontFamily: 'inherit',
+        resize: 'vertical',
+        boxSizing: 'border-box',
     },
 }
