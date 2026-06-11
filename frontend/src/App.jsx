@@ -5,6 +5,10 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import ProblemListPage from './pages/ProblemListPage'
 import ProblemDetailPage from './pages/ProblemDetailPage'
+import ProfilePage from './pages/ProfilePage'
+import LeaderboardPage from './pages/LeaderboardPage'
+import AdminPage from './pages/AdminPage'
+import CreateProblemPage from './pages/CreateProblemPage'
 
 const ProtectedRoute = ({ children }) => {
   const { isLoggedIn } = useAuth()
@@ -33,17 +37,33 @@ function App() {
       <Route path="/" element={<Navigate to="/problems" />} />
       <Route path="/problems" element={
         <ProtectedRoute>
-          <Layout>
-            <ProblemListPage />
-          </Layout>
+          <Layout><ProblemListPage /></Layout>
         </ProtectedRoute>
       } />
       <Route path="/problems/:id" element={
         <ProtectedRoute>
-          <Layout>
-            <ProblemDetailPage />
-          </Layout>
+          <Layout><ProblemDetailPage /></Layout>
         </ProtectedRoute>
+      } />
+      <Route path="/profile/:username" element={
+        <ProtectedRoute>
+          <Layout><ProfilePage /></Layout>
+        </ProtectedRoute>
+      } />
+      <Route path="/leaderboard" element={
+        <ProtectedRoute>
+          <Layout><LeaderboardPage /></Layout>
+        </ProtectedRoute>
+      } />
+      <Route path="/admin" element={
+        <AdminRoute>
+          <Layout><AdminPage /></Layout>
+        </AdminRoute>
+      } />
+      <Route path="/admin/problems/create" element={
+        <AdminRoute>
+          <Layout><CreateProblemPage /></Layout>
+        </AdminRoute>
       } />
     </Routes>
   )

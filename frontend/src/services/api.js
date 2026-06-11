@@ -20,10 +20,16 @@ api.interceptors.request.use(
 );
 
 // Handle 401 errors globally
+// BUT skip redirect if we are on the login page
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401) {
+        const isLoginRequest = error.config?.url?.includes('/auth/login')
+        const isRegisterRequest = error.config?.url?.includes('/auth/register')
+
+        if (error.response?.status === 401
+            && !isLoginRequest
+            && !isRegisterRequest) {
             localStorage.removeItem('accessToken');
             localStorage.removeItem('user');
             window.location.href = '/login';
