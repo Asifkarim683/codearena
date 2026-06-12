@@ -11,6 +11,7 @@ import AdminPage from './pages/AdminPage'
 import CreateProblemPage from './pages/CreateProblemPage'
 import ContestListPage from './pages/ContestListPage'
 import ContestDetailPage from './pages/ContestDetailPage'
+import SettingsPage from './pages/SettingsPage'
 
 const ProtectedRoute = ({ children }) => {
   const { isLoggedIn } = useAuth()
@@ -75,6 +76,11 @@ function App() {
       <Route path="/contests/:id" element={
         <ProtectedRoute>
           <Layout><ContestDetailPage /></Layout>
+        </ProtectedRoute>
+      } />
+      <Route path="/settings" element={
+        <ProtectedRoute>
+          <Layout><SettingsPage /></Layout>
         </ProtectedRoute>
       } />
     </Routes>

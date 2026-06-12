@@ -4,7 +4,8 @@ import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 import {
     Code2, LayoutDashboard, Trophy, Users,
-    LogOut, User, ChevronDown, Shield, Menu, X
+    LogOut, User, ChevronDown, Shield, Menu, X,
+    Settings
 } from 'lucide-react'
 import './Navbar.css'
 
@@ -113,6 +114,13 @@ export default function Navbar() {
                                         <User size={15} />
                                         My Profile
                                     </Link>
+                                    <Link
+                                        to="/settings"
+                                        className="navbar-dropdown-item"
+                                        onClick={() => setDropdownOpen(false)}>
+                                        <Settings size={15} />
+                                        Settings
+                                    </Link>
                                     {isAdmin && (
                                         <Link
                                             to="/admin"
@@ -204,6 +212,13 @@ export default function Navbar() {
                             onClick={() => setMobileOpen(false)}>
                             <User size={18} />
                             My Profile
+                        </Link>
+                        <Link
+                            to="/settings"
+                            className="navbar-mobile-link"
+                            onClick={() => setMobileOpen(false)}>
+                            <Settings size={18} />
+                            Settings
                         </Link>
                         <button
                             onClick={handleLogout}
