@@ -11,6 +11,7 @@ import {
     ArrowLeft, Loader2, Target, Zap,
     BarChart2, Award, Hash
 } from 'lucide-react'
+import './ProfilePage.css'
 
 export default function ProfilePage() {
     const { username } = useParams()
@@ -98,17 +99,17 @@ export default function ProfilePage() {
     const getVerdictStyle = (verdict) => {
         switch (verdict) {
             case 'ACCEPTED':
-                return { color: '#10b981', bg: '#10b98118', icon: CheckCircle2 }
+                return { color: '#10b981', bg: 'rgba(16, 185, 129, 0.08)', icon: CheckCircle2 }
             case 'WRONG_ANSWER':
-                return { color: '#ef4444', bg: '#ef444418', icon: XCircle }
+                return { color: '#ef4444', bg: 'rgba(239, 68, 68, 0.08)', icon: XCircle }
             case 'TIME_LIMIT_EXCEEDED':
-                return { color: '#f59e0b', bg: '#f59e0b18', icon: Clock }
+                return { color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.08)', icon: Clock }
             case 'COMPILATION_ERROR':
-                return { color: '#6366f1', bg: '#6366f118', icon: AlertCircle }
+                return { color: '#6366f1', bg: 'rgba(99, 102, 241, 0.08)', icon: AlertCircle }
             case 'RUNTIME_ERROR':
-                return { color: '#f97316', bg: '#f9731618', icon: AlertCircle }
+                return { color: '#f97316', bg: 'rgba(249, 115, 22, 0.08)', icon: AlertCircle }
             default:
-                return { color: '#6b7280', bg: '#6b728018', icon: AlertCircle }
+                return { color: '#64748b', bg: 'rgba(100, 116, 139, 0.08)', icon: AlertCircle }
         }
     }
 
@@ -153,66 +154,71 @@ export default function ProfilePage() {
     const isOwnProfile = currentUser?.username === username
 
     if (loading) return (
-        <div style={styles.loadingContainer}>
+        <div className="profile-loading">
             <Loader2 size={40} color="#3b82f6"
                 style={{ animation: 'spin 1s linear infinite' }} />
-            <p style={{ color: '#6b7280', marginTop: '16px' }}>
+            <p style={{ color: '#64748b', marginTop: '16px', fontWeight: '600' }}>
                 Loading profile...
             </p>
         </div>
     )
 
     if (!profile) return (
-        <div style={styles.loadingContainer}>
-            <p style={{ color: '#6b7280' }}>User not found</p>
+        <div className="profile-loading">
+            <p style={{ color: '#64748b', fontWeight: '600' }}>User not found</p>
         </div>
     )
 
     return (
-        <div style={styles.page}>
-            <div style={styles.container}>
+        <div className="profile-page">
+            {/* Background Blobs */}
+            <div className="blob blob-pink" />
+            <div className="blob blob-mint" />
+            <div className="blob blob-blue" />
+
+            <div className="profile-container">
 
                 {/* Back Button */}
-                <Link to="/problems" style={styles.backBtn}>
-                    <ArrowLeft size={16} />
-                    Back to Problems
+                <Link to="/problems" className="profile-back-btn">
+                     <ArrowLeft size={16} />
+                     Back to Problems
                 </Link>
 
                 {/* ── Hero Card ── */}
-                <div style={styles.heroCard}>
-                    <div style={styles.heroBg} />
-                    <div style={styles.heroContent}>
-                        <div style={styles.avatarWrapper}>
-                            <div style={styles.avatarLarge}>
+                <div className="profile-hero-card">
+                    <div className="profile-hero-bg" />
+                    <div className="profile-hero-content">
+                        <div className="profile-avatar-wrapper">
+                            <div className="profile-avatar-large">
                                 {profile.username?.charAt(0).toUpperCase()}
                             </div>
                             {profile.role === 'ADMIN' && (
-                                <div style={styles.adminDot} title="Admin" />
+                                <div className="profile-admin-dot" title="Admin" />
                             )}
                         </div>
-                        <div style={styles.heroInfo}>
-                            <div style={styles.heroNameRow}>
-                                <h1 style={styles.heroName}>
+                        <div className="profile-hero-info">
+                            <div className="profile-name-row">
+                                <h1 className="profile-name">
                                     {profile.username}
                                 </h1>
                                 {profile.role === 'ADMIN' && (
-                                    <span style={styles.adminBadge}>
+                                    <span className="profile-admin-badge">
                                         <Award size={12} />
                                         Admin
                                     </span>
                                 )}
                                 {isOwnProfile && (
-                                    <span style={styles.youBadge}>You</span>
+                                    <span className="profile-you-badge">You</span>
                                 )}
                             </div>
-                            <p style={styles.heroEmail}>{profile.email}</p>
-                            <div style={styles.heroMeta}>
-                                <span style={styles.metaChip}>
+                            <p className="profile-email">{profile.email}</p>
+                            <div className="profile-hero-meta">
+                                <span className="profile-meta-chip">
                                     <Calendar size={13} />
                                     Joined {formatDate(profile.memberSince)}
                                 </span>
                                 {isOwnProfile && favoriteLanguage !== 'N/A' && (
-                                    <span style={styles.metaChip}>
+                                    <span className="profile-meta-chip">
                                         <Code2 size={13} />
                                         {favoriteLanguage}
                                     </span>
@@ -223,55 +229,49 @@ export default function ProfilePage() {
                 </div>
 
                 {/* ── Stats Grid ── */}
-                <div style={styles.statsGrid}>
-                    <div style={styles.statCard}>
-                        <div style={styles.statIcon}>
+                <div className="profile-stats-grid">
+                    <div className="profile-stat-card">
+                        <div className="profile-stat-icon">
                             <Target size={20} color="#3b82f6" />
                         </div>
-                        <div style={styles.statValue} >
+                        <div className="profile-stat-value" >
                             {profile.totalSolved || 0}
                         </div>
-                        <div style={styles.statLabel}>Problems Solved</div>
+                        <div className="profile-stat-label">Problems Solved</div>
                     </div>
 
                     {isOwnProfile && (
                         <>
-                            <div style={styles.statCard}>
-                                <div style={styles.statIcon}>
+                            <div className="profile-stat-card">
+                                <div className="profile-stat-icon">
                                     <CheckCircle2 size={20} color="#10b981" />
                                 </div>
-                                <div style={{
-                                    ...styles.statValue, color: '#10b981'
-                                }}>
+                                <div className="profile-stat-value" style={{ color: '#10b981' }}>
                                     {accepted}
                                 </div>
-                                <div style={styles.statLabel}>Accepted</div>
+                                <div className="profile-stat-label">Accepted</div>
                             </div>
 
-                            <div style={styles.statCard}>
-                                <div style={styles.statIcon}>
+                            <div className="profile-stat-card">
+                                <div className="profile-stat-icon">
                                     <BarChart2 size={20} color="#6366f1" />
                                 </div>
-                                <div style={{
-                                    ...styles.statValue, color: '#6366f1'
-                                }}>
+                                <div className="profile-stat-value" style={{ color: '#6366f1' }}>
                                     {total}
                                 </div>
-                                <div style={styles.statLabel}>
+                                <div className="profile-stat-label">
                                     Total Submissions
                                 </div>
                             </div>
 
-                            <div style={styles.statCard}>
-                                <div style={styles.statIcon}>
+                            <div className="profile-stat-card">
+                                <div className="profile-stat-icon">
                                     <Zap size={20} color="#f59e0b" />
                                 </div>
-                                <div style={{
-                                    ...styles.statValue, color: '#f59e0b'
-                                }}>
+                                <div className="profile-stat-value" style={{ color: '#f59e0b' }}>
                                     {acceptanceRate}%
                                 </div>
-                                <div style={styles.statLabel}>
+                                <div className="profile-stat-label">
                                     Acceptance Rate
                                 </div>
                             </div>
@@ -281,51 +281,53 @@ export default function ProfilePage() {
 
                 {/* ── Contest Performance (own profile only) ── */}
                 {isOwnProfile && contestStats.length > 0 && (
-                    <div style={styles.verdictCard}>
-                        <h3 style={styles.sectionTitle}>
+                    <div className="profile-verdict-card">
+                        <h3 className="profile-section-title">
                             <Trophy size={16} />
                             Contest Performance
                         </h3>
-                        <div style={styles.contestStatsGrid}>
+                        <div className="profile-contest-grid">
                             {contestStats.map(cs => (
                                 <Link
                                     key={cs.contestId}
                                     to={`/contests/${cs.contestId}/scoreboard`}
-                                    style={styles.contestStatCard}>
-                                    <div style={styles.contestStatTop}>
+                                    className="profile-contest-card">
+                                    <div className="profile-contest-top">
                                         <div>
-                                            <span style={styles.contestStatTitle}>
+                                            <span className="profile-contest-title">
                                                 {cs.title}
                                             </span>
-                                            <div style={styles.contestStatDate}>
+                                            <div className="profile-contest-date">
                                                 {formatDate(cs.startTime)}
                                             </div>
                                         </div>
-                                        <span style={{
-                                            ...styles.contestStatStatus,
-                                            color: cs.status === 'ONGOING'
-                                                ? '#10b981'
-                                                : cs.status === 'UPCOMING'
-                                                    ? '#3b82f6' : '#6b7280',
-                                            background: cs.status === 'ONGOING'
-                                                ? 'rgba(16,185,129,0.1)'
-                                                : cs.status === 'UPCOMING'
-                                                    ? 'rgba(59,130,246,0.1)'
-                                                    : 'rgba(107,114,128,0.1)',
-                                        }}>
+                                        <span 
+                                            className="profile-contest-status"
+                                            style={{
+                                                color: cs.status === 'ONGOING'
+                                                    ? '#10b981'
+                                                    : cs.status === 'UPCOMING'
+                                                        ? '#3b82f6' : '#64748b',
+                                                background: cs.status === 'ONGOING'
+                                                    ? 'rgba(16,185,129,0.08)'
+                                                    : cs.status === 'UPCOMING'
+                                                        ? 'rgba(59,130,246,0.08)'
+                                                        : 'rgba(100,116,139,0.08)',
+                                            }}
+                                        >
                                             {cs.status}
                                         </span>
                                     </div>
-                                    <div style={styles.contestStatBody}>
-                                        <div style={styles.contestScoreBlock}>
-                                            <span style={styles.contestScoreValue}>
+                                    <div className="profile-contest-body">
+                                        <div className="profile-contest-score">
+                                            <span className="profile-contest-score-value">
                                                 {cs.score}
                                             </span>
-                                            <span style={styles.contestScoreLabel}>
+                                             <span className="profile-contest-score-label">
                                                 points
                                             </span>
                                         </div>
-                                        <div style={styles.contestSolvedBlock}>
+                                        <div className="profile-contest-solved">
                                             <CheckCircle2 size={14} color="#10b981" />
                                             {cs.solvedCount} / {cs.totalProblems} solved
                                         </div>
@@ -337,42 +339,41 @@ export default function ProfilePage() {
                 )}
 
                 {isOwnProfile && total > 0 && (
-                    <div style={styles.verdictCard}>
-                        <h3 style={styles.sectionTitle}>
+                    <div className="profile-verdict-card">
+                        <h3 className="profile-section-title">
                             <BarChart2 size={16} />
                             Submission Breakdown
                         </h3>
-                        <div style={styles.verdictGrid}>
+                        <div className="profile-verdict-grid">
                             {[
                                 { label: 'Accepted', count: accepted, color: '#10b981' },
                                 { label: 'Wrong Answer', count: wrongAnswer, color: '#ef4444' },
                                 { label: 'TLE', count: tle, color: '#f59e0b' },
                                 { label: 'Compile Error', count: ce, color: '#6366f1' },
                             ].map(item => (
-                                <div key={item.label} style={styles.verdictItem}>
-                                    <div style={styles.verdictItemTop}>
-                                        <span style={{
-                                            ...styles.verdictDot,
-                                            background: item.color
-                                        }} />
-                                        <span style={styles.verdictItemLabel}>
+                                <div key={item.label} className="profile-verdict-item">
+                                    <div className="profile-verdict-item-top">
+                                        <span 
+                                            className="profile-verdict-dot" 
+                                            style={{ background: item.color }} 
+                                        />
+                                        <span className="profile-verdict-label">
                                             {item.label}
                                         </span>
-                                        <span style={{
-                                            ...styles.verdictItemCount,
-                                            color: item.color
-                                        }}>
+                                        <span className="profile-verdict-count" style={{ color: item.color }}>
                                             {item.count}
                                         </span>
                                     </div>
-                                    <div style={styles.verdictBarBg}>
-                                        <div style={{
-                                            ...styles.verdictBar,
-                                            width: total > 0
-                                                ? `${(item.count / total) * 100}%`
-                                                : '0%',
-                                            background: item.color,
-                                        }} />
+                                    <div className="profile-verdict-bar-bg">
+                                        <div 
+                                            className="profile-verdict-bar" 
+                                            style={{
+                                                width: total > 0
+                                                    ? `${(item.count / total) * 100}%`
+                                                    : '0%',
+                                                background: item.color,
+                                            }} 
+                                        />
                                     </div>
                                 </div>
                             ))}
@@ -383,24 +384,18 @@ export default function ProfilePage() {
                 {/* ── Tabs (own profile only) ── */}
                 {isOwnProfile && (
                     <>
-                        <div style={styles.tabs}>
+                        <div className="profile-tabs">
                             <button
                                 onClick={() => setActiveTab('submissions')}
-                                style={{
-                                    ...styles.tab,
-                                    ...(activeTab === 'submissions'
-                                        ? styles.tabActive : {})
-                                }}>
+                                className={`profile-tab${activeTab === 'submissions' ? ' profile-tab-active' : ''}`}
+                            >
                                 <Hash size={14} />
                                 Submissions ({total})
                             </button>
                             <button
                                 onClick={() => setActiveTab('solved')}
-                                style={{
-                                    ...styles.tab,
-                                    ...(activeTab === 'solved'
-                                        ? styles.tabActive : {})
-                                }}>
+                                className={`profile-tab${activeTab === 'solved' ? ' profile-tab-active' : ''}`}
+                            >
                                 <CheckCircle2 size={14} />
                                 Solved Problems ({solvedProblems.length})
                             </button>
@@ -408,78 +403,73 @@ export default function ProfilePage() {
 
                         {/* Submissions Tab */}
                         {activeTab === 'submissions' && (
-                            <div style={styles.tableCard}>
+                            <div className="profile-table-card">
                                 {submissions.length === 0 ? (
-                                    <div style={styles.empty}>
-                                        <Code2 size={48} color="#374151" />
-                                        <p style={styles.emptyText}>
-                                            No submissions yet
+                                    <div className="profile-empty">
+                                        <Code2 size={48} color="#64748b" />
+                                        <p className="profile-empty-text">
+                                             No submissions yet
                                         </p>
-                                        <Link to="/problems" style={styles.solveBtn}>
-                                            Start Solving
+                                        <Link to="/problems" className="profile-solve-btn">
+                                             Start Solving
                                         </Link>
                                     </div>
                                 ) : (
-                                    <table style={styles.table}>
+                                    <table className="profile-table">
                                         <thead>
-                                            <tr>
-                                                <th style={styles.th}>#</th>
-                                                <th style={styles.th}>Problem</th>
-                                                <th style={styles.th}>Verdict</th>
-                                                <th style={styles.th}>Language</th>
-                                                <th style={styles.th}>Runtime</th>
-                                                <th style={styles.th}>Date</th>
-                                            </tr>
+                                             <tr>
+                                                 <th className="profile-th">#</th>
+                                                 <th className="profile-th">Problem</th>
+                                                 <th className="profile-th">Verdict</th>
+                                                 <th className="profile-th">Language</th>
+                                                 <th className="profile-th">Runtime</th>
+                                                 <th className="profile-th">Date</th>
+                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {submissions.map((sub, i) => {
-                                                const vs = getVerdictStyle(sub.verdict)
-                                                const VIcon = vs.icon
-                                                return (
-                                                    <tr key={sub.id} style={styles.row}>
-                                                        <td style={{
-                                                            ...styles.td,
-                                                            color: '#4b5563',
-                                                            fontSize: '13px'
-                                                        }}>
-                                                            {i + 1}
-                                                        </td>
-                                                        <td style={styles.td}>
-                                                            <Link
-                                                                to={`/problems/${sub.problemId}`}
-                                                                style={styles.problemLink}>
-                                                                {sub.problemTitle}
-                                                            </Link>
-                                                        </td>
-                                                        <td style={styles.td}>
-                                                            <span style={{
-                                                                ...styles.verdictBadge,
-                                                                color: vs.color,
-                                                                background: vs.bg,
-                                                            }}>
-                                                                <VIcon size={12} />
-                                                                {formatVerdict(sub.verdict)}
-                                                            </span>
-                                                        </td>
-                                                        <td style={styles.td}>
-                                                            <span style={styles.langBadge}>
-                                                                {sub.language}
-                                                            </span>
-                                                        </td>
-                                                        <td style={styles.td}>
-                                                            <span style={styles.runtime}>
-                                                                {sub.runtimeMs
-                                                                    ? `${sub.runtimeMs}ms` : '—'}
-                                                            </span>
-                                                        </td>
-                                                        <td style={styles.td}>
-                                                            <span style={styles.date}>
-                                                                {formatDate(sub.submittedAt)}
-                                                            </span>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            })}
+                                             {submissions.map((sub, i) => {
+                                                 const vs = getVerdictStyle(sub.verdict)
+                                                 const VIcon = vs.icon
+                                                 return (
+                                                     <tr key={sub.id} className="profile-row">
+                                                         <td className="profile-td" style={{ color: '#94a3b8', fontSize: '13px', fontWeight: '600' }}>
+                                                             {i + 1}
+                                                         </td>
+                                                         <td className="profile-td">
+                                                             <Link
+                                                                 to={`/problems/${sub.problemId}`}
+                                                                 className="profile-problem-link">
+                                                                 {sub.problemTitle}
+                                                             </Link>
+                                                         </td>
+                                                         <td className="profile-td">
+                                                             <span 
+                                                                 className="profile-verdict-badge"
+                                                                 style={{ color: vs.color, background: vs.bg }}
+                                                             >
+                                                                 <VIcon size={12} />
+                                                                 {formatVerdict(sub.verdict)}
+                                                             </span>
+                                                         </td>
+                                                         <td className="profile-td">
+                                                             <span className="profile-lang-badge">
+                                                                 {sub.language}
+                                                             </span>
+                                                         </td>
+                                                         <td className="profile-td">
+                                                             <span className="profile-runtime">
+                                                                 {sub.runtimeMs
+                                                                     ? `${sub.runtimeMs}ms` : '—'}
+                                                             </span>
+                                                         </td>
+                                                         <td className="profile-td">
+                                                             <span className="profile-date">
+                                                                 {formatDate(sub.submittedAt)}
+                                                             </span>
+                                                         </td>
+                                                     </tr>
+                                                 )
+                                             })}
                                         </tbody>
                                     </table>
                                 )}
@@ -488,69 +478,65 @@ export default function ProfilePage() {
 
                         {/* Solved Problems Tab */}
                         {activeTab === 'solved' && (
-                            <div style={styles.tableCard}>
+                            <div className="profile-table-card">
                                 {solvedProblems.length === 0 ? (
-                                    <div style={styles.empty}>
-                                        <Trophy size={48} color="#374151" />
-                                        <p style={styles.emptyText}>
-                                            No solved problems yet
+                                    <div className="profile-empty">
+                                        <Trophy size={48} color="#64748b" />
+                                        <p className="profile-empty-text">
+                                             No solved problems yet
                                         </p>
-                                        <Link to="/problems" style={styles.solveBtn}>
-                                            Start Solving
+                                        <Link to="/problems" className="profile-solve-btn">
+                                             Start Solving
                                         </Link>
                                     </div>
                                 ) : (
-                                    <table style={styles.table}>
+                                    <table className="profile-table">
                                         <thead>
-                                            <tr>
-                                                <th style={styles.th}>#</th>
-                                                <th style={styles.th}>Problem</th>
-                                                <th style={styles.th}>Language</th>
-                                                <th style={styles.th}>Runtime</th>
-                                                <th style={styles.th}>Solved On</th>
-                                            </tr>
+                                             <tr>
+                                                 <th className="profile-th">#</th>
+                                                 <th className="profile-th">Problem</th>
+                                                 <th className="profile-th">Language</th>
+                                                 <th className="profile-th">Runtime</th>
+                                                 <th className="profile-th">Solved On</th>
+                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {solvedProblems.map((sub, i) => (
-                                                <tr key={sub.problemId} style={styles.row}>
-                                                    <td style={{
-                                                        ...styles.td,
-                                                        color: '#4b5563',
-                                                        fontSize: '13px'
-                                                    }}>
-                                                        {i + 1}
-                                                    </td>
-                                                    <td style={styles.td}>
-                                                        <Link
-                                                            to={`/problems/${sub.problemId}`}
-                                                            style={styles.problemLink}>
-                                                            {sub.problemTitle}
-                                                        </Link>
-                                                    </td>
-                                                    <td style={styles.td}>
-                                                        <span style={styles.langBadge}>
-                                                            {sub.language}
-                                                        </span>
-                                                    </td>
-                                                    <td style={styles.td}>
-                                                        <span style={styles.runtime}>
-                                                            {sub.runtimeMs
-                                                                ? `${sub.runtimeMs}ms` : '—'}
-                                                        </span>
-                                                    </td>
-                                                    <td style={styles.td}>
-                                                        <div style={styles.solvedOnCell}>
-                                                            <CheckCircle2
-                                                                size={14}
-                                                                color="#10b981"
-                                                            />
-                                                            <span style={styles.date}>
-                                                                {formatDate(sub.submittedAt)}
-                                                            </span>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            ))}
+                                             {solvedProblems.map((sub, i) => (
+                                                 <tr key={sub.problemId} className="profile-row">
+                                                     <td className="profile-td" style={{ color: '#94a3b8', fontSize: '13px', fontWeight: '600' }}>
+                                                         {i + 1}
+                                                     </td>
+                                                     <td className="profile-td">
+                                                         <Link
+                                                             to={`/problems/${sub.problemId}`}
+                                                             className="profile-problem-link">
+                                                             {sub.problemTitle}
+                                                         </Link>
+                                                     </td>
+                                                     <td className="profile-td">
+                                                         <span className="profile-lang-badge">
+                                                             {sub.language}
+                                                         </span>
+                                                     </td>
+                                                     <td className="profile-td">
+                                                         <span className="profile-runtime">
+                                                             {sub.runtimeMs
+                                                                 ? `${sub.runtimeMs}ms` : '—'}
+                                                         </span>
+                                                     </td>
+                                                     <td className="profile-td">
+                                                         <div className="profile-solved-on">
+                                                             <CheckCircle2
+                                                                 size={14}
+                                                                 color="#10b981"
+                                                             />
+                                                             <span className="profile-date">
+                                                                 {formatDate(sub.submittedAt)}
+                                                             </span>
+                                                         </div>
+                                                     </td>
+                                                 </tr>
+                                             ))}
                                         </tbody>
                                     </table>
                                 )}
@@ -561,458 +547,15 @@ export default function ProfilePage() {
 
                 {/* Private profile note */}
                 {!isOwnProfile && (
-                    <div style={styles.privateNote}>
-                        <User size={20} color="#4b5563" />
-                        <p style={{ color: '#6b7280', margin: 0 }}>
-                            Detailed stats are private
-                        </p>
+                    <div className="profile-private-note">
+                         <User size={20} color="#64748b" />
+                         <p style={{ color: '#64748b', margin: 0, fontWeight: '600' }}>
+                              Detailed stats are private
+                         </p>
                     </div>
                 )}
             </div>
         </div>
     )
 }
-
-const styles = {
-    page: {
-        minHeight: 'calc(100vh - 64px)',
-        background: '#0a0e1a',
-        padding: '32px 0 60px',
-    },
-    container: {
-        maxWidth: '960px',
-        margin: '0 auto',
-        padding: '0 24px',
-    },
-    loadingContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: 'calc(100vh - 64px)',
-        background: '#0a0e1a',
-    },
-    backBtn: {
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '6px',
-        color: '#6b7280',
-        fontSize: '14px',
-        marginBottom: '24px',
-        textDecoration: 'none',
-        transition: 'color 0.15s',
-    },
-
-    contestStatDate: {
-        fontSize: '11px',
-        color: '#6b7280',
-        marginTop: '2px',
-    },
-
-    // Hero Card
-    heroCard: {
-        position: 'relative',
-        background: '#111827',
-        border: '1px solid #1e2d45',
-        borderRadius: '20px',
-        padding: '32px',
-        marginBottom: '20px',
-        overflow: 'hidden',
-    },
-    heroBg: {
-        position: 'absolute',
-        top: 0, left: 0, right: 0,
-        height: '80px',
-        background: 'linear-gradient(135deg, rgba(59,130,246,0.15), rgba(99,102,241,0.1))',
-        borderRadius: '20px 20px 0 0',
-    },
-    heroContent: {
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'flex-end',
-        gap: '20px',
-        flexWrap: 'wrap',
-    },
-    avatarWrapper: {
-        position: 'relative',
-        flexShrink: 0,
-    },
-    avatarLarge: {
-        width: '80px',
-        height: '80px',
-        borderRadius: '20px',
-        background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '32px',
-        fontWeight: '800',
-        color: 'white',
-        border: '3px solid #111827',
-        boxShadow: '0 8px 24px rgba(59,130,246,0.3)',
-    },
-    adminDot: {
-        position: 'absolute',
-        bottom: '-2px',
-        right: '-2px',
-        width: '18px',
-        height: '18px',
-        background: '#818cf8',
-        borderRadius: '50%',
-        border: '2px solid #111827',
-    },
-    heroInfo: {
-        flex: 1,
-        minWidth: '200px',
-    },
-    heroNameRow: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-        flexWrap: 'wrap',
-        marginBottom: '4px',
-    },
-    heroName: {
-        fontSize: '24px',
-        fontWeight: '800',
-        color: '#f9fafb',
-        letterSpacing: '-0.3px',
-    },
-    adminBadge: {
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '4px',
-        padding: '3px 10px',
-        background: 'rgba(99,102,241,0.15)',
-        border: '1px solid rgba(99,102,241,0.3)',
-        borderRadius: '20px',
-        fontSize: '12px',
-        fontWeight: '600',
-        color: '#818cf8',
-    },
-    youBadge: {
-        padding: '3px 10px',
-        background: 'rgba(59,130,246,0.15)',
-        border: '1px solid rgba(59,130,246,0.3)',
-        borderRadius: '20px',
-        fontSize: '12px',
-        fontWeight: '600',
-        color: '#60a5fa',
-    },
-    heroEmail: {
-        fontSize: '14px',
-        color: '#6b7280',
-        marginBottom: '10px',
-    },
-    heroMeta: {
-        display: 'flex',
-        gap: '10px',
-        flexWrap: 'wrap',
-    },
-    metaChip: {
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '6px',
-        padding: '5px 12px',
-        background: '#0f172a',
-        border: '1px solid #1e2d45',
-        borderRadius: '20px',
-        fontSize: '13px',
-        color: '#9ca3af',
-    },
-
-    // Stats Grid
-    statsGrid: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-        gap: '16px',
-        marginBottom: '20px',
-    },
-    statCard: {
-        background: '#111827',
-        border: '1px solid #1e2d45',
-        borderRadius: '14px',
-        padding: '20px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '8px',
-        transition: 'border-color 0.2s',
-    },
-    statIcon: {
-        width: '40px',
-        height: '40px',
-        background: '#0f172a',
-        borderRadius: '10px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    statValue: {
-        fontSize: '32px',
-        fontWeight: '800',
-        color: '#3b82f6',
-        letterSpacing: '-1px',
-        lineHeight: 1,
-    },
-    statLabel: {
-        fontSize: '13px',
-        color: '#6b7280',
-        fontWeight: '500',
-    },
-
-    // Verdict Breakdown
-    verdictCard: {
-        background: '#111827',
-        border: '1px solid #1e2d45',
-        borderRadius: '14px',
-        padding: '20px 24px',
-        marginBottom: '20px',
-    },
-    sectionTitle: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        fontSize: '14px',
-        fontWeight: '700',
-        color: '#9ca3af',
-        textTransform: 'uppercase',
-        letterSpacing: '0.5px',
-        marginBottom: '16px',
-    },
-    verdictGrid: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-        gap: '16px',
-    },
-    verdictItem: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '6px',
-    },
-    verdictItemTop: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-    },
-    verdictDot: {
-        width: '8px',
-        height: '8px',
-        borderRadius: '50%',
-        flexShrink: 0,
-    },
-    verdictItemLabel: {
-        fontSize: '13px',
-        color: '#9ca3af',
-        flex: 1,
-    },
-    verdictItemCount: {
-        fontSize: '14px',
-        fontWeight: '700',
-    },
-    verdictBarBg: {
-        height: '6px',
-        background: '#1e2d45',
-        borderRadius: '3px',
-        overflow: 'hidden',
-    },
-    verdictBar: {
-        height: '100%',
-        borderRadius: '3px',
-        transition: 'width 0.5s ease',
-        minWidth: '4px',
-    },
-
-    // Tabs
-    tabs: {
-        display: 'flex',
-        gap: '4px',
-        borderBottom: '1px solid #1e2d45',
-        marginBottom: '20px',
-    },
-    tab: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-        padding: '12px 20px',
-        background: 'none',
-        border: 'none',
-        fontSize: '14px',
-        fontWeight: '500',
-        color: '#6b7280',
-        cursor: 'pointer',
-        borderBottom: '2px solid transparent',
-        transition: 'all 0.2s',
-        fontFamily: 'inherit',
-    },
-    tabActive: {
-        color: '#3b82f6',
-        borderBottom: '2px solid #3b82f6',
-    },
-
-    // Table
-    tableCard: {
-        background: '#111827',
-        border: '1px solid #1e2d45',
-        borderRadius: '14px',
-        overflow: 'hidden',
-    },
-    table: {
-        width: '100%',
-        borderCollapse: 'collapse',
-    },
-    th: {
-        textAlign: 'left',
-        padding: '14px 20px',
-        fontSize: '12px',
-        fontWeight: '600',
-        color: '#6b7280',
-        textTransform: 'uppercase',
-        letterSpacing: '0.5px',
-        borderBottom: '1px solid #1e2d45',
-        background: '#0f172a',
-    },
-    td: {
-        padding: '14px 20px',
-        borderBottom: '1px solid #1e2d45',
-        fontSize: '14px',
-    },
-    row: {
-        transition: 'background 0.15s',
-    },
-    problemLink: {
-        color: '#f9fafb',
-        fontWeight: '500',
-        textDecoration: 'none',
-        transition: 'color 0.15s',
-    },
-    verdictBadge: {
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '5px',
-        padding: '4px 10px',
-        borderRadius: '6px',
-        fontSize: '12px',
-        fontWeight: '600',
-    },
-    langBadge: {
-        padding: '3px 10px',
-        background: '#1a2235',
-        border: '1px solid #1e2d45',
-        borderRadius: '6px',
-        fontSize: '12px',
-        color: '#9ca3af',
-        fontFamily: "'JetBrains Mono', monospace",
-    },
-    runtime: {
-        fontSize: '13px',
-        color: '#6b7280',
-        fontFamily: "'JetBrains Mono', monospace",
-    },
-    date: {
-        fontSize: '13px',
-        color: '#6b7280',
-    },
-    solvedOnCell: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-    },
-    empty: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '12px',
-        padding: '60px 20px',
-    },
-    emptyText: {
-        fontSize: '16px',
-        color: '#4b5563',
-        fontWeight: '500',
-    },
-    solveBtn: {
-        padding: '10px 24px',
-        background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-        color: 'white',
-        borderRadius: '8px',
-        fontSize: '14px',
-        fontWeight: '600',
-        textDecoration: 'none',
-        marginTop: '8px',
-        boxShadow: '0 4px 12px rgba(59,130,246,0.3)',
-    },
-    privateNote: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        padding: '24px',
-        background: '#111827',
-        border: '1px solid #1e2d45',
-        borderRadius: '12px',
-        justifyContent: 'center',
-    },
-    contestStatsGrid: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-        gap: '14px',
-    },
-    contestStatCard: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '12px',
-        padding: '16px',
-        background: '#0f172a',
-        border: '1px solid #1e2d45',
-        borderRadius: '12px',
-        textDecoration: 'none',
-        transition: 'border-color 0.2s',
-    },
-    contestStatTop: {
-        display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'space-between',
-        gap: '8px',
-    },
-    contestStatTitle: {
-        fontSize: '14px',
-        fontWeight: '700',
-        color: '#f9fafb',
-    },
-    contestStatStatus: {
-        fontSize: '11px',
-        fontWeight: '700',
-        padding: '2px 8px',
-        borderRadius: '20px',
-        textTransform: 'uppercase',
-        letterSpacing: '0.5px',
-        whiteSpace: 'nowrap',
-    },
-    contestStatBody: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    contestScoreBlock: {
-        display: 'flex',
-        alignItems: 'baseline',
-        gap: '5px',
-    },
-    contestScoreValue: {
-        fontSize: '22px',
-        fontWeight: '800',
-        color: '#f59e0b',
-        letterSpacing: '-0.5px',
-    },
-    contestScoreLabel: {
-        fontSize: '12px',
-        color: '#6b7280',
-        fontWeight: '500',
-    },
-    contestSolvedBlock: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-        fontSize: '12px',
-        color: '#9ca3af',
-        fontWeight: '600',
-    },
 }

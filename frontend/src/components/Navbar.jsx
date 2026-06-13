@@ -36,7 +36,7 @@ export default function Navbar() {
         location.pathname === path ||
         location.pathname.startsWith(path + '/')
 
-    const isLightThemePage = ['/', '/about', '/contact', '/leaderboard'].includes(location.pathname) || location.pathname.startsWith('/problems') || location.pathname.startsWith('/contests')
+    const isLightThemePage = ['/', '/about', '/contact', '/leaderboard'].includes(location.pathname) || location.pathname.startsWith('/problems') || location.pathname.startsWith('/contests') || location.pathname.startsWith('/profile')
 
     return (
         <>
