@@ -88,4 +88,17 @@ public class Problem {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    public int getPoints() {
+        switch (difficulty) {
+            case EASY:
+                return 100;
+            case MEDIUM:
+                return 200;
+            case HARD:
+                return 300;
+            default:
+                return 0;
+        }
+    }
 }

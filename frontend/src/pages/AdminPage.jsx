@@ -163,8 +163,8 @@ export default function AdminPage() {
             await contestService.createContest({
                 title: contestTitle.trim(),
                 description: contestDesc.trim(),
-                startTime: new Date(contestStart).toISOString(),
-                endTime: new Date(contestEnd).toISOString(),
+                startTime: contestStart,
+                endTime: contestEnd,
                 problemIds: selectedProblemIds,
             })
             toast.success('Contest created successfully!')

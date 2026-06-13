@@ -12,6 +12,8 @@ import CreateProblemPage from './pages/CreateProblemPage'
 import ContestListPage from './pages/ContestListPage'
 import ContestDetailPage from './pages/ContestDetailPage'
 import SettingsPage from './pages/SettingsPage'
+import ContestProblemPage from './pages/ContestProblemPage'
+import ContestScoreboardPage from './pages/ContestScoreboardPage'
 
 const ProtectedRoute = ({ children }) => {
   const { isLoggedIn } = useAuth()
@@ -76,6 +78,16 @@ function App() {
       <Route path="/contests/:id" element={
         <ProtectedRoute>
           <Layout><ContestDetailPage /></Layout>
+        </ProtectedRoute>
+      } />
+      <Route path="/contests/:id/problems/:problemId" element={
+        <ProtectedRoute>
+          <Layout><ContestProblemPage /></Layout>
+        </ProtectedRoute>
+      } />
+      <Route path="/contests/:id/scoreboard" element={
+        <ProtectedRoute>
+          <Layout><ContestScoreboardPage /></Layout>
         </ProtectedRoute>
       } />
       <Route path="/settings" element={

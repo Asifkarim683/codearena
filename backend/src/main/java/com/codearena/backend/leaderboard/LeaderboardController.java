@@ -16,50 +16,51 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LeaderboardController {
 
-    private final UserRepository userRepository;
-    private final SubmissionRepository submissionRepository;
+        private final UserRepository userRepository;
+        private final SubmissionRepository submissionRepository;
 
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> getLeaderboard(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
+        @GetMapping
+        public ResponseEntity<ApiResponse<List<Map<String, Object>>>> getLeaderboard(
+                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "20") int size) {
 
-        List<Map<String, Object>> leaderboard = userRepository.findAll().stream()
-                .map(user -> {
-                    long solved = submissionRepository
-                            .findByUserIdOrderBySubmittedAtDesc(
-                                    user.getId(),
-                                    PageRequest.of(0, 1000))
-                            .stream()
-                            .filter(s -> s.getVerdict() == Verdict.ACCEPTED)
-                            .map(s -> s.getProblem().getId())
-                            .distinct()
-                            .count();
+                List<Map<String, Object>> leaderboard = userRepository.findAll().stream()
+                                .filter(user -> user.getRole() != com.codearena.backend.user.Role.ADMIN)
+                                .map(user -> {
+                                        long solved = submissionRepository
+                                                        .findByUserIdOrderBySubmittedAtDesc(
+                                                                        user.getId(),
+                                                                        PageRequest.of(0, 1000))
+                                                        .stream()
+                                                        .filter(s -> s.getVerdict() == Verdict.ACCEPTED)
+                                                        .map(s -> s.getProblem().getId())
+                                                        .distinct()
+                                                        .count();
 
-                    Map<String, Object> entry = new HashMap<>();
-                    entry.put("username",
-                            user.getActualUsername());
-                    entry.put("solved", solved);
-                    entry.put("memberSince",
-                            user.getCreatedAt());
-                    return entry;
-                })
-                .sorted((a, b) -> Long.compare(
-                        (Long) b.get("solved"),
-                        (Long) a.get("solved")))
-                .skip((long) page * size)
-                .limit(size)
-                .collect(Collectors.toList());
+                                        Map<String, Object> entry = new HashMap<>();
+                                        entry.put("username",
+                                                        user.getActualUsername());
+                                        entry.put("solved", solved);
+                                        entry.put("memberSince",
+                                                        user.getCreatedAt());
+                                        return entry;
+                                })
+                                .sorted((a, b) -> Long.compare(
+                                                (Long) b.get("solved"),
+                                                (Long) a.get("solved")))
+                                .skip((long) page * size)
+                                .limit(size)
+                                .collect(Collectors.toList());
 
-        // Add rank
-        for (int i = 0; i < leaderboard.size(); i++) {
-            leaderboard.get(i).put("rank",
-                    (long) page * size + i + 1);
+                // Add rank
+                for (int i = 0; i < leaderboard.size(); i++) {
+                        leaderboard.get(i).put("rank",
+                                        (long) page * size + i + 1);
+                }
+
+                return ResponseEntity.ok(
+                                ApiResponse.success(
+                                                "Leaderboard fetched successfully",
+                                                leaderboard));
         }
-
-        return ResponseEntity.ok(
-                ApiResponse.success(
-                        "Leaderboard fetched successfully",
-                        leaderboard));
-    }
 }

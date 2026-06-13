@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 import {
     ArrowLeft, Calendar, Clock, Users,
     Trophy, Lock, Loader2, CheckCircle2,
-    Code2, Zap, Award
+    Code2, Zap, Award, BarChart2
 } from 'lucide-react'
 
 export default function ContestDetailPage() {
@@ -221,6 +221,16 @@ export default function ContestDetailPage() {
                     </div>
                 </div>
 
+                {/* Scoreboard Link */}
+                {contest.status !== 'UPCOMING' && (
+                    <Link
+                        to={`/contests/${id}/scoreboard`}
+                        style={styles.scoreboardBtn}>
+                        <BarChart2 size={16} />
+                        View Scoreboard
+                    </Link>
+                )}
+
                 {/* Problems Section */}
                 <div style={styles.problemsSection}>
                     <h2 style={styles.sectionTitle}>
@@ -244,7 +254,9 @@ export default function ContestDetailPage() {
                             {contest.problems.map((problem, index) => (
                                 <Link
                                     key={problem.id}
-                                    to={`/problems/${problem.id}`}
+                                    to={contest.status === 'ONGOING'
+                                        ? `/contests/${id}/problems/${problem.id}`
+                                        : `/problems/${problem.id}`}
                                     style={styles.problemRow}>
                                     <div style={styles.problemLeft}>
                                         <span style={styles.problemIndex}>
@@ -513,5 +525,21 @@ const styles = {
         borderRadius: '20px',
         fontSize: '12px',
         fontWeight: '600',
+    },
+
+    scoreboardBtn: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '8px',
+        padding: '12px',
+        background: 'rgba(59,130,246,0.1)',
+        border: '1px solid rgba(59,130,246,0.2)',
+        borderRadius: '12px',
+        color: '#60a5fa',
+        fontSize: '14px',
+        fontWeight: '700',
+        textDecoration: 'none',
+        marginBottom: '24px',
     },
 }

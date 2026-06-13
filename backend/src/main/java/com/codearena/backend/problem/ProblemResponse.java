@@ -26,4 +26,5 @@ public class ProblemResponse {
     private int acceptedSubmissions;
     private double acceptanceRate;
     private LocalDateTime createdAt;
+    private int points;
 }

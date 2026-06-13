@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import { submissionService } from '../services/submissionService'
+import { contestService } from '../services/contestService'
 import toast from 'react-hot-toast'
 import {
     User, Calendar, Code2, CheckCircle2,
@@ -18,6 +19,7 @@ export default function ProfilePage() {
     const [submissions, setSubmissions] = useState([])
     const [loading, setLoading] = useState(true)
     const [activeTab, setActiveTab] = useState('submissions')
+    const [contestStats, setContestStats] = useState([])
 
     useEffect(() => {
         fetchProfile()
@@ -30,14 +32,65 @@ export default function ProfilePage() {
             setProfile(profileRes.data.data)
             if (currentUser?.username === username) {
                 const subRes = await submissionService
-                    .getMySubmissions(0, 50)
-                setSubmissions(subRes.data.content || [])
+                    .getMySubmissions(0, 100)
+                const subs = subRes.data.content || []
+                setSubmissions(subs)
+                await buildContestStats(subs)
             }
         } catch (error) {
             toast.error('Failed to load profile')
         } finally {
             setLoading(false)
         }
+    }
+
+    const buildContestStats = async (subs) => {
+        const accepted = subs.filter(
+            s => s.verdict === 'ACCEPTED' && s.contestId)
+
+        // Group by contestId -> unique problems -> sum points
+        const contestMap = new Map()
+        for (const sub of accepted) {
+            if (!contestMap.has(sub.contestId)) {
+                contestMap.set(sub.contestId, {
+                    contestId: sub.contestId,
+                    score: 0,
+                    solvedProblemIds: new Set(),
+                })
+            }
+            const entry = contestMap.get(sub.contestId)
+            if (!entry.solvedProblemIds.has(sub.problemId)) {
+                entry.solvedProblemIds.add(sub.problemId)
+                entry.score += sub.points || 0
+            }
+        }
+
+        if (contestMap.size === 0) {
+            setContestStats([])
+            return
+        }
+
+        // Fetch contest details for titles + totals
+        const results = await Promise.all(
+            Array.from(contestMap.values()).map(async (entry) => {
+                try {
+                    const res = await contestService.getContestById(
+                        entry.contestId)
+                    return {
+                        contestId: entry.contestId,
+                        title: res.data.title,
+                        status: res.data.status,
+                        score: entry.score,
+                        solvedCount: entry.solvedProblemIds.size,
+                        totalProblems: res.data.totalProblems,
+                    }
+                } catch {
+                    return null
+                }
+            })
+        )
+
+        setContestStats(results.filter(Boolean))
     }
 
     const getVerdictStyle = (verdict) => {
@@ -224,7 +277,58 @@ export default function ProfilePage() {
                     )}
                 </div>
 
-                {/* ── Verdict Breakdown (own profile only) ── */}
+                {/* ── Contest Performance (own profile only) ── */}
+                {isOwnProfile && contestStats.length > 0 && (
+                    <div style={styles.verdictCard}>
+                        <h3 style={styles.sectionTitle}>
+                            <Trophy size={16} />
+                            Contest Performance
+                        </h3>
+                        <div style={styles.contestStatsGrid}>
+                            {contestStats.map(cs => (
+                                <Link
+                                    key={cs.contestId}
+                                    to={`/contests/${cs.contestId}/scoreboard`}
+                                    style={styles.contestStatCard}>
+                                    <div style={styles.contestStatTop}>
+                                        <span style={styles.contestStatTitle}>
+                                            {cs.title}
+                                        </span>
+                                        <span style={{
+                                            ...styles.contestStatStatus,
+                                            color: cs.status === 'ONGOING'
+                                                ? '#10b981'
+                                                : cs.status === 'UPCOMING'
+                                                    ? '#3b82f6' : '#6b7280',
+                                            background: cs.status === 'ONGOING'
+                                                ? 'rgba(16,185,129,0.1)'
+                                                : cs.status === 'UPCOMING'
+                                                    ? 'rgba(59,130,246,0.1)'
+                                                    : 'rgba(107,114,128,0.1)',
+                                        }}>
+                                            {cs.status}
+                                        </span>
+                                    </div>
+                                    <div style={styles.contestStatBody}>
+                                        <div style={styles.contestScoreBlock}>
+                                            <span style={styles.contestScoreValue}>
+                                                {cs.score}
+                                            </span>
+                                            <span style={styles.contestScoreLabel}>
+                                                points
+                                            </span>
+                                        </div>
+                                        <div style={styles.contestSolvedBlock}>
+                                            <CheckCircle2 size={14} color="#10b981" />
+                                            {cs.solvedCount} / {cs.totalProblems} solved
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {isOwnProfile && total > 0 && (
                     <div style={styles.verdictCard}>
                         <h3 style={styles.sectionTitle}>
@@ -832,5 +936,70 @@ const styles = {
         border: '1px solid #1e2d45',
         borderRadius: '12px',
         justifyContent: 'center',
+    },
+    contestStatsGrid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+        gap: '14px',
+    },
+    contestStatCard: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
+        padding: '16px',
+        background: '#0f172a',
+        border: '1px solid #1e2d45',
+        borderRadius: '12px',
+        textDecoration: 'none',
+        transition: 'border-color 0.2s',
+    },
+    contestStatTop: {
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        gap: '8px',
+    },
+    contestStatTitle: {
+        fontSize: '14px',
+        fontWeight: '700',
+        color: '#f9fafb',
+    },
+    contestStatStatus: {
+        fontSize: '11px',
+        fontWeight: '700',
+        padding: '2px 8px',
+        borderRadius: '20px',
+        textTransform: 'uppercase',
+        letterSpacing: '0.5px',
+        whiteSpace: 'nowrap',
+    },
+    contestStatBody: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    contestScoreBlock: {
+        display: 'flex',
+        alignItems: 'baseline',
+        gap: '5px',
+    },
+    contestScoreValue: {
+        fontSize: '22px',
+        fontWeight: '800',
+        color: '#f59e0b',
+        letterSpacing: '-0.5px',
+    },
+    contestScoreLabel: {
+        fontSize: '12px',
+        color: '#6b7280',
+        fontWeight: '500',
+    },
+    contestSolvedBlock: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        fontSize: '12px',
+        color: '#9ca3af',
+        fontWeight: '600',
     },
 }

@@ -22,4 +22,6 @@ public class SubmissionResponse {
     private String errorMessage;
     private String code;
     private LocalDateTime submittedAt;
+    private Long contestId;
+    private int points;
 }

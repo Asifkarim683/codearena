@@ -49,6 +49,9 @@ public class Submission {
     @Column(columnDefinition = "TEXT")
     private String errorMessage;
 
+    @Column(name = "contest_id")
+    private Long contestId;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime submittedAt;
 

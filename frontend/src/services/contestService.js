@@ -26,4 +26,9 @@ export const contestService = {
         const response = await api.delete(`/contests/${id}`);
         return response.data;
     },
+
+    getScoreboard: async (id) => {
+        const response = await api.get(`/contests/${id}/scoreboard`);
+        return response.data;
+    },
 };

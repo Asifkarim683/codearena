@@ -8,17 +8,20 @@ import java.util.List;
 
 @Repository
 public interface SubmissionRepository
-        extends JpaRepository<Submission, Long> {
+                extends JpaRepository<Submission, Long> {
 
-    Page<Submission> findByUserIdOrderBySubmittedAtDesc(
-            Long userId, Pageable pageable);
+        Page<Submission> findByUserIdOrderBySubmittedAtDesc(
+                        Long userId, Pageable pageable);
 
-    List<Submission> findByUserIdAndProblemIdOrderBySubmittedAtDesc(
-            Long userId, Long problemId);
+        List<Submission> findByUserIdAndProblemIdOrderBySubmittedAtDesc(
+                        Long userId, Long problemId);
 
-    List<Submission> findByProblemIdOrderBySubmittedAtDesc(
-            Long problemId);
+        List<Submission> findByProblemIdOrderBySubmittedAtDesc(
+                        Long problemId);
 
-    boolean existsByUserIdAndProblemIdAndVerdict(
-            Long userId, Long problemId, Verdict verdict);
+        boolean existsByUserIdAndProblemIdAndVerdict(
+                        Long userId, Long problemId, Verdict verdict);
+
+        java.util.List<Submission> findByContestId(Long contestId);
+
 }

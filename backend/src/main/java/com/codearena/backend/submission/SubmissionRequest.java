@@ -21,4 +21,6 @@ public class SubmissionRequest {
 
     @NotBlank(message = "Code is required")
     private String code;
+
+    private Long contestId; // optional - set when submitting from a contest
 }
