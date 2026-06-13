@@ -1,0 +1,7 @@
+# Ignore environment variables file
+.env
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
