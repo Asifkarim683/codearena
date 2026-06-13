@@ -9,6 +9,7 @@ import {
     CheckCircle2, XCircle, AlertCircle, Loader2,
     ChevronDown, ChevronUp, Tag
 } from 'lucide-react'
+import './ProblemDetailPage.css'
 
 const LANGUAGES = [
     { value: 'JAVA', label: 'Java', monaco: 'java' },
@@ -131,42 +132,33 @@ export default function ProblemDetailPage() {
     const getVerdictStyle = (verdict) => {
         switch (verdict) {
             case 'ACCEPTED':
-                return { color: '#10b981', bg: 'rgba(16,185,129,0.1)', icon: CheckCircle2 }
+                return { color: '#10b981', bg: 'rgba(16,185,129,0.08)', icon: CheckCircle2 }
             case 'WRONG_ANSWER':
-                return { color: '#ef4444', bg: 'rgba(239,68,68,0.1)', icon: XCircle }
+                return { color: '#ef4444', bg: 'rgba(239,68,68,0.08)', icon: XCircle }
             case 'TIME_LIMIT_EXCEEDED':
-                return { color: '#f59e0b', bg: 'rgba(245,158,11,0.1)', icon: Clock }
+                return { color: '#d97706', bg: 'rgba(245,158,11,0.08)', icon: Clock }
             case 'COMPILATION_ERROR':
-                return { color: '#6366f1', bg: 'rgba(99,102,241,0.1)', icon: AlertCircle }
+                return { color: '#6366f1', bg: 'rgba(99,102,241,0.08)', icon: AlertCircle }
             case 'RUNTIME_ERROR':
-                return { color: '#f97316', bg: 'rgba(249,115,22,0.1)', icon: AlertCircle }
+                return { color: '#f97316', bg: 'rgba(249,115,22,0.08)', icon: AlertCircle }
             default:
-                return { color: '#6b7280', bg: 'rgba(107,114,128,0.1)', icon: AlertCircle }
-        }
-    }
-
-    const getDifficultyStyle = (diff) => {
-        switch (diff) {
-            case 'EASY': return { color: '#10b981', bg: 'rgba(16,185,129,0.1)' }
-            case 'MEDIUM': return { color: '#f59e0b', bg: 'rgba(245,158,11,0.1)' }
-            case 'HARD': return { color: '#ef4444', bg: 'rgba(239,68,68,0.1)' }
-            default: return {}
+                return { color: '#6b7280', bg: 'rgba(107,114,128,0.08)', icon: AlertCircle }
         }
     }
 
     if (loading) return (
-        <div style={styles.loadingContainer}>
+        <div className="detail-loading-container">
             <Loader2 size={40} color="#3b82f6"
                 style={{ animation: 'spin 1s linear infinite' }} />
-            <p style={{ color: '#6b7280', marginTop: '16px' }}>
+            <p className="detail-loading-text">
                 Loading problem...
             </p>
         </div>
     )
 
     if (!problem) return (
-        <div style={styles.loadingContainer}>
-            <p style={{ color: '#6b7280' }}>Problem not found</p>
+        <div className="detail-loading-container">
+            <p className="detail-loading-text">Problem not found</p>
         </div>
     )
 
@@ -174,84 +166,79 @@ export default function ProblemDetailPage() {
         ? getVerdictStyle(result.verdict) : null
 
     return (
-        <div style={styles.container}>
+        <div className="detail-container">
+            {/* Glowing Blur Background Blobs */}
+            <div className="blob blob-pink"></div>
+            <div className="blob blob-mint"></div>
 
             {/* Left Panel — Problem Description */}
-            <div style={styles.leftPanel}>
+            <div className="detail-left-panel">
 
                 {/* Back + Title */}
-                <div style={styles.problemHeader}>
-                    <Link to="/problems" style={styles.backBtn}>
+                <div className="detail-problem-header">
+                    <Link to="/problems" className="detail-back-btn">
                         <ChevronLeft size={16} />
                         Problems
                     </Link>
-                    <div style={styles.titleRow}>
-                        <h1 style={styles.problemTitle}>{problem.title}</h1>
-                        <span style={{
-                            ...styles.diffBadge,
-                            color: getDifficultyStyle(problem.difficulty).color,
-                            background: getDifficultyStyle(
-                                problem.difficulty).bg
-                        }}>
+                    <div className="detail-title-row">
+                        <h1 className="detail-problem-title">{problem.title}</h1>
+                        <span className={`detail-diff-badge ${problem.difficulty.toLowerCase()}`}>
                             {problem.difficulty.charAt(0) +
                                 problem.difficulty.slice(1).toLowerCase()}
                         </span>
                     </div>
 
                     {/* Stats Row */}
-                    <div style={styles.statsRow}>
-                        <span style={styles.stat}>
+                    <div className="detail-stats-row">
+                        <span className="detail-stat">
                             <Clock size={13} />
                             {problem.timeLimit}ms
                         </span>
-                        <span style={styles.stat}>
+                        <span className="detail-stat">
                             <MemoryStick size={13} />
                             {problem.memoryLimit}MB
                         </span>
-                        <span style={styles.stat}>
+                        <span className="detail-stat">
                             Acceptance: {problem.acceptanceRate?.toFixed(1)}%
                         </span>
                     </div>
 
                     {/* Tags */}
                     {problem.tags && problem.tags.length > 0 && (
-                        <div style={styles.tagsRow}>
+                        <div className="detail-tags-row">
                             <Tag size={13} color="#6b7280" />
                             {problem.tags.map(tag => (
-                                <span key={tag} style={styles.tag}>{tag}</span>
+                                <span key={tag} className="detail-tag">{tag}</span>
                             ))}
                         </div>
                     )}
                 </div>
 
                 {/* Tabs */}
-                <div style={styles.tabs}>
+                <div className="detail-tabs">
                     {['description', 'examples'].map(tab => (
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
-                            style={{
-                                ...styles.tab,
-                                ...(activeTab === tab ? styles.tabActive : {})
-                            }}>
+                            className={`detail-tab${activeTab === tab ? ' active' : ''}`}>
                             {tab.charAt(0).toUpperCase() + tab.slice(1)}
                         </button>
                     ))}
                 </div>
 
                 {/* Tab Content */}
-                <div style={styles.tabContent}>
+                <div className="detail-tab-content">
                     {activeTab === 'description' && (
                         <div>
-                            <div style={styles.section}>
-                                <h3 style={styles.sectionTitle}>Description</h3>
-                                <p style={styles.description}>
+                            <div className="detail-section">
+                                <h3 className="detail-section-title">Description</h3>
+                                <p className="detail-description">
                                     {problem.description}
                                 </p>
                             </div>
-                            <div style={styles.section}>
-                                <h3 style={styles.sectionTitle}>Constraints</h3>
-                                <pre style={styles.constraints}>
+                            <div className="detail-section">
+                                <h3 className="detail-section-title">Constraints</h3>
+                                <pre className="detail-constraints">
                                     {problem.constraints}
                                 </pre>
                             </div>
@@ -262,21 +249,21 @@ export default function ProblemDetailPage() {
                         <div>
                             {problem.sampleTestCases?.length > 0 ? (
                                 problem.sampleTestCases.map((tc, i) => (
-                                    <div key={tc.id} style={styles.example}>
-                                        <h4 style={styles.exampleTitle}>
+                                    <div key={tc.id} className="detail-example">
+                                        <h4 className="detail-example-title">
                                             Example {i + 1}
                                         </h4>
-                                        <div style={styles.ioBox}>
-                                            <div style={styles.ioLabel}>Input:</div>
-                                            <pre style={styles.ioContent}>
+                                        <div className="detail-io-box">
+                                            <div className="detail-io-label">Input:</div>
+                                            <pre className="detail-io-content">
                                                 {tc.input}
                                             </pre>
                                         </div>
-                                        <div style={styles.ioBox}>
-                                            <div style={styles.ioLabel}>
+                                        <div className="detail-io-box">
+                                            <div className="detail-io-label">
                                                 Expected Output:
                                             </div>
-                                            <pre style={styles.ioContent}>
+                                            <pre className="detail-io-content">
                                                 {tc.expectedOutput}
                                             </pre>
                                         </div>
@@ -293,28 +280,26 @@ export default function ProblemDetailPage() {
             </div>
 
             {/* Right Panel — Code Editor */}
-            <div style={styles.rightPanel}>
+            <div className="detail-right-panel">
 
                 {/* Editor Header */}
-                <div style={styles.editorHeader}>
+                <div className="detail-editor-header">
                     <select
                         value={language}
                         onChange={(e) => handleLanguageChange(e.target.value)}
-                        style={styles.langSelect}>
+                        className="detail-lang-select">
                         {LANGUAGES.map(lang => (
                             <option key={lang.value} value={lang.value}>
                                 {lang.label}
                             </option>
                         ))}
                     </select>
-                    <div style={styles.editorActions}>
+                    <div className="detail-editor-actions">
                         <button
                             onClick={handleRun}
                             disabled={running || submitting}
-                            style={{
-                                ...styles.runBtn,
-                                opacity: running || submitting ? 0.7 : 1
-                            }}>
+                            className="detail-run-btn"
+                        >
                             {running
                                 ? <Loader2 size={15}
                                     style={{ animation: 'spin 1s linear infinite' }} />
@@ -324,10 +309,8 @@ export default function ProblemDetailPage() {
                         <button
                             onClick={handleSubmit}
                             disabled={running || submitting}
-                            style={{
-                                ...styles.submitBtn,
-                                opacity: running || submitting ? 0.7 : 1
-                            }}>
+                            className="detail-submit-btn"
+                        >
                             {submitting
                                 ? <Loader2 size={15}
                                     style={{ animation: 'spin 1s linear infinite' }} />
@@ -338,7 +321,7 @@ export default function ProblemDetailPage() {
                 </div>
 
                 {/* Monaco Editor */}
-                <div style={styles.editorWrapper}>
+                <div className="detail-editor-wrapper">
                     <Editor
                         height="100%"
                         language={
@@ -364,11 +347,11 @@ export default function ProblemDetailPage() {
 
                 {/* Result Panel */}
                 {resultOpen && (
-                    <div style={styles.resultPanel}>
+                    <div className="detail-result-panel">
                         <button
                             onClick={() => setResultOpen(!resultOpen)}
-                            style={styles.resultToggle}>
-                            <span style={styles.resultToggleText}>
+                            className="detail-result-toggle">
+                            <span className="detail-result-toggle-text">
                                 Result
                             </span>
                             {resultOpen
@@ -376,14 +359,14 @@ export default function ProblemDetailPage() {
                                 : <ChevronUp size={16} />}
                         </button>
 
-                        <div style={styles.resultContent}>
+                        <div className="detail-result-content">
                             {(running || submitting) && !result ? (
-                                <div style={styles.resultLoading}>
+                                <div className="detail-result-loading">
                                     <Loader2 size={24} color="#3b82f6"
                                         style={{
                                             animation: 'spin 1s linear infinite'
                                         }} />
-                                    <span style={{ color: '#6b7280' }}>
+                                    <span>
                                         {running
                                             ? 'Running against sample tests...'
                                             : 'Judging your submission...'}
@@ -391,19 +374,21 @@ export default function ProblemDetailPage() {
                                 </div>
                             ) : result ? (
                                 <div>
-                                    <div style={styles.verdictRow}>
+                                    <div className="detail-verdict-row">
                                         {verdictInfo && (
                                             <>
-                                                <div style={{
-                                                    ...styles.verdictBadge,
-                                                    color: verdictInfo.color,
-                                                    background: verdictInfo.bg,
-                                                }}>
+                                                <div 
+                                                    className="detail-verdict-badge"
+                                                    style={{
+                                                        color: verdictInfo.color,
+                                                        background: verdictInfo.bg,
+                                                    }}
+                                                >
                                                     <verdictInfo.icon size={18} />
                                                     {result.verdict.replace(/_/g, ' ')}
                                                 </div>
                                                 {result.runtimeMs && (
-                                                    <span style={styles.runtimeStat}>
+                                                    <span className="detail-runtime-stat">
                                                         <Clock size={13} />
                                                         {result.runtimeMs}ms
                                                     </span>
@@ -412,7 +397,7 @@ export default function ProblemDetailPage() {
                                         )}
                                     </div>
                                     {result.errorMessage && (
-                                        <pre style={styles.errorMsg}>
+                                        <pre className="detail-error-msg">
                                             {result.errorMessage}
                                         </pre>
                                     )}
@@ -424,309 +409,4 @@ export default function ProblemDetailPage() {
             </div>
         </div>
     )
-}
-
-const styles = {
-    container: {
-        display: 'flex',
-        height: 'calc(100vh - 64px)',
-        background: '#0a0e1a',
-        overflow: 'hidden',
-    },
-    leftPanel: {
-        width: '42%',
-        minWidth: '380px',
-        display: 'flex',
-        flexDirection: 'column',
-        borderRight: '1px solid #1e2d45',
-        overflow: 'hidden',
-    },
-    problemHeader: {
-        padding: '20px 24px 0',
-        borderBottom: '1px solid #1e2d45',
-    },
-    backBtn: {
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '4px',
-        fontSize: '13px',
-        color: '#6b7280',
-        marginBottom: '12px',
-        textDecoration: 'none',
-        transition: 'color 0.15s',
-    },
-    titleRow: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        marginBottom: '12px',
-        flexWrap: 'wrap',
-    },
-    problemTitle: {
-        fontSize: '20px',
-        fontWeight: '700',
-        color: '#f9fafb',
-        letterSpacing: '-0.3px',
-    },
-    diffBadge: {
-        padding: '3px 10px',
-        borderRadius: '20px',
-        fontSize: '12px',
-        fontWeight: '600',
-    },
-    statsRow: {
-        display: 'flex',
-        gap: '16px',
-        marginBottom: '12px',
-    },
-    stat: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '5px',
-        fontSize: '12px',
-        color: '#6b7280',
-    },
-    tagsRow: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        flexWrap: 'wrap',
-        paddingBottom: '16px',
-    },
-    tag: {
-        padding: '3px 10px',
-        background: '#1a2235',
-        border: '1px solid #1e2d45',
-        borderRadius: '20px',
-        fontSize: '12px',
-        color: '#9ca3af',
-    },
-    tabs: {
-        display: 'flex',
-        padding: '0 24px',
-        borderBottom: '1px solid #1e2d45',
-        background: '#0f172a',
-    },
-    tab: {
-        padding: '12px 16px',
-        background: 'none',
-        border: 'none',
-        fontSize: '13px',
-        fontWeight: '500',
-        color: '#6b7280',
-        cursor: 'pointer',
-        borderBottom: '2px solid transparent',
-        transition: 'all 0.2s',
-        fontFamily: 'inherit',
-    },
-    tabActive: {
-        color: '#3b82f6',
-        borderBottom: '2px solid #3b82f6',
-    },
-    tabContent: {
-        flex: 1,
-        overflow: 'auto',
-        padding: '20px 24px',
-    },
-    section: {
-        marginBottom: '24px',
-    },
-    sectionTitle: {
-        fontSize: '14px',
-        fontWeight: '600',
-        color: '#9ca3af',
-        textTransform: 'uppercase',
-        letterSpacing: '0.5px',
-        marginBottom: '10px',
-    },
-    description: {
-        fontSize: '14px',
-        color: '#d1d5db',
-        lineHeight: '1.7',
-        whiteSpace: 'pre-wrap',
-    },
-    constraints: {
-        fontSize: '13px',
-        color: '#d1d5db',
-        background: '#0f172a',
-        border: '1px solid #1e2d45',
-        borderRadius: '8px',
-        padding: '12px 16px',
-        fontFamily: "'JetBrains Mono', monospace",
-        whiteSpace: 'pre-wrap',
-        lineHeight: '1.6',
-    },
-    example: {
-        marginBottom: '20px',
-        background: '#0f172a',
-        border: '1px solid #1e2d45',
-        borderRadius: '10px',
-        padding: '16px',
-    },
-    exampleTitle: {
-        fontSize: '13px',
-        fontWeight: '600',
-        color: '#9ca3af',
-        marginBottom: '12px',
-        textTransform: 'uppercase',
-        letterSpacing: '0.5px',
-    },
-    ioBox: {
-        marginBottom: '10px',
-    },
-    ioLabel: {
-        fontSize: '12px',
-        color: '#6b7280',
-        fontWeight: '500',
-        marginBottom: '4px',
-    },
-    ioContent: {
-        background: '#1a2235',
-        border: '1px solid #1e2d45',
-        borderRadius: '6px',
-        padding: '10px 12px',
-        fontSize: '13px',
-        color: '#d1d5db',
-        fontFamily: "'JetBrains Mono', monospace",
-        whiteSpace: 'pre-wrap',
-    },
-    rightPanel: {
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-    },
-    editorHeader: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '12px 16px',
-        background: '#0f172a',
-        borderBottom: '1px solid #1e2d45',
-    },
-    langSelect: {
-        padding: '7px 12px',
-        background: '#1a2235',
-        border: '1px solid #1e2d45',
-        borderRadius: '8px',
-        color: '#f9fafb',
-        fontSize: '13px',
-        fontWeight: '500',
-        cursor: 'pointer',
-        fontFamily: 'inherit',
-    },
-    editorActions: {
-        display: 'flex',
-        gap: '10px',
-    },
-    runBtn: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-        padding: '8px 18px',
-        background: 'transparent',
-        border: '1px solid #1e2d45',
-        borderRadius: '8px',
-        color: '#d1d5db',
-        fontSize: '13px',
-        fontWeight: '600',
-        cursor: 'pointer',
-        transition: 'all 0.2s',
-        fontFamily: 'inherit',
-    },
-    submitBtn: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-        padding: '8px 18px',
-        background: 'linear-gradient(135deg, #10b981, #059669)',
-        border: 'none',
-        borderRadius: '8px',
-        color: 'white',
-        fontSize: '13px',
-        fontWeight: '600',
-        cursor: 'pointer',
-        transition: 'all 0.2s',
-        fontFamily: 'inherit',
-        boxShadow: '0 2px 8px rgba(16,185,129,0.3)',
-    },
-    editorWrapper: {
-        flex: 1,
-        overflow: 'hidden',
-    },
-    resultPanel: {
-        borderTop: '1px solid #1e2d45',
-        background: '#0f172a',
-        maxHeight: '200px',
-    },
-    resultToggle: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '100%',
-        padding: '10px 16px',
-        background: 'none',
-        border: 'none',
-        borderBottom: '1px solid #1e2d45',
-        cursor: 'pointer',
-        fontFamily: 'inherit',
-    },
-    resultToggleText: {
-        fontSize: '13px',
-        fontWeight: '600',
-        color: '#9ca3af',
-    },
-    resultContent: {
-        padding: '16px',
-        overflow: 'auto',
-        maxHeight: '140px',
-    },
-    resultLoading: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        fontSize: '14px',
-    },
-    verdictRow: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '16px',
-    },
-    verdictBadge: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        padding: '8px 16px',
-        borderRadius: '8px',
-        fontSize: '15px',
-        fontWeight: '700',
-    },
-    runtimeStat: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '5px',
-        fontSize: '13px',
-        color: '#6b7280',
-    },
-    errorMsg: {
-        marginTop: '12px',
-        padding: '12px',
-        background: '#1a0a0a',
-        border: '1px solid #3f1515',
-        borderRadius: '8px',
-        fontSize: '12px',
-        color: '#fca5a5',
-        fontFamily: "'JetBrains Mono', monospace",
-        whiteSpace: 'pre-wrap',
-        overflow: 'auto',
-        maxHeight: '80px',
-    },
-    loadingContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: 'calc(100vh - 64px)',
-        background: '#0a0e1a',
-    },
 }
