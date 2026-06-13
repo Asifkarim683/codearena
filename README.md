@@ -1,6 +1,6 @@
 # CodeArena
 
-CodeArena is a full-stack online coding platform inspired by LeetCode and HackerRank, built as an internship project. It allows users to solve algorithmic problems, submit code in multiple languages, receive automated verdicts from a custom judge engine, compete in timed contests, and track their progress on a leaderboard.
+CodeArena is a full-stack online coding platform inspired by LeetCode and HackerRank, built as an internship project. It allows users to solve algorithmic problems, submit code in multiple languages, receive automated verdicts from a custom judge engine, compete in timed contests with scoring and rankings, and track their progress on a leaderboard.
 
 ## Features
 
@@ -9,9 +9,12 @@ CodeArena is a full-stack online coding platform inspired by LeetCode and Hacker
 - Online code editor (Monaco Editor) supporting Java, Python, C++, and JavaScript
 - Custom judge engine that compiles and runs code against hidden test cases
 - Verdicts: Accepted, Wrong Answer, Time Limit Exceeded, Runtime Error, Compilation Error
-- User profiles with submission history, solved problems, and acceptance rate
-- Global leaderboard with rankings
+- User profiles with submission history, solved problems, acceptance rate, and contest performance
+- Global leaderboard with rankings (admins excluded)
 - Timed contests with countdown timers
+- Points-based contest scoring (Easy = 100, Medium = 200, Hard = 300)
+- Dedicated contest problem-solving page with copy/paste disabled
+- Contest scoreboard with rankings based on score and submission time (admins excluded)
 - Admin panel for managing users, problems, contests, and submissions
 - Account settings for updating profile details and changing password
 - Fully responsive UI
@@ -123,6 +126,18 @@ The judge engine evaluates submitted code as follows:
 6. A verdict is returned: Accepted, Wrong Answer, Time Limit Exceeded, Compilation Error, Runtime Error, or Memory Limit Exceeded
 7. Temporary files are deleted after judging
 
+## Contests and Scoring
+
+Contests group a set of problems within a start and end time window.
+
+- Each problem carries points based on its difficulty: Easy = 100, Medium = 200, Hard = 300
+- During an ongoing contest, problems are solved through a dedicated contest page where copy, paste, cut, and right-click are disabled
+- A submission only counts toward a contest if it is made through this page and the contest is ongoing
+- A user's contest score is the sum of points for each problem they get Accepted on (only the first Accepted submission per problem counts)
+- The contest scoreboard ranks participants by score, then by earliest last-accepted submission time as a tiebreaker
+- Admin accounts are excluded from both the global leaderboard and contest scoreboards
+- User profiles show a Contest Performance section summarizing score and problems solved per contest
+
 ## API Endpoints
 
 | Method | Endpoint | Description |
@@ -133,10 +148,9 @@ The judge engine evaluates submitted code as follows:
 | POST | /api/v1/submissions | Submit code for judging |
 | GET | /api/v1/leaderboard | Get leaderboard |
 | GET | /api/v1/contests | List contests |
+| GET | /api/v1/contests/{id} | Get contest details |
+| POST | /api/v1/contests/{id}/join | Join a contest |
+| GET | /api/v1/contests/{id}/scoreboard | Get contest scoreboard |
 | PUT | /api/v1/users/me | Update profile |
 | PUT | /api/v1/users/me/password | Change password |
 | GET | /api/v1/admin/stats | Admin dashboard stats |
-
-## Contributors
-
-This project was built as part of an internship program.
