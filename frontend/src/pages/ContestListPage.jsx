@@ -5,8 +5,9 @@ import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 import {
     Trophy, Calendar, Clock, Users,
-    ArrowRight, Loader2, Zap, CheckCircle2
+    ArrowRight, Loader2
 } from 'lucide-react'
+import './ContestListPage.css'
 
 export default function ContestListPage() {
     const { isAdmin } = useAuth()
@@ -35,13 +36,13 @@ export default function ContestListPage() {
     const getStatusStyle = (status) => {
         switch (status) {
             case 'ONGOING':
-                return { color: '#10b981', bg: 'rgba(16,185,129,0.1)', label: 'Live Now' }
+                return { color: '#10b981', bg: 'rgba(16,185,129,0.08)', label: 'Live Now' }
             case 'UPCOMING':
-                return { color: '#3b82f6', bg: 'rgba(59,130,246,0.1)', label: 'Upcoming' }
+                return { color: '#3b82f6', bg: 'rgba(59,130,246,0.08)', label: 'Upcoming' }
             case 'ENDED':
-                return { color: '#6b7280', bg: 'rgba(107,114,128,0.1)', label: 'Ended' }
+                return { color: '#64748b', bg: 'rgba(107,114,128,0.08)', label: 'Ended' }
             default:
-                return { color: '#6b7280', bg: 'rgba(107,114,128,0.1)', label: status }
+                return { color: '#64748b', bg: 'rgba(107,114,128,0.08)', label: status }
         }
     }
 
@@ -73,18 +74,22 @@ export default function ContestListPage() {
     })
 
     return (
-        <div style={styles.page}>
-            <div style={styles.container}>
+        <div className="contest-page">
+            {/* Glowing Blur Background Blobs */}
+            <div className="blob blob-pink"></div>
+            <div className="blob blob-mint"></div>
+            <div className="blob blob-blue"></div>
 
+            <div className="contest-container">
                 {/* Header */}
-                <div style={styles.header}>
-                    <div style={styles.headerLeft}>
-                        <div style={styles.headerIcon}>
+                <div className="contest-header">
+                    <div className="contest-header-left">
+                        <div className="contest-header-icon">
                             <Trophy size={24} color="#f59e0b" />
                         </div>
                         <div>
-                            <h1 style={styles.title}>Contests</h1>
-                            <p style={styles.subtitle}>
+                            <h1 className="contest-title">Contests</h1>
+                            <p className="contest-subtitle">
                                 Compete with others and climb the leaderboard
                             </p>
                         </div>
@@ -92,68 +97,72 @@ export default function ContestListPage() {
                 </div>
 
                 {loading ? (
-                    <div style={styles.loadingDiv}>
+                    <div className="contest-loading">
                         <Loader2 size={32} color="#3b82f6"
                             style={{ animation: 'spin 1s linear infinite' }} />
                     </div>
                 ) : sortedContests.length === 0 ? (
-                    <div style={styles.empty}>
-                        <Trophy size={48} color="#374151" />
-                        <p style={styles.emptyText}>No contests yet</p>
-                        <p style={styles.emptySubtext}>
+                    <div className="contest-empty">
+                        <Trophy size={48} color="#94a3b8" />
+                        <p className="contest-empty-text">No contests yet</p>
+                        <p className="contest-empty-subtext">
                             Check back later for upcoming contests
                         </p>
                     </div>
                 ) : (
-                    <div style={styles.contestGrid}>
+                    <div className="contest-grid">
                         {sortedContests.map(contest => {
                             const statusStyle = getStatusStyle(contest.status)
                             const countdown = contest.status === 'UPCOMING'
-                                ? getCountdown(contest.startTime, contest.status)
-                                : contest.status === 'ONGOING'
-                                    ? getCountdown(contest.endTime, contest.status)
-                                    : null
+                                  ? getCountdown(contest.startTime, contest.status)
+                                  : contest.status === 'ONGOING'
+                                      ? getCountdown(contest.endTime, contest.status)
+                                      : null
 
                             return (
                                 <Link
                                     key={contest.id}
                                     to={`/contests/${contest.id}`}
-                                    style={styles.contestCard}>
-
+                                    className="contest-card"
+                                >
                                     {/* Status Badge */}
-                                    <div style={styles.cardTop}>
-                                        <span style={{
-                                            ...styles.statusBadge,
-                                            color: statusStyle.color,
-                                            background: statusStyle.bg,
-                                        }}>
+                                    <div className="card-top">
+                                        <span 
+                                            className="status-badge"
+                                            style={{
+                                                color: statusStyle.color,
+                                                background: statusStyle.bg,
+                                            }}
+                                        >
                                             {contest.status === 'ONGOING' && (
-                                                <span style={styles.liveDot} />
+                                                <span className="live-dot" />
                                             )}
                                             {statusStyle.label}
                                         </span>
                                         {contest.status !== 'ENDED' && (
-                                            <span style={styles.problemCount}>
+                                            <span className="problem-count">
                                                 {contest.totalProblems} problems
                                             </span>
                                         )}
                                     </div>
 
                                     {/* Title */}
-                                    <h3 style={styles.contestTitle}>
+                                    <h3 className="contest-card-title">
                                         {contest.title}
                                     </h3>
-                                    <p style={styles.contestDesc}>
+                                    <p className="contest-desc">
                                         {contest.description}
                                     </p>
 
                                     {/* Countdown */}
                                     {countdown && (
-                                        <div style={{
-                                            ...styles.countdown,
-                                            background: statusStyle.bg,
-                                            color: statusStyle.color,
-                                        }}>
+                                        <div 
+                                            className="countdown-box"
+                                            style={{
+                                                background: statusStyle.bg,
+                                                color: statusStyle.color,
+                                            }}
+                                        >
                                             <Clock size={14} />
                                             {contest.status === 'UPCOMING'
                                                 ? `Starts in ${countdown}`
@@ -162,18 +171,18 @@ export default function ContestListPage() {
                                     )}
 
                                     {/* Footer */}
-                                    <div style={styles.cardFooter}>
-                                        <div style={styles.footerItem}>
+                                    <div className="card-footer">
+                                        <div className="footer-item">
                                             <Calendar size={13} />
                                             {formatDateTime(contest.startTime)}
                                         </div>
-                                        <div style={styles.footerItem}>
+                                        <div className="footer-item">
                                             <Users size={13} />
                                             {contest.totalParticipants} joined
                                         </div>
                                     </div>
 
-                                    <div style={styles.viewBtn}>
+                                    <div className="view-btn">
                                         View Contest
                                         <ArrowRight size={14} />
                                     </div>
@@ -185,168 +194,4 @@ export default function ContestListPage() {
             </div>
         </div>
     )
-}
-
-const styles = {
-    page: {
-        minHeight: 'calc(100vh - 64px)',
-        background: '#0a0e1a',
-        padding: '32px 0 60px',
-    },
-    container: {
-        maxWidth: '1100px',
-        margin: '0 auto',
-        padding: '0 24px',
-    },
-    header: {
-        marginBottom: '32px',
-    },
-    headerLeft: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '16px',
-    },
-    headerIcon: {
-        width: '52px',
-        height: '52px',
-        background: 'rgba(245, 158, 11, 0.1)',
-        border: '1px solid rgba(245, 158, 11, 0.2)',
-        borderRadius: '14px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexShrink: 0,
-    },
-    title: {
-        fontSize: '28px',
-        fontWeight: '800',
-        color: '#f9fafb',
-        letterSpacing: '-0.5px',
-    },
-    subtitle: {
-        fontSize: '14px',
-        color: '#6b7280',
-        marginTop: '4px',
-    },
-    loadingDiv: {
-        display: 'flex',
-        justifyContent: 'center',
-        padding: '80px',
-    },
-    empty: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '8px',
-        padding: '80px 20px',
-        background: '#111827',
-        border: '1px solid #1e2d45',
-        borderRadius: '14px',
-    },
-    emptyText: {
-        fontSize: '18px',
-        fontWeight: '600',
-        color: '#374151',
-    },
-    emptySubtext: {
-        fontSize: '14px',
-        color: '#4b5563',
-    },
-    contestGrid: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-        gap: '20px',
-    },
-    contestCard: {
-        display: 'flex',
-        flexDirection: 'column',
-        background: '#111827',
-        border: '1px solid #1e2d45',
-        borderRadius: '16px',
-        padding: '22px',
-        textDecoration: 'none',
-        transition: 'all 0.2s',
-        position: 'relative',
-    },
-    cardTop: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: '14px',
-    },
-    statusBadge: {
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '6px',
-        padding: '4px 12px',
-        borderRadius: '20px',
-        fontSize: '12px',
-        fontWeight: '700',
-        textTransform: 'uppercase',
-        letterSpacing: '0.5px',
-    },
-    liveDot: {
-        width: '6px',
-        height: '6px',
-        borderRadius: '50%',
-        background: '#10b981',
-        animation: 'pulse 1.5s infinite',
-    },
-    problemCount: {
-        fontSize: '12px',
-        color: '#6b7280',
-        fontWeight: '500',
-    },
-    contestTitle: {
-        fontSize: '18px',
-        fontWeight: '700',
-        color: '#f9fafb',
-        marginBottom: '8px',
-        letterSpacing: '-0.2px',
-    },
-    contestDesc: {
-        fontSize: '13px',
-        color: '#6b7280',
-        lineHeight: '1.6',
-        marginBottom: '16px',
-        display: '-webkit-box',
-        WebkitLineClamp: 2,
-        WebkitBoxOrient: 'vertical',
-        overflow: 'hidden',
-        flex: 1,
-    },
-    countdown: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-        padding: '8px 14px',
-        borderRadius: '8px',
-        fontSize: '13px',
-        fontWeight: '600',
-        marginBottom: '14px',
-    },
-    cardFooter: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '6px',
-        marginBottom: '16px',
-        paddingBottom: '16px',
-        borderBottom: '1px solid #1e2d45',
-    },
-    footerItem: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-        fontSize: '12px',
-        color: '#6b7280',
-    },
-    viewBtn: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '6px',
-        fontSize: '14px',
-        fontWeight: '600',
-        color: '#3b82f6',
-    },
-}
+}

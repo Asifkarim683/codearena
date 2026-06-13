@@ -7,6 +7,7 @@ import {
     Trophy, Medal, Crown,
     ChevronLeft, ChevronRight, Loader2
 } from 'lucide-react'
+import './LeaderboardPage.css'
 
 export default function LeaderboardPage() {
     const { user: currentUser } = useAuth()
@@ -34,24 +35,24 @@ export default function LeaderboardPage() {
 
     const getRankDisplay = (rank) => {
         if (rank === 1) return (
-            <div style={{ ...styles.rankBadge, background: 'linear-gradient(135deg, #f59e0b, #d97706)' }}>
+            <div className="rank-badge" style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)' }}>
                 <Crown size={14} />
                 1
             </div>
         )
         if (rank === 2) return (
-            <div style={{ ...styles.rankBadge, background: 'linear-gradient(135deg, #9ca3af, #6b7280)' }}>
+            <div className="rank-badge" style={{ background: 'linear-gradient(135deg, #9ca3af, #6b7280)' }}>
                 <Medal size={14} />
                 2
             </div>
         )
         if (rank === 3) return (
-            <div style={{ ...styles.rankBadge, background: 'linear-gradient(135deg, #cd7c2f, #a85c1c)' }}>
+            <div className="rank-badge" style={{ background: 'linear-gradient(135deg, #cd7c2f, #a85c1c)' }}>
                 <Medal size={14} />
                 3
             </div>
         )
-        return <span style={styles.rankNumber}>#{rank}</span>
+        return <span className="rank-number">#{rank}</span>
     }
 
     const formatDate = (dateStr) =>
@@ -60,18 +61,22 @@ export default function LeaderboardPage() {
         })
 
     return (
-        <div style={styles.page}>
-            <div style={styles.container}>
+        <div className="leaderboard-page">
+            {/* Glowing Blur Background Blobs */}
+            <div className="blob blob-pink"></div>
+            <div className="blob blob-mint"></div>
+            <div className="blob blob-blue"></div>
 
+            <div className="leaderboard-container">
                 {/* Header */}
-                <div style={styles.header}>
-                    <div style={styles.headerLeft}>
-                        <div style={styles.headerIcon}>
+                <div className="leaderboard-header">
+                    <div className="leaderboard-header-left">
+                        <div className="leaderboard-header-icon">
                             <Trophy size={24} color="#f59e0b" />
                         </div>
                         <div>
-                            <h1 style={styles.title}>Leaderboard</h1>
-                            <p style={styles.subtitle}>
+                            <h1 className="leaderboard-title">Leaderboard</h1>
+                            <p className="leaderboard-subtitle">
                                 Top coders ranked by problems solved
                             </p>
                         </div>
@@ -80,73 +85,72 @@ export default function LeaderboardPage() {
 
                 {/* Top 3 Podium */}
                 {page === 0 && leaderboard.length >= 3 && (
-                    <div style={styles.podium}>
+                    <div className="leaderboard-podium">
                         {/* 2nd Place */}
-                        <div style={styles.podiumCard}>
-                            <div style={{
-                                ...styles.podiumAvatar,
-                                background: 'linear-gradient(135deg, #9ca3af, #6b7280)'
-                            }}>
+                        <div className="podium-card">
+                            <div 
+                                className="podium-avatar"
+                                style={{ background: 'linear-gradient(135deg, #9ca3af, #6b7280)' }}
+                            >
                                 {leaderboard[1]?.username?.charAt(0).toUpperCase()}
                             </div>
-                            <div style={styles.podiumRankBadge}>
+                            <div className="podium-rank-badge">
                                 🥈 2nd
                             </div>
                             <Link
                                 to={`/profile/${leaderboard[1]?.username}`}
-                                style={styles.podiumName}>
+                                className="podium-name">
                                 {leaderboard[1]?.username}
                             </Link>
-                            <div style={styles.podiumSolved}>
+                            <div className="podium-solved">
                                 {leaderboard[1]?.solved} solved
                             </div>
                         </div>
 
                         {/* 1st Place */}
-                        <div style={{
-                            ...styles.podiumCard,
-                            ...styles.podiumFirst
-                        }}>
-                            <div style={styles.crownIcon}>👑</div>
-                            <div style={{
-                                ...styles.podiumAvatar,
-                                background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                                width: '72px',
-                                height: '72px',
-                                fontSize: '28px',
-                            }}>
+                        <div className="podium-card podium-first">
+                            <div className="crown-icon">👑</div>
+                            <div 
+                                className="podium-avatar"
+                                style={{
+                                    background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                                    width: '72px',
+                                    height: '72px',
+                                    fontSize: '28px',
+                                }}
+                            >
                                 {leaderboard[0]?.username?.charAt(0).toUpperCase()}
                             </div>
-                            <div style={styles.podiumRankBadge}>
+                            <div className="podium-rank-badge">
                                 🥇 1st
                             </div>
                             <Link
                                 to={`/profile/${leaderboard[0]?.username}`}
-                                style={styles.podiumName}>
+                                className="podium-name">
                                 {leaderboard[0]?.username}
                             </Link>
-                            <div style={styles.podiumSolved}>
+                            <div className="podium-solved">
                                 {leaderboard[0]?.solved} solved
                             </div>
                         </div>
 
                         {/* 3rd Place */}
-                        <div style={styles.podiumCard}>
-                            <div style={{
-                                ...styles.podiumAvatar,
-                                background: 'linear-gradient(135deg, #cd7c2f, #a85c1c)'
-                            }}>
+                        <div className="podium-card">
+                            <div 
+                                className="podium-avatar"
+                                style={{ background: 'linear-gradient(135deg, #cd7c2f, #a85c1c)' }}
+                            >
                                 {leaderboard[2]?.username?.charAt(0).toUpperCase()}
                             </div>
-                            <div style={styles.podiumRankBadge}>
+                            <div className="podium-rank-badge">
                                 🥉 3rd
                             </div>
                             <Link
                                 to={`/profile/${leaderboard[2]?.username}`}
-                                style={styles.podiumName}>
+                                className="podium-name">
                                 {leaderboard[2]?.username}
                             </Link>
-                            <div style={styles.podiumSolved}>
+                            <div className="podium-solved">
                                 {leaderboard[2]?.solved} solved
                             </div>
                         </div>
@@ -154,20 +158,20 @@ export default function LeaderboardPage() {
                 )}
 
                 {/* Table */}
-                <div style={styles.tableCard}>
+                <div className="leaderboard-table-card">
                     {loading ? (
-                        <div style={styles.loadingDiv}>
+                        <div className="leaderboard-loading">
                             <Loader2 size={32} color="#3b82f6"
                                 style={{ animation: 'spin 1s linear infinite' }} />
                         </div>
                     ) : (
-                        <table style={styles.table}>
+                        <table className="leaderboard-table">
                             <thead>
                                 <tr>
-                                    <th style={styles.th}>Rank</th>
-                                    <th style={styles.th}>User</th>
-                                    <th style={styles.th}>Problems Solved</th>
-                                    <th style={styles.th}>Member Since</th>
+                                    <th className="leaderboard-th">Rank</th>
+                                    <th className="leaderboard-th">User</th>
+                                    <th className="leaderboard-th">Problems Solved</th>
+                                    <th className="leaderboard-th">Member Since</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -177,55 +181,56 @@ export default function LeaderboardPage() {
                                     return (
                                         <tr
                                             key={entry.rank}
-                                            style={{
-                                                ...styles.row,
-                                                ...(isCurrentUser
-                                                    ? styles.currentUserRow : {})
-                                            }}>
-                                            <td style={styles.td}>
+                                            className={`leaderboard-row${isCurrentUser ? ' leaderboard-current-user-row' : ''}`}
+                                        >
+                                            <td className="leaderboard-td">
                                                 {getRankDisplay(entry.rank)}
                                             </td>
-                                            <td style={styles.td}>
-                                                <div style={styles.userCell}>
-                                                    <div style={{
-                                                        ...styles.avatar,
-                                                        background: entry.rank === 1
-                                                            ? 'linear-gradient(135deg, #f59e0b, #d97706)'
-                                                            : entry.rank === 2
-                                                                ? 'linear-gradient(135deg, #9ca3af, #6b7280)'
-                                                                : entry.rank === 3
-                                                                    ? 'linear-gradient(135deg, #cd7c2f, #a85c1c)'
-                                                                    : 'linear-gradient(135deg, #3b82f6, #2563eb)'
-                                                    }}>
+                                            <td className="leaderboard-td">
+                                                <div className="user-cell">
+                                                    <div 
+                                                        className="user-avatar"
+                                                        style={{
+                                                            background: entry.rank === 1
+                                                                ? 'linear-gradient(135deg, #f59e0b, #d97706)'
+                                                                : entry.rank === 2
+                                                                    ? 'linear-gradient(135deg, #9ca3af, #6b7280)'
+                                                                    : entry.rank === 3
+                                                                        ? 'linear-gradient(135deg, #cd7c2f, #a85c1c)'
+                                                                        : 'linear-gradient(135deg, #3b82f6, #2563eb)'
+                                                        }}
+                                                    >
                                                         {entry.username?.charAt(0).toUpperCase()}
                                                     </div>
                                                     <div>
                                                         <Link
                                                             to={`/profile/${entry.username}`}
-                                                            style={styles.username}>
+                                                            className="user-username-link">
                                                             {entry.username}
                                                         </Link>
                                                         {isCurrentUser && (
-                                                            <span style={styles.youBadge}>
+                                                            <span className="you-badge">
                                                                 You
                                                             </span>
                                                         )}
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td style={styles.td}>
-                                                <div style={styles.solvedCell}>
-                                                    <div style={{
-                                                        ...styles.solvedBar,
-                                                        width: `${Math.min(100, (entry.solved / (leaderboard[0]?.solved || 1)) * 100)}%`
-                                                    }} />
-                                                    <span style={styles.solvedNum}>
+                                            <td className="leaderboard-td">
+                                                <div className="solved-cell">
+                                                    <div 
+                                                        className="solved-bar"
+                                                        style={{
+                                                            width: `${Math.min(100, (entry.solved / (leaderboard[0]?.solved || 1)) * 100)}%`
+                                                        }} 
+                                                    />
+                                                    <span className="solved-num">
                                                         {entry.solved}
                                                     </span>
                                                 </div>
                                             </td>
-                                            <td style={styles.td}>
-                                                <span style={styles.date}>
+                                            <td className="leaderboard-td">
+                                                <span className="member-date">
                                                     {formatDate(entry.memberSince)}
                                                 </span>
                                             </td>
@@ -238,27 +243,23 @@ export default function LeaderboardPage() {
                 </div>
 
                 {/* Pagination */}
-                <div style={styles.pagination}>
+                <div className="leaderboard-pagination">
                     <button
                         onClick={() => setPage(p => Math.max(0, p - 1))}
                         disabled={page === 0}
-                        style={{
-                            ...styles.pageBtn,
-                            opacity: page === 0 ? 0.4 : 1
-                        }}>
+                        className="leaderboard-page-btn"
+                    >
                         <ChevronLeft size={16} />
                         Previous
                     </button>
-                    <span style={styles.pageInfo}>
+                    <span className="leaderboard-page-info">
                         Page {page + 1}
                     </span>
                     <button
                         onClick={() => setPage(p => p + 1)}
                         disabled={leaderboard.length < size}
-                        style={{
-                            ...styles.pageBtn,
-                            opacity: leaderboard.length < size ? 0.4 : 1
-                        }}>
+                        className="leaderboard-page-btn"
+                    >
                         Next
                         <ChevronRight size={16} />
                     </button>
@@ -266,234 +267,4 @@ export default function LeaderboardPage() {
             </div>
         </div>
     )
-}
-
-const styles = {
-    page: {
-        minHeight: 'calc(100vh - 64px)',
-        background: '#0a0e1a',
-        padding: '32px 0',
-    },
-    container: {
-        maxWidth: '900px',
-        margin: '0 auto',
-        padding: '0 24px',
-    },
-    header: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: '32px',
-    },
-    headerLeft: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '16px',
-    },
-    headerIcon: {
-        width: '52px',
-        height: '52px',
-        background: 'rgba(245, 158, 11, 0.1)',
-        border: '1px solid rgba(245, 158, 11, 0.2)',
-        borderRadius: '14px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        fontSize: '28px',
-        fontWeight: '800',
-        color: '#f9fafb',
-        letterSpacing: '-0.5px',
-    },
-    subtitle: {
-        fontSize: '14px',
-        color: '#6b7280',
-        marginTop: '4px',
-    },
-    podium: {
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        gap: '16px',
-        marginBottom: '32px',
-        padding: '24px',
-        background: '#111827',
-        border: '1px solid #1e2d45',
-        borderRadius: '16px',
-    },
-    podiumCard: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '8px',
-        flex: 1,
-        maxWidth: '160px',
-    },
-    podiumFirst: {
-        transform: 'translateY(-16px)',
-    },
-    crownIcon: {
-        fontSize: '24px',
-    },
-    podiumAvatar: {
-        width: '56px',
-        height: '56px',
-        borderRadius: '14px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '22px',
-        fontWeight: '800',
-        color: 'white',
-    },
-    podiumRankBadge: {
-        fontSize: '13px',
-        fontWeight: '700',
-        color: '#f9fafb',
-    },
-    podiumName: {
-        fontSize: '14px',
-        fontWeight: '700',
-        color: '#f9fafb',
-        textDecoration: 'none',
-        textAlign: 'center',
-    },
-    podiumSolved: {
-        fontSize: '12px',
-        color: '#6b7280',
-    },
-    tableCard: {
-        background: '#111827',
-        border: '1px solid #1e2d45',
-        borderRadius: '14px',
-        overflow: 'hidden',
-        marginBottom: '24px',
-    },
-    loadingDiv: {
-        display: 'flex',
-        justifyContent: 'center',
-        padding: '60px',
-    },
-    table: {
-        width: '100%',
-        borderCollapse: 'collapse',
-    },
-    th: {
-        textAlign: 'left',
-        padding: '14px 20px',
-        fontSize: '12px',
-        fontWeight: '600',
-        color: '#6b7280',
-        textTransform: 'uppercase',
-        letterSpacing: '0.5px',
-        borderBottom: '1px solid #1e2d45',
-        background: '#0f172a',
-    },
-    td: {
-        padding: '14px 20px',
-        borderBottom: '1px solid #1e2d45',
-        fontSize: '14px',
-    },
-    row: {
-        transition: 'background 0.15s',
-    },
-    currentUserRow: {
-        background: 'rgba(59, 130, 246, 0.05)',
-        borderLeft: '3px solid #3b82f6',
-    },
-    rankBadge: {
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '5px',
-        padding: '5px 10px',
-        borderRadius: '8px',
-        fontSize: '13px',
-        fontWeight: '700',
-        color: 'white',
-    },
-    rankNumber: {
-        fontSize: '14px',
-        fontWeight: '600',
-        color: '#6b7280',
-    },
-    userCell: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-    },
-    avatar: {
-        width: '36px',
-        height: '36px',
-        borderRadius: '10px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '15px',
-        fontWeight: '700',
-        color: 'white',
-        flexShrink: 0,
-    },
-    username: {
-        fontSize: '14px',
-        fontWeight: '600',
-        color: '#f9fafb',
-        textDecoration: 'none',
-        display: 'block',
-    },
-    youBadge: {
-        fontSize: '11px',
-        fontWeight: '600',
-        color: '#3b82f6',
-        background: 'rgba(59, 130, 246, 0.1)',
-        padding: '2px 8px',
-        borderRadius: '10px',
-        marginLeft: '8px',
-    },
-    solvedCell: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-    },
-    solvedBar: {
-        height: '6px',
-        background: 'linear-gradient(90deg, #3b82f6, #60a5fa)',
-        borderRadius: '3px',
-        minWidth: '4px',
-        maxWidth: '120px',
-        transition: 'width 0.3s ease',
-    },
-    solvedNum: {
-        fontSize: '14px',
-        fontWeight: '700',
-        color: '#f9fafb',
-    },
-    date: {
-        fontSize: '13px',
-        color: '#6b7280',
-    },
-    pagination: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '16px',
-    },
-    pageBtn: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-        padding: '8px 16px',
-        background: '#111827',
-        border: '1px solid #1e2d45',
-        borderRadius: '8px',
-        color: '#9ca3af',
-        fontSize: '14px',
-        fontWeight: '500',
-        cursor: 'pointer',
-        fontFamily: 'inherit',
-    },
-    pageInfo: {
-        fontSize: '14px',
-        color: '#6b7280',
-    },
-}
+}
