@@ -36,11 +36,11 @@ export default function Navbar() {
         location.pathname === path ||
         location.pathname.startsWith(path + '/')
 
-    const isLandingPage = location.pathname === '/'
+    const isLightThemePage = ['/', '/about', '/contact'].includes(location.pathname)
 
     return (
         <>
-            <nav className={`navbar${isLandingPage ? ' light-theme' : ''}`}>
+            <nav className={`navbar${isLightThemePage ? ' light-theme' : ''}`}>
                 <div className="navbar-container">
 
                     {/* ── Logo ── */}
@@ -70,9 +70,9 @@ export default function Navbar() {
                             ))
                         ) : (
                             <>
-                                <a href="#features" className="navbar-link">Features</a>
-                                <a href="#contests" className="navbar-link">Contests</a>
-                                <a href="#leaderboard" className="navbar-link">Leaderboard</a>
+                                <a href="/#features" className="navbar-link">Features</a>
+                                <Link to="/about" className={`navbar-link${isActive('/about') ? ' active' : ''}`}>About</Link>
+                                <Link to="/contact" className={`navbar-link${isActive('/contact') ? ' active' : ''}`}>Contact</Link>
                             </>
                         )}
                     </div>
@@ -279,23 +279,23 @@ export default function Navbar() {
                                     Explore
                                 </span>
                                 <a
-                                    href="#features"
+                                    href="/#features"
                                     className="navbar-mobile-link"
                                     onClick={() => setMobileOpen(false)}>
                                     Features
                                 </a>
-                                <a
-                                    href="#contests"
-                                    className="navbar-mobile-link"
+                                <Link
+                                    to="/about"
+                                    className={`navbar-mobile-link${isActive('/about') ? ' active' : ''}`}
                                     onClick={() => setMobileOpen(false)}>
-                                    Contests
-                                </a>
-                                <a
-                                    href="#leaderboard"
-                                    className="navbar-mobile-link"
+                                    About
+                                </Link>
+                                <Link
+                                    to="/contact"
+                                    className={`navbar-mobile-link${isActive('/contact') ? ' active' : ''}`}
                                     onClick={() => setMobileOpen(false)}>
-                                    Leaderboard
-                                </a>
+                                    Contact
+                                </Link>
 
                                 <div className="navbar-mobile-divider" />
 

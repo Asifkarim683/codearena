@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import Navbar from '../components/Navbar'
@@ -9,11 +9,65 @@ import {
 } from 'lucide-react'
 import './LandingPage.css'
 
+const testimonials = [
+    {
+        name: "Sarah Jenkins",
+        role: "Software Engineer at Google",
+        text: "CodeArena was instrumental in my interview preparation. The live contest environments and process-isolated compile speeds are unmatched.",
+        avatar: "SJ",
+        rating: 5,
+        accent: "mint"
+    },
+    {
+        name: "David Chen",
+        role: "Computer Science Student",
+        text: "I love the clean interface and responsive judge verdict updates. It feels much more premium and friendly compared to other competitive coding sites.",
+        avatar: "DC",
+        rating: 5,
+        accent: "pink"
+    },
+    {
+        name: "Elena Rostova",
+        role: "Full-Stack Dev",
+        text: "The timed contests are incredibly fun. The copy-paste block keeps the arena secure and fair. I highly recommend it!",
+        avatar: "ER",
+        rating: 5,
+        accent: "blue"
+    }
+];
+
+const faqs = [
+    {
+        question: "How does the judge engine grade my code?",
+        answer: "Your submitted code is compiled and executed within process-isolated security sandboxes. The judge feeds custom inputs through standard input (stdin) and compares the output with expected values, checking constraints like Time Limit Exceeded (TLE) and Runtime Errors."
+    },
+    {
+        question: "Are there copy-paste protections active?",
+        answer: "Yes. During timed competitive contests, copy, paste, cut, and right-click actions are disabled on the problem-solving page to preserve integrity and discourage cheating."
+    },
+    {
+        question: "Which programming languages are supported?",
+        answer: "Currently, CodeArena supports Java 21, Python 3, C++ (g++), and JavaScript (Node.js) execution."
+    },
+    {
+        question: "Is CodeArena completely free to use?",
+        answer: "Yes, CodeArena is a completely free platform built to help developers practice algorithmic solving, view global leaderboards, and compete in timed challenges."
+    }
+];
+
 export default function LandingPage() {
     const { isLoggedIn } = useAuth()
     const navigate = useNavigate()
+
+
+
     const [isCompiling, setIsCompiling] = useState(false)
     const [verdictShow, setVerdictShow] = useState(true)
+    const [activeFaqIndex, setActiveFaqIndex] = useState(null)
+
+    const toggleFaq = (index) => {
+        setActiveFaqIndex(activeFaqIndex === index ? null : index)
+    }
 
     // Interactive editor action simulation
     const handleRunCode = () => {
@@ -285,6 +339,70 @@ export default function LandingPage() {
                         </div>
                     </div>
 
+                </div>
+            </section>
+
+
+
+            {/* ── TESTIMONIALS SECTION ── */}
+            <section className="testimonials-section">
+                <div className="section-header">
+                    <span className="section-label">Success Stories</span>
+                    <h2 className="section-title">What Our Coders Say</h2>
+                    <p className="section-description">
+                        Discover how developers and students are leveraging CodeArena to sharpen their skills and challenge themselves.
+                    </p>
+                </div>
+
+                <div className="testimonials-grid">
+                    {testimonials.map((t, index) => (
+                        <div key={index} className={`testimonial-card ${t.accent}-theme`}>
+                            <div className="testimonial-rating">
+                                {[...Array(t.rating)].map((_, i) => (
+                                    <Sparkles key={i} size={14} fill="#eab308" color="#eab308" />
+                                ))}
+                            </div>
+                            <p className="testimonial-text">"{t.text}"</p>
+                            <div className="testimonial-user">
+                                <div className="testimonial-avatar">{t.avatar}</div>
+                                <div className="testimonial-meta">
+                                    <h4 className="testimonial-name">{t.name}</h4>
+                                    <span className="testimonial-role">{t.role}</span>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* ── FAQ SECTION ── */}
+            <section className="faq-section">
+                <div className="section-header">
+                    <span className="section-label">FAQ</span>
+                    <h2 className="section-title">Frequently Asked Questions</h2>
+                    <p className="section-description">
+                        Find answers to common questions about the platform, contests, and compilers.
+                    </p>
+                </div>
+
+                <div className="faq-accordion">
+                    {faqs.map((faq, index) => (
+                        <div 
+                            key={index} 
+                            className={`faq-item ${activeFaqIndex === index ? 'active' : ''}`}
+                            onClick={() => toggleFaq(index)}
+                        >
+                            <div className="faq-question-row">
+                                <h3 className="faq-question">{faq.question}</h3>
+                                <div className="faq-toggle-icon">
+                                    <ArrowRight size={16} className="faq-arrow" />
+                                </div>
+                            </div>
+                            <div className="faq-answer-container">
+                                <p className="faq-answer">{faq.answer}</p>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </section>
 

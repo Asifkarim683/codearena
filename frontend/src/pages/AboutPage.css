@@ -1,0 +1,310 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap');
+
+.about-page {
+    background-color: #f8fafc;
+    color: #1e293b;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    font-family: 'Outfit', 'Inter', sans-serif;
+    z-index: 1;
+}
+
+/* ── DECORATIVE BLOBS ── */
+.about-page .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.about-page .blob-pink {
+    top: 5%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(251, 207, 232, 0.5) 0%, rgba(255, 255, 255, 0) 70%);
+}
+
+.about-page .blob-mint {
+    top: 45%;
+    left: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(167, 243, 208, 0.45) 0%, rgba(255, 255, 255, 0) 70%);
+}
+
+.about-page .blob-blue {
+    bottom: 5%;
+    right: 5%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(191, 219, 254, 0.45) 0%, rgba(255, 255, 255, 0) 70%);
+}
+
+/* ── LAYOUT CONTAINERS ── */
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.about-container.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 60px;
+    align-items: center;
+}
+
+/* ── HERO SECTION ── */
+.about-hero {
+    padding: 100px 0 60px;
+    text-align: center;
+}
+
+.about-hero-title {
+    font-size: 48px;
+    font-weight: 850;
+    color: #0f172a;
+    letter-spacing: -1.2px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.about-hero-subtitle {
+    font-size: 18px;
+    color: #475569;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* ── SECTIONS ── */
+.about-section {
+    padding: 80px 0;
+    position: relative;
+}
+
+.about-section.bg-slate-light {
+    background: rgba(241, 245, 249, 0.4);
+}
+
+.about-section.border-y {
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.about-section-title {
+    font-size: 32px;
+    font-weight: 850;
+    color: #0f172a;
+    letter-spacing: -0.8px;
+    margin: 0;
+}
+
+.about-text {
+    font-size: 15.5px;
+    color: #475569;
+    line-height: 1.65;
+    margin: 0;
+}
+
+.blue-icon {
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+}
+
+/* ── QUOTE CARD ── */
+.quote-card {
+    background: white;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 28px;
+    padding: 48px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.01);
+    position: relative;
+    overflow: hidden;
+}
+
+.quote-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(251, 207, 232, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+    z-index: 0;
+}
+
+.quote-mark {
+    font-size: 80px;
+    font-weight: 900;
+    color: rgba(59, 130, 246, 0.12);
+    line-height: 1;
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    user-select: none;
+}
+
+.quote-text {
+    font-size: 16.5px;
+    color: #334155;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+    font-style: italic;
+    margin-bottom: 24px;
+}
+
+.quote-author {
+    font-size: 14px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: 0.5px;
+}
+
+/* ── ARCHITECTURE STEP SHAPE ── */
+.architecture-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+}
+
+.architecture-step {
+    background: white;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 24px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.01);
+    transition: all 0.3s;
+}
+
+.architecture-step:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.04);
+}
+
+.step-num {
+    font-size: 40px;
+    font-weight: 900;
+    color: rgba(59, 130, 246, 0.15);
+    font-family: monospace;
+    line-height: 1;
+}
+
+.step-title {
+    font-size: 18px;
+    font-weight: 850;
+    color: #0f172a;
+}
+
+.step-desc {
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ── CORE VALUES ── */
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+}
+
+.value-card {
+    background: white;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 24px;
+    padding: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.01);
+    transition: all 0.3s;
+}
+
+.value-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.04);
+}
+
+.value-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.value-icon.blue { background: rgba(59, 130, 246, 0.08); color: #3b82f6; }
+.value-icon.green { background: rgba(16, 185, 129, 0.08); color: #10b981; }
+.value-icon.purple { background: rgba(139, 92, 246, 0.08); color: #8b5cf6; }
+
+.value-title {
+    font-size: 18px;
+    font-weight: 850;
+    color: #0f172a;
+}
+
+.value-desc {
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ── RESPONSIVE BREAKPOINTS ── */
+@media (max-width: 900px) {
+    .about-container.grid-2 {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .architecture-grid, .values-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .about-hero-title {
+        font-size: 38px;
+    }
+}
+
+@media (max-width: 640px) {
+    .about-hero {
+        padding: 60px 0 30px;
+    }
+    
+    .about-hero-title {
+        font-size: 30px;
+    }
+
+    .about-section {
+        padding: 50px 0;
+    }
+
+    .quote-card {
+        padding: 30px;
+    }
+}

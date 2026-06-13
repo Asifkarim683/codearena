@@ -5,6 +5,7 @@ import toast from 'react-hot-toast'
 import { Code2, Mail, Lock, LogIn } from 'lucide-react'
 import { ArrowLeft } from 'lucide-react'
 import ContactSupportModal from '../components/ContactSupportModal'
+import './Auth.css'
 
 export default function LoginPage() {
     const [email, setEmail] = useState('')
@@ -24,7 +25,7 @@ export default function LoginPage() {
         try {
             await login(email, password)
             toast.success('Welcome back!')
-            navigate('/')
+            navigate('/problems')
         } catch (error) {
             const message = error.response?.data?.message
                 || error.response?.data?.error
@@ -36,80 +37,76 @@ export default function LoginPage() {
     }
 
     return (
-        <div style={styles.container}>
-            <div style={styles.card}>
+        <div className="auth-page">
+            {/* Background Blobs */}
+            <div className="blob blob-pink"></div>
+            <div className="blob blob-mint"></div>
 
-                {/* Back to Home */}
-                <Link to="/" style={styles.backHome}>
-                    <ArrowLeft size={14} />
-                    Back to Home
-                </Link>
+            {/* Back to Home */}
+            <Link to="/" style={styles.backHome}>
+                <ArrowLeft size={14} />
+                Back to Home
+            </Link>
 
+            <div className="auth-card">
                 {/* Logo */}
-                <div style={styles.logo}>
-                    <Code2 size={40} color="#3b82f6" />
-                    <h1 style={styles.logoText}>CodeArena</h1>
+                <div className="auth-logo">
+                    <div className="auth-logo-icon">
+                        <Code2 size={22} color="#3b82f6" />
+                    </div>
+                    <span className="auth-logo-text">CodeArena</span>
                 </div>
 
-                <h2 style={styles.title}>Welcome Back</h2>
-                <p style={styles.subtitle}>
-                    Login to continue solving problems
-                </p>
+                <h2 className="auth-title">Welcome Back</h2>
+                <p className="auth-subtitle">Login to continue solving problems</p>
 
-                <form onSubmit={handleSubmit} style={styles.form}>
-
+                <form onSubmit={handleSubmit} className="auth-form">
                     {/* Email */}
-                    <div style={styles.inputGroup}>
-                        <label style={styles.label}>Email</label>
-                        <div style={styles.inputWrapper}>
-                            <Mail size={18} color="#64748b"
-                                style={styles.icon} />
+                    <div className="auth-input-group">
+                        <label className="auth-label">Email</label>
+                        <div className="auth-input-wrapper">
+                            <Mail size={18} className="auth-icon" />
                             <input
                                 type="email"
                                 placeholder="Enter your email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                style={styles.input}
+                                className="auth-input"
+                                required
                             />
                         </div>
                     </div>
 
                     {/* Password */}
-                    <div style={styles.inputGroup}>
-                        <label style={styles.label}>Password</label>
-                        <div style={styles.inputWrapper}>
-                            <Lock size={18} color="#64748b"
-                                style={styles.icon} />
+                    <div className="auth-input-group">
+                        <label className="auth-label">Password</label>
+                        <div className="auth-input-wrapper">
+                            <Lock size={18} className="auth-icon" />
                             <input
                                 type="password"
                                 placeholder="Enter your password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                style={styles.input}
+                                className="auth-input"
+                                required
                             />
                         </div>
                     </div>
 
                     {/* Submit Button */}
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        style={{
-                            ...styles.button,
-                            opacity: loading ? 0.7 : 1
-                        }}>
+                    <button type="submit" disabled={loading} className="auth-button">
                         {loading ? 'Logging in...' : (
                             <>
-                                <LogIn size={18} />
+                                <LogIn size={16} />
                                 Login
                             </>
                         )}
                     </button>
                 </form>
 
-                <p style={styles.footer}>
+                <p className="auth-footer">
                     Don't have an account?{' '}
-                    <Link to="/register" style={styles.link}>
+                    <Link to="/register" className="auth-link">
                         Register here
                     </Link>
                 </p>
@@ -136,15 +133,15 @@ export default function LoginPage() {
 }
 
 const styles = {
-    container: {
-        minHeight: '100vh',
-        display: 'flex',
+    backHome: {
+        display: 'inline-flex',
         alignItems: 'center',
-        justifyContent: 'center',
-        background: 'radial-gradient(ellipse at top, #1a2235 0%, #0a0e1a 70%)',
-        padding: '20px',
+        gap: '6px',
+        fontSize: '13px',
+        color: '#6b7280',
+        textDecoration: 'none',
+        marginBottom: '24px',
     },
-
     supportRow: {
         display: 'flex',
         flexDirection: 'column',
@@ -166,115 +163,5 @@ const styles = {
         fontFamily: 'inherit',
         textDecoration: 'underline',
     },
-    card: {
-        background: '#111827',
-        borderRadius: '20px',
-        padding: '48px 40px',
-        width: '100%',
-        maxWidth: '440px',
-        border: '1px solid #1e2d45',
-        boxShadow: '0 25px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(59,130,246,0.05)',
-        animation: 'fadeIn 0.4s ease',
-    },
-    logo: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        marginBottom: '32px',
-        justifyContent: 'center',
-    },
-    logoText: {
-        fontSize: '26px',
-        fontWeight: '800',
-        color: '#f9fafb',
-        letterSpacing: '-0.5px',
-    },
-    title: {
-        fontSize: '24px',
-        fontWeight: '700',
-        color: '#f9fafb',
-        textAlign: 'center',
-        marginBottom: '8px',
-        letterSpacing: '-0.3px',
-    },
-    subtitle: {
-        fontSize: '14px',
-        color: '#6b7280',
-        textAlign: 'center',
-        marginBottom: '36px',
-    },
-    form: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '20px',
-    },
-    inputGroup: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '8px',
-    },
-    label: {
-        fontSize: '13px',
-        fontWeight: '600',
-        color: '#9ca3af',
-        textTransform: 'uppercase',
-        letterSpacing: '0.5px',
-    },
-    inputWrapper: {
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-    },
-
-    backHome: {
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '6px',
-        fontSize: '13px',
-        color: '#6b7280',
-        textDecoration: 'none',
-        marginBottom: '24px',
-    },
-    icon: {
-        position: 'absolute',
-        left: '14px',
-        pointerEvents: 'none',
-    },
-    input: {
-        width: '100%',
-        padding: '13px 14px 13px 44px',
-        background: '#0a0e1a',
-        border: '1px solid #1e2d45',
-        borderRadius: '10px',
-        color: '#f9fafb',
-        fontSize: '14px',
-        transition: 'border-color 0.2s, box-shadow 0.2s',
-    },
-    button: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '8px',
-        padding: '14px',
-        background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-        color: 'white',
-        border: 'none',
-        borderRadius: '10px',
-        fontSize: '15px',
-        fontWeight: '700',
-        marginTop: '8px',
-        transition: 'all 0.2s',
-        boxShadow: '0 4px 15px rgba(59, 130, 246, 0.3)',
-        letterSpacing: '0.3px',
-    },
-    footer: {
-        textAlign: 'center',
-        marginTop: '28px',
-        fontSize: '14px',
-        color: '#6b7280',
-    },
-    link: {
-        color: '#3b82f6',
-        fontWeight: '600',
-    },
+}
 }
