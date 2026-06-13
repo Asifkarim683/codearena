@@ -458,3 +458,128 @@
         font-size: 15px;
     }
 }
+
+/* ── AUTH BUTTONS ── */
+.navbar-auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.navbar-btn-login {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.navbar-btn-register {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 10px;
+    background: #3b82f6;
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.navbar-btn-register:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.25);
+}
+
+.navbar:not(.light-theme) .navbar-btn-login {
+    color: #9ca3af;
+}
+
+.navbar:not(.light-theme) .navbar-btn-login:hover {
+    color: #f9fafb;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* ── LIGHT THEME OVERRIDES ── */
+.navbar.light-theme {
+    background: rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid #e2e8f0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.navbar.light-theme .navbar-logo-text {
+    color: #0f172a;
+}
+
+.navbar.light-theme .navbar-logo-icon {
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.navbar.light-theme .navbar-link {
+    color: #475569;
+}
+
+.navbar.light-theme .navbar-link:hover {
+    color: #1e293b;
+    background: rgba(59, 130, 246, 0.06);
+}
+
+.navbar.light-theme .navbar-link.active {
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.08);
+}
+
+.navbar.light-theme .navbar-btn-login {
+    color: #475569;
+}
+
+.navbar.light-theme .navbar-btn-login:hover {
+    color: #0f172a;
+    background: #f1f5f9;
+}
+
+.navbar.light-theme .navbar-mobile-btn {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: #0f172a;
+}
+
+.navbar.light-theme .navbar-mobile-btn:hover {
+    background: #e2e8f0;
+}
+
+/* Mobile menu light theme */
+.navbar.light-theme .navbar-mobile-menu {
+    border-top: 1px solid #e2e8f0;
+    background: #ffffff;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.navbar.light-theme .navbar-mobile-section-label {
+    color: #94a3b8;
+}
+
+.navbar.light-theme .navbar-mobile-link {
+    color: #475569;
+}
+
+.navbar.light-theme .navbar-mobile-link:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.navbar.light-theme .navbar-mobile-link.active-btn {
+    background: #3b82f6;
+    color: white !important;
+}
+
+.navbar.light-theme .navbar-mobile-link.active-btn:hover {
+    background: #2563eb;
+}
+
+.navbar.light-theme .navbar-mobile-divider {
+    background: #e2e8f0;
+}
