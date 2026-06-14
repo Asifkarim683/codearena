@@ -1,0 +1,598 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap');
+
+/* ── PROBLEM CREATION PAGE ── */
+.create-problem-page {
+    background-color: #f8fafc;
+    color: #334155;
+    min-height: calc(100vh - 64px);
+    padding: 32px 0 60px;
+    overflow-x: hidden;
+    position: relative;
+    font-family: 'Outfit', 'Inter', sans-serif;
+    z-index: 1;
+}
+
+/* ── DECORATIVE BLUR BLOBS ── */
+.create-problem-page .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.create-problem-page .blob-pink {
+    top: 5%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(251, 207, 232, 0.45) 0%, rgba(255, 255, 255, 0) 70%);
+}
+
+.create-problem-page .blob-mint {
+    top: 35%;
+    left: -15%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(167, 243, 208, 0.35) 0%, rgba(255, 255, 255, 0) 70%);
+}
+
+.create-problem-page .blob-blue {
+    bottom: 15%;
+    right: -5%;
+    width: 650px;
+    height: 650px;
+    background: radial-gradient(circle, rgba(191, 219, 254, 0.35) 0%, rgba(255, 255, 255, 0) 70%);
+}
+
+.create-problem-container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 2;
+}
+
+/* ── HEADER ── */
+.create-problem-header {
+    margin-bottom: 24px;
+}
+
+.create-problem-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #64748b;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 16px;
+    transition: all 0.2s;
+}
+
+.create-problem-back-btn:hover {
+    color: #3b82f6;
+    transform: translateX(-2px);
+}
+
+.create-problem-header-right {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.create-problem-title {
+    font-size: 26px;
+    font-weight: 850;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+    margin: 0;
+}
+
+.create-problem-save-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 24px;
+    background: #10b981;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 14.5px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+    transition: all 0.2s;
+}
+
+.create-problem-save-btn:hover:not(:disabled) {
+    background: #059669;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.25);
+}
+
+/* ── TABS ── */
+.create-problem-tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 24px;
+}
+
+.create-problem-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #64748b;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.create-problem-tab:hover {
+    color: #3b82f6;
+}
+
+.create-problem-tab-active {
+    color: #3b82f6;
+    border-bottom: 2px solid #3b82f6;
+}
+
+/* ── CARD ── */
+.create-problem-card {
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.015);
+}
+
+.create-problem-form-group {
+    margin-bottom: 24px;
+}
+
+.create-problem-label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+}
+
+.create-problem-required {
+    color: #ef4444;
+    margin-left: 2px;
+}
+
+.create-problem-hint {
+    font-size: 13px;
+    color: #64748b;
+    margin: 0 0 10px;
+    line-height: 1.5;
+}
+
+/* ── INPUTS & TEXTAREAS ── */
+.create-problem-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    color: #0f172a;
+    font-size: 14.5px;
+    font-family: inherit;
+    transition: all 0.2s;
+    box-sizing: border-box;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.01);
+}
+
+.create-problem-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.create-problem-textarea {
+    width: 100%;
+    padding: 14px 16px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    color: #0f172a;
+    font-size: 14px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    resize: vertical;
+    line-height: 1.6;
+    box-sizing: border-box;
+    transition: all 0.2s;
+}
+
+.create-problem-textarea:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* ── DIFFICULTY BUTTONS ── */
+.create-problem-difficulty-btns {
+    display: flex;
+    gap: 10px;
+}
+
+.create-problem-diff-btn {
+    padding: 8px 24px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.01);
+}
+
+.create-problem-diff-btn:hover {
+    border-color: #cbd5e1;
+    color: #334155;
+    background: #f8fafc;
+}
+
+/* ── TAGS INPUT ── */
+.create-problem-tag-input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.create-problem-tag-input-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.create-problem-tag-icon {
+    position: absolute;
+    left: 16px;
+    pointer-events: none;
+}
+
+.create-problem-tag-input {
+    width: 100%;
+    padding: 12px 16px 12px 46px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    color: #0f172a;
+    font-size: 14.5px;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.create-problem-tag-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.create-problem-add-tag-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 20px;
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    border-radius: 12px;
+    color: #3b82f6;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.create-problem-add-tag-btn:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+.create-problem-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.create-problem-tag-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.create-problem-remove-tag-btn {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    transition: color 0.15s;
+}
+
+.create-problem-remove-tag-btn:hover {
+    color: #ef4444;
+}
+
+/* ── TEST CASES ── */
+.create-problem-tc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.create-problem-add-tc-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    border-radius: 12px;
+    color: #3b82f6;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.create-problem-add-tc-btn:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+.create-problem-tc-card {
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 16px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.01);
+}
+
+.create-problem-tc-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.create-problem-tc-title {
+    font-size: 14.5px;
+    font-weight: 800;
+    color: #334155;
+}
+
+.create-problem-tc-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.create-problem-sample-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.create-problem-remove-tc-btn {
+    background: none;
+    border: 1px solid #fecaca;
+    color: #ef4444;
+    border-radius: 8px;
+    padding: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.create-problem-remove-tc-btn:hover {
+    background: #ef4444;
+    color: white;
+}
+
+.create-problem-tc-body {
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 600px) {
+    .create-problem-tc-body {
+        grid-template-columns: 1fr;
+    }
+}
+
+.create-problem-tc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.create-problem-tc-label {
+    font-size: 12px;
+    font-weight: 750;
+    color: #475569;
+    text-transform: uppercase;
+}
+
+.create-problem-tc-textarea {
+    width: 100%;
+    padding: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    color: #0f172a;
+    font-size: 13.5px;
+    font-family: 'JetBrains Mono', monospace;
+    min-height: 80px;
+    box-sizing: border-box;
+    resize: vertical;
+    transition: all 0.2s;
+}
+
+.create-problem-tc-textarea:focus {
+    border-color: #3b82f6;
+    background: #ffffff;
+}
+
+/* ── SETTINGS / PRESETS ── */
+.create-problem-settings-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #334155;
+    margin: 0 0 10px;
+}
+
+.create-problem-settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+
+@media (max-width: 600px) {
+    .create-problem-settings-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.create-problem-presets {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+.create-problem-preset-btn {
+    padding: 6px 14px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.create-problem-preset-btn:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+.create-problem-preset-btn-active {
+    background: rgba(59, 130, 246, 0.08) !important;
+    border-color: rgba(59, 130, 246, 0.25) !important;
+    color: #3b82f6 !important;
+}
+
+/* ── SUMMARY ── */
+.create-problem-summary {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 28px;
+}
+
+.create-problem-summary-title {
+    font-size: 14.5px;
+    font-weight: 800;
+    color: #334155;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 16px;
+}
+
+.create-problem-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.create-problem-summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.create-problem-summary-label {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.create-problem-summary-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* ── FINAL BUTTONS ── */
+.create-problem-final-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    background: #10b981;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 15px;
+    font-weight: 750;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+    transition: all 0.2s;
+}
+
+.create-problem-final-btn:hover:not(:disabled) {
+    background: #059669;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.25);
+}

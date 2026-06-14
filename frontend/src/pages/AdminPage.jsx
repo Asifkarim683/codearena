@@ -12,7 +12,11 @@ import {
     LayoutDashboard, FileText, Settings,
     Trophy, X, Calendar, MessageSquare
 } from 'lucide-react'
+<<<<<<< HEAD
 import { supportService } from '../services/supportService'
+=======
+import './AdminPage.css'
+>>>>>>> 0986170 (complete overhaul of ui)
 
 export default function AdminPage() {
     const [activeTab, setActiveTab] = useState('dashboard')
@@ -239,23 +243,23 @@ export default function AdminPage() {
     const getVerdictStyle = (verdict) => {
         switch (verdict) {
             case 'ACCEPTED':
-                return { color: '#10b981', bg: '#10b98118' }
+                return { color: '#10b981', bg: 'rgba(16,185,129,0.08)' }
             case 'WRONG_ANSWER':
-                return { color: '#ef4444', bg: '#ef444418' }
+                return { color: '#ef4444', bg: 'rgba(239,68,68,0.08)' }
             case 'TIME_LIMIT_EXCEEDED':
-                return { color: '#f59e0b', bg: '#f59e0b18' }
+                return { color: '#f59e0b', bg: 'rgba(245,158,11,0.08)' }
             case 'COMPILATION_ERROR':
-                return { color: '#6366f1', bg: '#6366f118' }
+                return { color: '#6366f1', bg: 'rgba(99,102,241,0.08)' }
             default:
-                return { color: '#6b7280', bg: '#6b728018' }
+                return { color: '#64748b', bg: 'rgba(100,116,139,0.08)' }
         }
     }
 
     const getDiffStyle = (diff) => {
         switch (diff) {
-            case 'EASY': return { color: '#10b981', bg: '#10b98118' }
-            case 'MEDIUM': return { color: '#f59e0b', bg: '#f59e0b18' }
-            case 'HARD': return { color: '#ef4444', bg: '#ef444418' }
+            case 'EASY': return { color: '#10b981', bg: 'rgba(16,185,129,0.08)' }
+            case 'MEDIUM': return { color: '#d97706', bg: 'rgba(245,158,11,0.08)' }
+            case 'HARD': return { color: '#ef4444', bg: 'rgba(239,68,68,0.08)' }
             default: return {}
         }
     }
@@ -313,23 +317,25 @@ export default function AdminPage() {
     }
 
     return (
-        <div style={styles.page}>
+        <div className="admin-page">
 
             {/* Sidebar */}
-            <div style={styles.sidebar}>
-                <div style={styles.sidebarHeader}>
-                    <Shield size={20} color="#818cf8" />
-                    <span style={styles.sidebarTitle}>Admin Panel</span>
+            <div className="admin-sidebar">
+                <div className="admin-sidebar-header">
+                    <Shield size={20} color="#3b82f6" />
+                    <span className="admin-sidebar-title">Admin Panel</span>
                 </div>
+<<<<<<< HEAD
                 <nav style={styles.sidebarNav}>
                     {sidebarItems.map(({ id, label, icon: Icon, badge }) => (
+=======
+                <nav className="admin-sidebar-nav">
+                    {sidebarItems.map(({ id, label, icon: Icon }) => (
+>>>>>>> 0986170 (complete overhaul of ui)
                         <button
                             key={id}
                             onClick={() => setActiveTab(id)}
-                            style={{
-                                ...styles.sidebarItem,
-                                ...(activeTab === id ? styles.sidebarItemActive : {})
-                            }}>
+                            className={`admin-sidebar-item${activeTab === id ? ' admin-sidebar-item-active' : ''}`}>
                             <Icon size={18} />
                             {label}
                             {badge > 0 && (
@@ -338,8 +344,8 @@ export default function AdminPage() {
                         </button>
                     ))}
                 </nav>
-                <div style={styles.sidebarFooter}>
-                    <Link to="/problems" style={styles.backLink}>
+                <div className="admin-sidebar-footer">
+                    <Link to="/problems" className="admin-back-link">
                         <ChevronLeft size={16} />
                         Back to Site
                     </Link>
@@ -347,92 +353,96 @@ export default function AdminPage() {
             </div>
 
             {/* Main Content */}
-            <div style={styles.main}>
+            <div className="admin-main">
+                {/* Decorative Blobs */}
+                <div className="blob blob-pink" />
+                <div className="blob blob-mint" />
 
                 {/* ── DASHBOARD ── */}
                 {activeTab === 'dashboard' && (
-                    <div style={styles.content}>
-                        <h1 style={styles.pageTitle}>Dashboard</h1>
-                        <p style={styles.pageSubtitle}>
+                    <div className="admin-content">
+                        <h1 className="admin-page-title">Dashboard</h1>
+                        <p className="admin-page-subtitle">
                             Platform overview and statistics
                         </p>
 
                         {loading ? (
-                            <div style={styles.loadingDiv}>
+                            <div className="admin-loading-div">
                                 <Loader2 size={32} color="#3b82f6"
                                     style={{ animation: 'spin 1s linear infinite' }} />
                             </div>
                         ) : (
                             <>
                                 {/* Stats Cards */}
-                                <div style={styles.statsGrid}>
+                                <div className="admin-stats-grid">
                                     {[
                                         {
                                             label: 'Total Users',
                                             value: stats?.totalUsers || 0,
                                             icon: Users,
                                             color: '#3b82f6',
-                                            bg: 'rgba(59,130,246,0.1)'
+                                            bg: 'rgba(59,130,246,0.08)'
                                         },
                                         {
                                             label: 'Total Problems',
                                             value: stats?.totalProblems || 0,
                                             icon: Code2,
                                             color: '#10b981',
-                                            bg: 'rgba(16,185,129,0.1)'
+                                            bg: 'rgba(16,185,129,0.08)'
                                         },
                                         {
                                             label: 'Total Submissions',
                                             value: stats?.totalSubmissions || 0,
                                             icon: BarChart2,
-                                            color: '#f59e0b',
-                                            bg: 'rgba(245,158,11,0.1)'
+                                            color: '#6366f1',
+                                            bg: 'rgba(99,102,241,0.08)'
                                         },
                                         {
                                             label: 'Active Problems',
                                             value: stats?.activeProblems || 0,
                                             icon: CheckCircle2,
-                                            color: '#6366f1',
-                                            bg: 'rgba(99,102,241,0.1)'
+                                            color: '#d97706',
+                                            bg: 'rgba(245,158,11,0.08)'
                                         },
                                     ].map(({ label, value, icon: Icon, color, bg }) => (
-                                        <div key={label} style={styles.statCard}>
-                                            <div style={{
-                                                ...styles.statIconBox,
-                                                background: bg
-                                            }}>
+                                        <div key={label} className="admin-stat-card">
+                                            <div 
+                                                className="admin-stat-icon-box"
+                                                style={{ background: bg }}
+                                            >
                                                 <Icon size={22} color={color} />
                                             </div>
-                                            <div style={{
-                                                ...styles.statValue, color
-                                            }}>
+                                            <div 
+                                                className="admin-stat-value"
+                                                style={{ color }}
+                                            >
                                                 {value}
                                             </div>
-                                            <div style={styles.statLabel}>{label}</div>
+                                            <div className="admin-stat-label">{label}</div>
                                         </div>
                                     ))}
                                 </div>
 
                                 {/* Quick Actions */}
-                                <div style={styles.quickActionsCard}>
-                                    <h3 style={styles.cardTitle}>Quick Actions</h3>
-                                    <div style={styles.quickActions}>
+                                <div className="admin-quick-actions-card">
+                                    <h3 className="admin-card-title">Quick Actions</h3>
+                                    <div className="admin-quick-actions">
                                         <button
                                             onClick={() => setActiveTab('users')}
-                                            style={styles.quickBtn}>
-                                            <Users size={16} />
+                                            className="admin-quick-btn">
+                                            <Users size={16} style={{ color: '#3b82f6' }} />
                                             Manage Users
                                         </button>
                                         <button
                                             onClick={() => setActiveTab('problems')}
-                                            style={styles.quickBtn}>
-                                            <Code2 size={16} />
+                                            className="admin-quick-btn">
+                                            <Code2 size={16} style={{ color: '#10b981' }} />
                                             Manage Problems
                                         </button>
                                         <button
                                             onClick={() => setActiveTab('submissions')}
-                                            style={styles.quickBtn}>
-                                            <FileText size={16} />
+                                            className="admin-quick-btn">
+                                            <FileText size={16} style={{ color: '#6366f1' }} />
                                             View Submissions
                                         </button>
                                     </div>
@@ -444,78 +454,69 @@ export default function AdminPage() {
 
                 {/* ── USERS ── */}
                 {activeTab === 'users' && (
-                    <div style={styles.content}>
-                        <h1 style={styles.pageTitle}>Users</h1>
-                        <p style={styles.pageSubtitle}>
+                    <div className="admin-content">
+                        <h1 className="admin-page-title">Users</h1>
+                        <p className="admin-page-subtitle">
                             Manage all registered users
                         </p>
 
-                        <div style={styles.tableCard}>
+                        <div className="admin-table-card">
                             {loading ? (
-                                <div style={styles.loadingDiv}>
+                                <div className="admin-loading-div">
                                     <Loader2 size={32} color="#3b82f6"
                                         style={{
                                             animation: 'spin 1s linear infinite'
                                         }} />
                                 </div>
                             ) : (
-                                <table style={styles.table}>
+                                <table className="admin-table">
                                     <thead>
                                         <tr>
-                                            <th style={styles.th}>User</th>
-                                            <th style={styles.th}>Email</th>
-                                            <th style={styles.th}>Role</th>
-                                            <th style={styles.th}>Status</th>
-                                            <th style={styles.th}>Joined</th>
-                                            <th style={styles.th}>Actions</th>
+                                            <th className="admin-th">User</th>
+                                            <th className="admin-th">Email</th>
+                                            <th className="admin-th">Role</th>
+                                            <th className="admin-th">Status</th>
+                                            <th className="admin-th">Joined</th>
+                                            <th className="admin-th">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {users.map(user => (
-                                            <tr key={user.id} style={styles.row}>
-                                                <td style={styles.td}>
-                                                    <div style={styles.userCell}>
-                                                        <div style={styles.miniAvatar}>
+                                            <tr key={user.id} className="admin-row">
+                                                <td className="admin-td">
+                                                    <div className="admin-user-cell">
+                                                        <div className="admin-mini-avatar">
                                                             {user.username?.charAt(0).toUpperCase()}
                                                         </div>
-                                                        <span style={styles.username}>
+                                                        <span className="admin-username">
                                                             {user.username}
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td style={styles.td}>
-                                                    <span style={styles.email}>
+                                                <td className="admin-td">
+                                                    <span className="admin-email">
                                                         {user.email}
                                                     </span>
                                                 </td>
-                                                <td style={styles.td}>
-                                                    <span style={{
-                                                        ...styles.roleBadge,
-                                                        ...(user.role === 'ADMIN'
-                                                            ? styles.adminRole
-                                                            : styles.userRole)
-                                                    }}>
+                                                <td className="admin-td">
+                                                    <span className={`admin-role-badge ${user.role === 'ADMIN' ? 'admin-admin-role' : 'admin-user-role'}`}>
                                                         {user.role === 'ADMIN'
-                                                            ? <Crown size={11} />
-                                                            : <Users size={11} />}
+                                                            ? <Crown size={11} style={{ marginRight: '4px' }} />
+                                                            : <Users size={11} style={{ marginRight: '4px' }} />}
                                                         {user.role}
                                                     </span>
                                                 </td>
-                                                <td style={styles.td}>
-                                                    <span style={{
-                                                        ...styles.statusBadge,
-                                                        ...(user.isActive
-                                                            ? styles.activeStatus
-                                                            : styles.inactiveStatus)
-                                                    }}>
+                                                <td className="admin-td">
+                                                    <span className={`admin-status-badge ${user.isActive ? 'admin-active-status' : 'admin-inactive-status'}`}>
                                                         {user.isActive ? 'Active' : 'Inactive'}
                                                     </span>
                                                 </td>
-                                                <td style={styles.td}>
-                                                    <span style={styles.date}>
+                                                <td className="admin-td">
+                                                    <span className="admin-date">
                                                         {formatDate(user.createdAt)}
                                                     </span>
                                                 </td>
+<<<<<<< HEAD
                                                 <td style={styles.td}>
                                                     <div style={styles.actions}>
                                                         {user.role === 'ADMIN' ? (
@@ -523,10 +524,15 @@ export default function AdminPage() {
                                                                 Protected
                                                             </span>
                                                         ) : user.isActive ? (
+=======
+                                                <td className="admin-td">
+                                                    <div className="admin-actions">
+                                                        {user.isActive ? (
+>>>>>>> 0986170 (complete overhaul of ui)
                                                             <button
                                                                 onClick={() =>
                                                                     handleDeactivate(user.id)}
-                                                                style={styles.dangerBtn}
+                                                                className="admin-danger-btn"
                                                                 title="Deactivate">
                                                                 <UserX size={14} />
                                                             </button>
@@ -534,7 +540,7 @@ export default function AdminPage() {
                                                             <button
                                                                 onClick={() =>
                                                                     handleActivate(user.id)}
-                                                                style={styles.successBtn}
+                                                                className="admin-success-btn"
                                                                 title="Activate">
                                                                 <UserCheck size={14} />
                                                             </button>
@@ -543,7 +549,7 @@ export default function AdminPage() {
                                                             <button
                                                                 onClick={() =>
                                                                     handlePromote(user.id)}
-                                                                style={styles.promoteBtn}
+                                                                className="admin-promote-btn"
                                                                 title="Promote to Admin">
                                                                 <Crown size={14} />
                                                             </button>
@@ -558,19 +564,17 @@ export default function AdminPage() {
                         </div>
 
                         {/* Pagination */}
-                        <div style={styles.pagination}>
+                        <div className="admin-pagination">
                             <button
                                 onClick={() =>
                                     setUserPage(p => Math.max(0, p - 1))}
                                 disabled={userPage === 0}
-                                style={{
-                                    ...styles.pageBtn,
-                                    opacity: userPage === 0 ? 0.4 : 1
-                                }}>
+                                className="admin-page-btn"
+                                style={{ opacity: userPage === 0 ? 0.4 : 1 }}>
                                 <ChevronLeft size={16} />
                                 Previous
                             </button>
-                            <span style={styles.pageInfo}>
+                            <span className="admin-page-info">
                                 Page {userPage + 1} of {totalUserPages}
                             </span>
                             <button
@@ -578,11 +582,8 @@ export default function AdminPage() {
                                     setUserPage(p =>
                                         Math.min(totalUserPages - 1, p + 1))}
                                 disabled={userPage === totalUserPages - 1}
-                                style={{
-                                    ...styles.pageBtn,
-                                    opacity: userPage === totalUserPages - 1
-                                        ? 0.4 : 1
-                                }}>
+                                className="admin-page-btn"
+                                style={{ opacity: userPage === totalUserPages - 1 ? 0.4 : 1 }}>
                                 Next
                                 <ChevronRight size={16} />
                             </button>
@@ -592,110 +593,109 @@ export default function AdminPage() {
 
                 {/* ── PROBLEMS ── */}
                 {activeTab === 'problems' && (
-                    <div style={styles.content}>
-                        <div style={styles.contentHeader}>
+                    <div className="admin-content">
+                        <div className="admin-page-header">
                             <div>
-                                <h1 style={styles.pageTitle}>Problems</h1>
-                                <p style={styles.pageSubtitle}>
+                                <h1 className="admin-page-title">Problems</h1>
+                                <p className="admin-page-subtitle">
                                     Manage all coding problems
                                 </p>
                             </div>
                             <Link
                                 to="/admin/problems/create"
-                                style={styles.createBtn}>
+                                className="admin-create-btn">
                                 <Plus size={16} />
                                 Create Problem
                             </Link>
                         </div>
 
-                        <div style={styles.tableCard}>
+                        <div className="admin-table-card">
                             {loading ? (
-                                <div style={styles.loadingDiv}>
+                                <div className="admin-loading-div">
                                     <Loader2 size={32} color="#3b82f6"
                                         style={{
                                             animation: 'spin 1s linear infinite'
                                         }} />
                                 </div>
                             ) : problems.length === 0 ? (
-                                <div style={styles.empty}>
-                                    <Code2 size={48} color="#374151" />
-                                    <p style={styles.emptyText}>
+                                <div className="admin-empty">
+                                    <Code2 size={48} color="#94a3b8" />
+                                    <p className="admin-empty-text">
                                         No problems yet
                                     </p>
                                 </div>
                             ) : (
-                                <table style={styles.table}>
+                                <table className="admin-table">
                                     <thead>
                                         <tr>
-                                            <th style={styles.th}>#</th>
-                                            <th style={styles.th}>Title</th>
-                                            <th style={styles.th}>Difficulty</th>
-                                            <th style={styles.th}>Tags</th>
-                                            <th style={styles.th}>Submissions</th>
-                                            <th style={styles.th}>Acceptance</th>
-                                            <th style={styles.th}>Actions</th>
+                                            <th className="admin-th">#</th>
+                                            <th className="admin-th">Title</th>
+                                            <th className="admin-th">Difficulty</th>
+                                            <th className="admin-th">Tags</th>
+                                            <th className="admin-th">Submissions</th>
+                                            <th className="admin-th">Acceptance</th>
+                                            <th className="admin-th">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {problems.map((p, i) => (
-                                            <tr key={p.id} style={styles.row}>
-                                                <td style={{
-                                                    ...styles.td, color: '#4b5563'
-                                                }}>
+                                            <tr key={p.id} className="admin-row">
+                                                <td className="admin-td" style={{ color: '#94a3b8', fontWeight: '600' }}>
                                                     {i + 1}
                                                 </td>
-                                                <td style={styles.td}>
+                                                <td className="admin-td">
                                                     <Link
                                                         to={`/problems/${p.id}`}
-                                                        style={styles.problemLink}>
+                                                        className="admin-problem-link">
                                                         {p.title}
                                                     </Link>
                                                 </td>
-                                                <td style={styles.td}>
-                                                    <span style={{
-                                                        ...styles.diffBadge,
-                                                        color: getDiffStyle(p.difficulty).color,
-                                                        background: getDiffStyle(
-                                                            p.difficulty).bg,
-                                                    }}>
+                                                <td className="admin-td">
+                                                    <span 
+                                                        className="admin-diff-badge"
+                                                        style={{
+                                                            color: getDiffStyle(p.difficulty).color,
+                                                            background: getDiffStyle(p.difficulty).bg,
+                                                        }}
+                                                    >
                                                         {p.difficulty}
                                                     </span>
                                                 </td>
-                                                <td style={styles.td}>
-                                                    <div style={styles.tags}>
+                                                <td className="admin-td">
+                                                    <div className="admin-tags">
                                                         {p.tags?.slice(0, 2).map(tag => (
-                                                            <span key={tag} style={styles.tag}>
+                                                            <span key={tag} className="admin-tag">
                                                                 {tag}
                                                             </span>
                                                         ))}
                                                         {p.tags?.length > 2 && (
-                                                            <span style={styles.moreTag}>
+                                                            <span className="admin-more-tag">
                                                                 +{p.tags.length - 2}
                                                             </span>
                                                         )}
                                                     </div>
                                                 </td>
-                                                <td style={styles.td}>
-                                                    <span style={styles.date}>
+                                                <td className="admin-td">
+                                                    <span className="admin-date">
                                                         {p.totalSubmissions}
                                                     </span>
                                                 </td>
-                                                <td style={styles.td}>
+                                                <td className="admin-td">
                                                     <span style={{
                                                         color: p.acceptanceRate >= 50
-                                                            ? '#10b981' : '#f59e0b',
-                                                        fontWeight: '600',
-                                                        fontSize: '13px'
+                                                            ? '#10b981' : '#d97706',
+                                                        fontWeight: '700',
+                                                        fontSize: '13.5px'
                                                     }}>
                                                         {p.acceptanceRate?.toFixed(1)}%
                                                     </span>
                                                 </td>
-                                                <td style={styles.td}>
-                                                    <div style={styles.actions}>
+                                                <td className="admin-td">
+                                                    <div className="admin-actions">
                                                         <button
                                                             onClick={() =>
                                                                 handleDeleteProblem(p.id)}
-                                                            style={styles.dangerBtn}
+                                                            className="admin-danger-btn"
                                                             title="Delete problem">
                                                             <Trash2 size={14} />
                                                         </button>
@@ -712,98 +712,100 @@ export default function AdminPage() {
 
                 {/* ── CONTESTS ── */}
                 {activeTab === 'contests' && (
-                    <div style={styles.content}>
-                        <div style={styles.contentHeader}>
+                    <div className="admin-content">
+                        <div className="admin-page-header">
                             <div>
-                                <h1 style={styles.pageTitle}>Contests</h1>
-                                <p style={styles.pageSubtitle}>
+                                <h1 className="admin-page-title">Contests</h1>
+                                <p className="admin-page-subtitle">
                                     Manage coding contests
                                 </p>
                             </div>
                             <button
                                 onClick={() => setShowContestModal(true)}
-                                style={styles.createBtn}>
+                                className="admin-create-btn">
                                 <Plus size={16} />
                                 Create Contest
                             </button>
                         </div>
 
-                        <div style={styles.tableCard}>
+                        <div className="admin-table-card">
                             {loading ? (
-                                <div style={styles.loadingDiv}>
+                                <div className="admin-loading-div">
                                     <Loader2 size={32} color="#3b82f6"
                                         style={{
                                             animation: 'spin 1s linear infinite'
                                         }} />
                                 </div>
                             ) : contests.length === 0 ? (
-                                <div style={styles.empty}>
-                                    <Trophy size={48} color="#374151" />
-                                    <p style={styles.emptyText}>
+                                <div className="admin-empty">
+                                    <Trophy size={48} color="#94a3b8" />
+                                    <p className="admin-empty-text">
                                         No contests yet
                                     </p>
                                 </div>
                             ) : (
-                                <table style={styles.table}>
+                                <table className="admin-table">
                                     <thead>
                                         <tr>
-                                            <th style={styles.th}>Title</th>
-                                            <th style={styles.th}>Status</th>
-                                            <th style={styles.th}>Start Time</th>
-                                            <th style={styles.th}>End Time</th>
-                                            <th style={styles.th}>Problems</th>
-                                            <th style={styles.th}>Participants</th>
-                                            <th style={styles.th}>Actions</th>
+                                            <th className="admin-th">Title</th>
+                                            <th className="admin-th">Status</th>
+                                            <th className="admin-th">Start Time</th>
+                                            <th className="admin-th">End Time</th>
+                                            <th className="admin-th">Problems</th>
+                                            <th className="admin-th">Participants</th>
+                                            <th className="admin-th">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {contests.map(contest => (
-                                            <tr key={contest.id} style={styles.row}>
-                                                <td style={styles.td}>
+                                            <tr key={contest.id} className="admin-row">
+                                                <td className="admin-td">
                                                     <Link
                                                         to={`/contests/${contest.id}`}
-                                                        style={styles.problemLink}>
+                                                        className="admin-problem-link">
                                                         {contest.title}
                                                     </Link>
                                                 </td>
-                                                <td style={styles.td}>
-                                                    <span style={{
-                                                        ...styles.statusBadge,
-                                                        ...(contest.status === 'ONGOING'
-                                                            ? { color: '#10b981', background: 'rgba(16,185,129,0.1)' }
-                                                            : contest.status === 'UPCOMING'
-                                                                ? { color: '#3b82f6', background: 'rgba(59,130,246,0.1)' }
-                                                                : { color: '#6b7280', background: 'rgba(107,114,128,0.1)' })
-                                                    }}>
+                                                <td className="admin-td">
+                                                    <span 
+                                                        className="admin-status-badge"
+                                                        style={{
+                                                            ...(contest.status === 'ONGOING'
+                                                                ? { color: '#10b981', background: 'rgba(16,185,129,0.08)' }
+                                                                : contest.status === 'UPCOMING'
+                                                                    ? { color: '#3b82f6', background: 'rgba(59,130,246,0.08)' }
+                                                                    : { color: '#64748b', background: 'rgba(100,116,139,0.08)' })
+                                                        }}
+                                                    >
                                                         {contest.status}
                                                     </span>
                                                 </td>
-                                                <td style={styles.td}>
-                                                    <span style={styles.date}>
+                                                <td className="admin-td">
+                                                    <span className="admin-date">
                                                         {formatDate(contest.startTime)}
                                                     </span>
                                                 </td>
-                                                <td style={styles.td}>
-                                                    <span style={styles.date}>
+                                                <td className="admin-td">
+                                                    <span className="admin-date">
                                                         {formatDate(contest.endTime)}
                                                     </span>
                                                 </td>
-                                                <td style={styles.td}>
-                                                    <span style={styles.date}>
+                                                <td className="admin-td">
+                                                    <span className="admin-date">
                                                         {contest.totalProblems}
                                                     </span>
                                                 </td>
-                                                <td style={styles.td}>
-                                                    <span style={styles.date}>
+                                                <td className="admin-td">
+                                                    <span className="admin-date">
                                                         {contest.totalParticipants}
                                                     </span>
                                                 </td>
-                                                <td style={styles.td}>
-                                                    <div style={styles.actions}>
+                                                <td className="admin-td">
+                                                    <div className="admin-actions">
                                                         <button
                                                             onClick={() =>
                                                                 handleDeleteContest(contest.id)}
-                                                            style={styles.dangerBtn}
+                                                            className="admin-danger-btn"
                                                             title="Delete contest">
                                                             <Trash2 size={14} />
                                                         </button>
@@ -950,83 +952,76 @@ export default function AdminPage() {
 
                 {/* ── SUBMISSIONS ── */}
                 {activeTab === 'submissions' && (
-                    <div style={styles.content}>
-                        <h1 style={styles.pageTitle}>All Submissions</h1>
-                        <p style={styles.pageSubtitle}>
+                    <div className="admin-content">
+                        <h1 className="admin-page-title">All Submissions</h1>
+                        <p className="admin-page-subtitle">
                             View all code submissions across the platform
                         </p>
 
-                        <div style={styles.tableCard}>
+                        <div className="admin-table-card">
                             {loading ? (
-                                <div style={styles.loadingDiv}>
+                                <div className="admin-loading-div">
                                     <Loader2 size={32} color="#3b82f6"
                                         style={{
                                             animation: 'spin 1s linear infinite'
                                         }} />
                                 </div>
                             ) : (
-                                <table style={styles.table}>
+                                <table className="admin-table">
                                     <thead>
                                         <tr>
-                                            <th style={styles.th}>#</th>
-                                            <th style={styles.th}>User</th>
-                                            <th style={styles.th}>Problem</th>
-                                            <th style={styles.th}>Verdict</th>
-                                            <th style={styles.th}>Language</th>
-                                            <th style={styles.th}>Runtime</th>
-                                            <th style={styles.th}>Date</th>
+                                            <th className="admin-th">#</th>
+                                            <th className="admin-th">User</th>
+                                            <th className="admin-th">Problem</th>
+                                            <th className="admin-th">Verdict</th>
+                                            <th className="admin-th">Language</th>
+                                            <th className="admin-th">Runtime</th>
+                                            <th className="admin-th">Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {submissions.map((sub, i) => {
                                             const vs = getVerdictStyle(sub.verdict)
                                             return (
-                                                <tr key={sub.id} style={styles.row}>
-                                                    <td style={{
-                                                        ...styles.td, color: '#4b5563'
-                                                    }}>
-                                                        {subPage * 10 + i + 1}
+                                                <tr key={sub.id} className="admin-row">
+                                                    <td className="admin-td" style={{ color: '#94a3b8', fontWeight: '600' }}>
+                                                        {i + 1}
                                                     </td>
-                                                    <td style={styles.td}>
-                                                        <div style={styles.userCell}>
-                                                            <div style={styles.miniAvatar}>
-                                                                {sub.username?.charAt(0)
-                                                                    .toUpperCase()}
-                                                            </div>
-                                                            <span style={styles.username}>
-                                                                {sub.username}
-                                                            </span>
-                                                        </div>
+                                                    <td className="admin-td">
+                                                        <span className="admin-username">
+                                                            {sub.username}
+                                                        </span>
                                                     </td>
-                                                    <td style={styles.td}>
+                                                    <td className="admin-td">
                                                         <Link
                                                             to={`/problems/${sub.problemId}`}
-                                                            style={styles.problemLink}>
+                                                            className="admin-problem-link">
                                                             {sub.problemTitle}
                                                         </Link>
                                                     </td>
-                                                    <td style={styles.td}>
-                                                        <span style={{
-                                                            ...styles.verdictBadge,
-                                                            color: vs.color,
-                                                            background: vs.bg,
-                                                        }}>
-                                                            {sub.verdict?.replace(/_/g, ' ')}
+                                                    <td className="admin-td">
+                                                        <span 
+                                                            className="admin-status-badge"
+                                                            style={{
+                                                                color: vs.color,
+                                                                background: vs.bg
+                                                            }}
+                                                        >
+                                                            {sub.verdict.replace(/_/g, ' ')}
                                                         </span>
                                                     </td>
-                                                    <td style={styles.td}>
-                                                        <span style={styles.langBadge}>
+                                                    <td className="admin-td">
+                                                        <span className="admin-tag" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                                                             {sub.language}
                                                         </span>
                                                     </td>
-                                                    <td style={styles.td}>
-                                                        <span style={styles.runtime}>
-                                                            {sub.runtimeMs
-                                                                ? `${sub.runtimeMs}ms` : '—'}
+                                                    <td className="admin-td">
+                                                        <span className="admin-date" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                                                            {sub.runtimeMs ? `${sub.runtimeMs}ms` : '—'}
                                                         </span>
                                                     </td>
-                                                    <td style={styles.td}>
-                                                        <span style={styles.date}>
+                                                    <td className="admin-td">
+                                                        <span className="admin-date">
                                                             {formatDate(sub.submittedAt)}
                                                         </span>
                                                     </td>
@@ -1039,31 +1034,26 @@ export default function AdminPage() {
                         </div>
 
                         {/* Pagination */}
-                        <div style={styles.pagination}>
+                        <div className="admin-pagination">
                             <button
                                 onClick={() =>
                                     setSubPage(p => Math.max(0, p - 1))}
                                 disabled={subPage === 0}
-                                style={{
-                                    ...styles.pageBtn,
-                                    opacity: subPage === 0 ? 0.4 : 1
-                                }}>
+                                className="admin-page-btn"
+                                style={{ opacity: subPage === 0 ? 0.4 : 1 }}>
                                 <ChevronLeft size={16} />
                                 Previous
                             </button>
-                            <span style={styles.pageInfo}>
+                            <span className="admin-page-info">
                                 Page {subPage + 1} of {totalSubPages}
                             </span>
                             <button
                                 onClick={() =>
                                     setSubPage(p =>
                                         Math.min(totalSubPages - 1, p + 1))}
-                                disabled={subPage >= totalSubPages - 1}
-                                style={{
-                                    ...styles.pageBtn,
-                                    opacity: subPage >= totalSubPages - 1
-                                        ? 0.4 : 1
-                                }}>
+                                disabled={subPage === totalSubPages - 1}
+                                className="admin-page-btn"
+                                style={{ opacity: subPage === totalSubPages - 1 ? 0.4 : 1 }}>
                                 Next
                                 <ChevronRight size={16} />
                             </button>
@@ -1074,147 +1064,117 @@ export default function AdminPage() {
 
             {/* ── CREATE CONTEST MODAL ── */}
             {showContestModal && (
-                <div style={styles.modalOverlay}
-                    onClick={() => setShowContestModal(false)}>
-                    <div style={styles.modal}
-                        onClick={(e) => e.stopPropagation()}>
-
-                        <div style={styles.modalHeader}>
-                            <h2 style={styles.modalTitle}>
-                                <Trophy size={18} color="#f59e0b" />
-                                Create New Contest
-                            </h2>
-                            <button
-                                onClick={() => setShowContestModal(false)}
-                                style={styles.modalCloseBtn}>
-                                <X size={18} />
-                            </button>
-                        </div>
-
-                        <div style={styles.modalBody}>
-
-                            {/* Title */}
-                            <div style={styles.formGroup}>
-                                <label style={styles.label}>
-                                    Contest Title <span style={styles.required}>*</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder="e.g. Weekly Contest 5"
-                                    value={contestTitle}
-                                    onChange={(e) => setContestTitle(e.target.value)}
-                                    style={styles.input}
-                                />
-                            </div>
-
-                            {/* Description */}
-                            <div style={styles.formGroup}>
-                                <label style={styles.label}>
-                                    Description <span style={styles.required}>*</span>
-                                </label>
-                                <textarea
-                                    placeholder="Brief description of the contest..."
-                                    value={contestDesc}
-                                    onChange={(e) => setContestDesc(e.target.value)}
-                                    style={{ ...styles.textarea, minHeight: '80px' }}
-                                />
-                            </div>
-
-                            {/* Time Range */}
-                            <div style={styles.timeGrid}>
-                                <div style={styles.formGroup}>
-                                    <label style={styles.label}>
-                                        Start Time <span style={styles.required}>*</span>
-                                    </label>
-                                    <input
-                                        type="datetime-local"
-                                        value={contestStart}
-                                        onChange={(e) => setContestStart(e.target.value)}
-                                        style={styles.input}
-                                    />
-                                </div>
-                                <div style={styles.formGroup}>
-                                    <label style={styles.label}>
-                                        End Time <span style={styles.required}>*</span>
-                                    </label>
-                                    <input
-                                        type="datetime-local"
-                                        value={contestEnd}
-                                        onChange={(e) => setContestEnd(e.target.value)}
-                                        style={styles.input}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Problem Selection */}
-                            <div style={styles.formGroup}>
-                                <label style={styles.label}>
-                                    Select Problems <span style={styles.required}>*</span>
-                                </label>
-                                <p style={styles.hint}>
-                                    {selectedProblemIds.length} problem(s) selected
-                                </p>
-                                <div style={styles.problemSelectList}>
-                                    {problems.length === 0 ? (
-                                        <p style={{
-                                            color: '#6b7280',
-                                            fontSize: '13px',
-                                            padding: '12px'
-                                        }}>
-                                            No problems available. Create a problem first.
-                                        </p>
-                                    ) : (
-                                        problems.map(p => (
-                                            <label
-                                                key={p.id}
-                                                style={{
-                                                    ...styles.problemCheckRow,
-                                                    ...(selectedProblemIds.includes(p.id)
-                                                        ? styles.problemCheckRowActive : {})
-                                                }}>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedProblemIds.includes(p.id)}
-                                                    onChange={() =>
-                                                        toggleProblemSelection(p.id)}
-                                                    style={{ marginRight: '10px' }}
-                                                />
-                                                <span style={styles.problemCheckTitle}>
-                                                    {p.title}
-                                                </span>
-                                                <span style={{
-                                                    ...styles.diffBadge,
-                                                    color: getDiffStyle(p.difficulty).color,
-                                                    background: getDiffStyle(p.difficulty).bg,
-                                                }}>
-                                                    {p.difficulty}
-                                                </span>
-                                            </label>
-                                        ))
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style={styles.modalFooter}>
+                <div className="admin-modal-overlay">
+                    <div className="admin-modal">
+                        <div className="admin-modal-header">
+                            <h3 className="admin-modal-title">Create New Contest</h3>
                             <button
                                 onClick={() => {
                                     setShowContestModal(false)
                                     resetContestForm()
                                 }}
-                                style={styles.cancelBtn}>
+                                className="admin-close-btn">
+                                <X size={18} />
+                            </button>
+                        </div>
+                        <div className="admin-modal-body">
+                            {/* Title */}
+                            <div className="create-problem-form-group">
+                                <label className="create-problem-label">Contest Title</label>
+                                <input
+                                    type="text"
+                                    placeholder="e.g. Weekly Contest 1"
+                                    value={contestTitle}
+                                    onChange={(e) => setContestTitle(e.target.value)}
+                                    className="create-problem-input"
+                                />
+                            </div>
+
+                            {/* Description */}
+                            <div className="create-problem-form-group">
+                                <label className="create-problem-label">Description</label>
+                                <textarea
+                                    placeholder="Enter contest description..."
+                                    value={contestDesc}
+                                    onChange={(e) => setContestDesc(e.target.value)}
+                                    className="create-problem-textarea"
+                                    style={{ minHeight: '80px' }}
+                                />
+                            </div>
+
+                            {/* Date Grid */}
+                            <div className="admin-date-grid">
+                                <div className="create-problem-form-group">
+                                    <label className="create-problem-label">Start Time</label>
+                                    <input
+                                        type="datetime-local"
+                                        value={contestStart}
+                                        onChange={(e) => setContestStart(e.target.value)}
+                                        className="create-problem-input"
+                                    />
+                                </div>
+                                <div className="create-problem-form-group">
+                                    <label className="create-problem-label">End Time</label>
+                                    <input
+                                        type="datetime-local"
+                                        value={contestEnd}
+                                        onChange={(e) => setContestEnd(e.target.value)}
+                                        className="create-problem-input"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Select Problems */}
+                            <div className="create-problem-form-group">
+                                <label className="create-problem-label">
+                                    Select Problems ({selectedProblemIds.length} selected)
+                                </label>
+                                <div className="admin-problem-list-box">
+                                    {problems.map(p => (
+                                        <div
+                                            key={p.id}
+                                            onClick={() => toggleProblemSelection(p.id)}
+                                            className={`admin-problem-select-item ${selectedProblemIds.includes(p.id) ? 'selected' : ''}`}>
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedProblemIds.includes(p.id)}
+                                                onChange={() => { }} // Handled by div click
+                                                style={{ pointerEvents: 'none' }}
+                                            />
+                                            <span className="admin-problem-select-title">
+                                                {p.title}
+                                            </span>
+                                            <span 
+                                                className="admin-diff-badge"
+                                                style={{
+                                                    marginLeft: 'auto',
+                                                    color: getDiffStyle(p.difficulty).color,
+                                                    background: getDiffStyle(p.difficulty).bg,
+                                                    fontSize: '9px',
+                                                    padding: '2px 6px'
+                                                }}
+                                            >
+                                                {p.difficulty}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="admin-modal-footer">
+                            <button
+                                onClick={() => {
+                                    setShowContestModal(false)
+                                    resetContestForm()
+                                }}
+                                className="admin-cancel-btn">
                                 Cancel
                             </button>
                             <button
                                 onClick={handleCreateContest}
                                 disabled={creatingContest}
-                                style={{
-                                    ...styles.confirmBtn,
-                                    opacity: creatingContest ? 0.7 : 1
-                                }}>
-                                <Trophy size={15} />
-                                {creatingContest
-                                    ? 'Creating...' : 'Create Contest'}
+                                className="admin-contest-submit-btn">
+                                {creatingContest ? 'Creating...' : 'Create Contest'}
                             </button>
                         </div>
                     </div>
@@ -1225,53 +1185,27 @@ export default function AdminPage() {
 }
 
 const styles = {
-    page: {
-        display: 'flex',
-        minHeight: 'calc(100vh - 64px)',
-        background: '#0a0e1a',
+    content: {
+        padding: '32px',
+        maxWidth: '1100px',
     },
-
-    // Sidebar
-    sidebar: {
-        width: '240px',
-        background: '#111827',
-        borderRight: '1px solid #1e2d45',
+    contentHeader: {
         display: 'flex',
-        flexDirection: 'column',
-        flexShrink: 0,
-        position: 'sticky',
-        top: '64px',
-        height: 'calc(100vh - 64px)',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        marginBottom: '4px',
     },
-    sidebarHeader: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-        padding: '20px 20px 16px',
-        borderBottom: '1px solid #1e2d45',
-    },
-    sidebarTitle: {
-        fontSize: '15px',
-        fontWeight: '700',
+    pageTitle: {
+        fontSize: '24px',
+        fontWeight: '800',
         color: '#f9fafb',
+        letterSpacing: '-0.3px',
+        marginBottom: '4px',
     },
-    sidebarNav: {
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '12px',
-        gap: '4px',
-        flex: 1,
-    },
-    sidebarBadge: {
-        marginLeft: 'auto',
-        background: '#ef4444',
-        color: 'white',
-        fontSize: '11px',
-        fontWeight: '700',
-        padding: '2px 7px',
-        borderRadius: '20px',
-        minWidth: '18px',
-        textAlign: 'center',
+    pageSubtitle: {
+        fontSize: '14px',
+        color: '#6b7280',
+        marginBottom: '28px',
     },
     ticketFilters: {
         display: 'flex',
@@ -1293,6 +1227,30 @@ const styles = {
         background: 'rgba(59,130,246,0.1)',
         border: '1px solid rgba(59,130,246,0.3)',
         color: '#60a5fa',
+    },
+    tableCard: {
+        background: '#111827',
+        border: '1px solid #1e2d45',
+        borderRadius: '14px',
+        overflow: 'hidden',
+        marginBottom: '20px',
+    },
+    loadingDiv: {
+        display: 'flex',
+        justifyContent: 'center',
+        padding: '60px',
+    },
+    empty: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '60px 20px',
+    },
+    emptyText: {
+        fontSize: '16px',
+        color: '#4b5563',
+        fontWeight: '500',
     },
     ticketCard: {
         padding: '20px 24px',
@@ -1367,371 +1325,6 @@ const styles = {
         color: '#10b981',
         marginTop: '8px',
     },
-    sidebarItem: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-        padding: '10px 14px',
-        borderRadius: '10px',
-        fontSize: '14px',
-        fontWeight: '500',
-        color: '#9ca3af',
-        background: 'none',
-        border: 'none',
-        cursor: 'pointer',
-        fontFamily: 'inherit',
-        transition: 'all 0.15s',
-        textAlign: 'left',
-    },
-    sidebarItemActive: {
-        color: '#f9fafb',
-        background: 'rgba(59, 130, 246, 0.12)',
-    },
-    sidebarFooter: {
-        padding: '16px',
-        borderTop: '1px solid #1e2d45',
-    },
-    backLink: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-        fontSize: '13px',
-        color: '#6b7280',
-        textDecoration: 'none',
-    },
-
-    // Main
-    main: {
-        flex: 1,
-        overflow: 'auto',
-    },
-    content: {
-        padding: '32px',
-        maxWidth: '1100px',
-    },
-    contentHeader: {
-        display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'space-between',
-        marginBottom: '4px',
-    },
-    pageTitle: {
-        fontSize: '24px',
-        fontWeight: '800',
-        color: '#f9fafb',
-        letterSpacing: '-0.3px',
-        marginBottom: '4px',
-    },
-    pageSubtitle: {
-        fontSize: '14px',
-        color: '#6b7280',
-        marginBottom: '28px',
-    },
-    loadingDiv: {
-        display: 'flex',
-        justifyContent: 'center',
-        padding: '60px',
-    },
-
-    createBtn: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        padding: '10px 20px',
-        background: 'linear-gradient(135deg, #10b981, #059669)',
-        border: 'none',
-        borderRadius: '10px',
-        color: 'white',
-        fontSize: '14px',
-        fontWeight: '600',
-        cursor: 'pointer',
-        textDecoration: 'none',
-        boxShadow: '0 4px 12px rgba(16,185,129,0.3)',
-    },
-
-    // Stats
-    statsGrid: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-        gap: '16px',
-        marginBottom: '24px',
-    },
-    statCard: {
-        background: '#111827',
-        border: '1px solid #1e2d45',
-        borderRadius: '14px',
-        padding: '20px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '10px',
-    },
-    protectedLabel: {
-        fontSize: '11px',
-        fontWeight: '600',
-        color: '#6b7280',
-        fontStyle: 'italic',
-    },
-    statIconBox: {
-        width: '44px',
-        height: '44px',
-        borderRadius: '12px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    statValue: {
-        fontSize: '32px',
-        fontWeight: '800',
-        letterSpacing: '-1px',
-        lineHeight: 1,
-    },
-    statLabel: {
-        fontSize: '13px',
-        color: '#6b7280',
-        fontWeight: '500',
-    },
-
-    // Quick Actions
-    quickActionsCard: {
-        background: '#111827',
-        border: '1px solid #1e2d45',
-        borderRadius: '14px',
-        padding: '24px',
-    },
-    cardTitle: {
-        fontSize: '15px',
-        fontWeight: '700',
-        color: '#f9fafb',
-        marginBottom: '16px',
-    },
-    quickActions: {
-        display: 'flex',
-        gap: '12px',
-        flexWrap: 'wrap',
-    },
-    quickBtn: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        padding: '10px 20px',
-        background: '#0f172a',
-        border: '1px solid #1e2d45',
-        borderRadius: '10px',
-        color: '#9ca3af',
-        fontSize: '14px',
-        fontWeight: '500',
-        cursor: 'pointer',
-        fontFamily: 'inherit',
-        transition: 'all 0.2s',
-    },
-
-    // Table
-    tableCard: {
-        background: '#111827',
-        border: '1px solid #1e2d45',
-        borderRadius: '14px',
-        overflow: 'hidden',
-        marginBottom: '20px',
-    },
-    table: {
-        width: '100%',
-        borderCollapse: 'collapse',
-    },
-    th: {
-        textAlign: 'left',
-        padding: '14px 20px',
-        fontSize: '12px',
-        fontWeight: '600',
-        color: '#6b7280',
-        textTransform: 'uppercase',
-        letterSpacing: '0.5px',
-        borderBottom: '1px solid #1e2d45',
-        background: '#0f172a',
-    },
-    td: {
-        padding: '14px 20px',
-        borderBottom: '1px solid #1e2d45',
-        fontSize: '14px',
-    },
-    row: {
-        transition: 'background 0.15s',
-    },
-    userCell: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-    },
-    miniAvatar: {
-        width: '30px',
-        height: '30px',
-        borderRadius: '8px',
-        background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '12px',
-        fontWeight: '700',
-        color: 'white',
-        flexShrink: 0,
-    },
-    username: {
-        fontSize: '14px',
-        fontWeight: '600',
-        color: '#f9fafb',
-    },
-    email: {
-        fontSize: '13px',
-        color: '#6b7280',
-    },
-    roleBadge: {
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '5px',
-        padding: '3px 10px',
-        borderRadius: '20px',
-        fontSize: '12px',
-        fontWeight: '600',
-    },
-    adminRole: {
-        color: '#818cf8',
-        background: 'rgba(99,102,241,0.1)',
-        border: '1px solid rgba(99,102,241,0.2)',
-    },
-    userRole: {
-        color: '#9ca3af',
-        background: 'rgba(107,114,128,0.1)',
-        border: '1px solid rgba(107,114,128,0.2)',
-    },
-    statusBadge: {
-        display: 'inline-flex',
-        alignItems: 'center',
-        padding: '3px 10px',
-        borderRadius: '20px',
-        fontSize: '12px',
-        fontWeight: '600',
-    },
-    activeStatus: {
-        color: '#10b981',
-        background: 'rgba(16,185,129,0.1)',
-    },
-    inactiveStatus: {
-        color: '#ef4444',
-        background: 'rgba(239,68,68,0.1)',
-    },
-    actions: {
-        display: 'flex',
-        gap: '8px',
-    },
-    dangerBtn: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '32px',
-        height: '32px',
-        background: 'rgba(239,68,68,0.1)',
-        border: '1px solid rgba(239,68,68,0.2)',
-        borderRadius: '8px',
-        color: '#ef4444',
-        cursor: 'pointer',
-        transition: 'all 0.15s',
-    },
-    successBtn: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '32px',
-        height: '32px',
-        background: 'rgba(16,185,129,0.1)',
-        border: '1px solid rgba(16,185,129,0.2)',
-        borderRadius: '8px',
-        color: '#10b981',
-        cursor: 'pointer',
-        transition: 'all 0.15s',
-    },
-    promoteBtn: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '32px',
-        height: '32px',
-        background: 'rgba(245,158,11,0.1)',
-        border: '1px solid rgba(245,158,11,0.2)',
-        borderRadius: '8px',
-        color: '#f59e0b',
-        cursor: 'pointer',
-        transition: 'all 0.15s',
-    },
-    problemLink: {
-        color: '#f9fafb',
-        fontWeight: '500',
-        textDecoration: 'none',
-    },
-    diffBadge: {
-        display: 'inline-flex',
-        padding: '3px 10px',
-        borderRadius: '20px',
-        fontSize: '12px',
-        fontWeight: '600',
-    },
-    tags: {
-        display: 'flex',
-        gap: '6px',
-        flexWrap: 'wrap',
-    },
-    tag: {
-        padding: '3px 8px',
-        background: '#1a2235',
-        border: '1px solid #1e2d45',
-        borderRadius: '20px',
-        fontSize: '12px',
-        color: '#9ca3af',
-    },
-    moreTag: {
-        padding: '3px 8px',
-        background: '#1a2235',
-        borderRadius: '20px',
-        fontSize: '12px',
-        color: '#6b7280',
-    },
-    verdictBadge: {
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '5px',
-        padding: '4px 10px',
-        borderRadius: '6px',
-        fontSize: '12px',
-        fontWeight: '600',
-    },
-    langBadge: {
-        padding: '3px 10px',
-        background: '#1a2235',
-        border: '1px solid #1e2d45',
-        borderRadius: '6px',
-        fontSize: '12px',
-        color: '#9ca3af',
-        fontFamily: "'JetBrains Mono', monospace",
-    },
-    runtime: {
-        fontSize: '13px',
-        color: '#6b7280',
-        fontFamily: "'JetBrains Mono', monospace",
-    },
-    date: {
-        fontSize: '13px',
-        color: '#6b7280',
-    },
-    empty: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '12px',
-        padding: '60px 20px',
-    },
-    emptyText: {
-        fontSize: '16px',
-        color: '#4b5563',
-        fontWeight: '500',
-    },
     pagination: {
         display: 'flex',
         alignItems: 'center',
@@ -1756,164 +1349,5 @@ const styles = {
         fontSize: '14px',
         color: '#6b7280',
     },
-    // Contest Modal
-    modalOverlay: {
-        position: 'fixed',
-        inset: 0,
-        background: 'rgba(0,0,0,0.6)',
-        backdropFilter: 'blur(4px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1000,
-        padding: '20px',
-    },
-    modal: {
-        background: '#111827',
-        border: '1px solid #1e2d45',
-        borderRadius: '16px',
-        width: '100%',
-        maxWidth: '560px',
-        maxHeight: '85vh',
-        display: 'flex',
-        flexDirection: 'column',
-        boxShadow: '0 24px 60px rgba(0,0,0,0.5)',
-    },
-    modalHeader: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '20px 24px',
-        borderBottom: '1px solid #1e2d45',
-    },
-    modalTitle: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        fontSize: '16px',
-        fontWeight: '700',
-        color: '#f9fafb',
-    },
-    modalCloseBtn: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '32px',
-        height: '32px',
-        background: '#0f172a',
-        border: '1px solid #1e2d45',
-        borderRadius: '8px',
-        color: '#9ca3af',
-        cursor: 'pointer',
-    },
-    modalBody: {
-        padding: '20px 24px',
-        overflowY: 'auto',
-        flex: 1,
-    },
-    modalFooter: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        gap: '12px',
-        padding: '16px 24px',
-        borderTop: '1px solid #1e2d45',
-    },
-    timeGrid: {
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: '16px',
-    },
-    problemSelectList: {
-        maxHeight: '220px',
-        overflowY: 'auto',
-        border: '1px solid #1e2d45',
-        borderRadius: '10px',
-        background: '#0f172a',
-    },
-    problemCheckRow: {
-        display: 'flex',
-        alignItems: 'center',
-        padding: '10px 14px',
-        borderBottom: '1px solid #1e2d45',
-        cursor: 'pointer',
-        transition: 'background 0.15s',
-    },
-    problemCheckRowActive: {
-        background: 'rgba(59,130,246,0.08)',
-    },
-    problemCheckTitle: {
-        flex: 1,
-        fontSize: '13px',
-        color: '#f9fafb',
-        fontWeight: '500',
-    },
-    cancelBtn: {
-        padding: '10px 20px',
-        background: 'transparent',
-        border: '1px solid #1e2d45',
-        borderRadius: '10px',
-        color: '#9ca3af',
-        fontSize: '14px',
-        fontWeight: '600',
-        cursor: 'pointer',
-        fontFamily: 'inherit',
-    },
-    confirmBtn: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        padding: '10px 22px',
-        background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-        border: 'none',
-        borderRadius: '10px',
-        color: 'white',
-        fontSize: '14px',
-        fontWeight: '700',
-        cursor: 'pointer',
-        fontFamily: 'inherit',
-        boxShadow: '0 4px 12px rgba(245,158,11,0.3)',
-    },
-    formGroup: {
-        marginBottom: '18px',
-    },
-    label: {
-        display: 'block',
-        fontSize: '12px',
-        fontWeight: '700',
-        color: '#9ca3af',
-        textTransform: 'uppercase',
-        letterSpacing: '0.5px',
-        marginBottom: '6px',
-    },
-    required: {
-        color: '#ef4444',
-    },
-    hint: {
-        fontSize: '12px',
-        color: '#4b5563',
-        marginBottom: '8px',
-    },
-    input: {
-        width: '100%',
-        padding: '10px 14px',
-        background: '#0f172a',
-        border: '1px solid #1e2d45',
-        borderRadius: '8px',
-        color: '#f9fafb',
-        fontSize: '14px',
-        fontFamily: 'inherit',
-        boxSizing: 'border-box',
-    },
-    textarea: {
-        width: '100%',
-        padding: '10px 14px',
-        background: '#0f172a',
-        border: '1px solid #1e2d45',
-        borderRadius: '8px',
-        color: '#f9fafb',
-        fontSize: '14px',
-        fontFamily: 'inherit',
-        resize: 'vertical',
-        boxSizing: 'border-box',
-    },
+}
 }

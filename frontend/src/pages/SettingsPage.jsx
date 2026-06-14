@@ -7,6 +7,7 @@ import {
     ArrowLeft, User, Mail, Lock,
     Save, Eye, EyeOff, Settings as SettingsIcon
 } from 'lucide-react'
+import './SettingsPage.css'
 
 export default function SettingsPage() {
     const { user, updateUser } = useAuth()
@@ -90,55 +91,59 @@ export default function SettingsPage() {
         ? '#10b981' : newPassword.length >= 8 ? '#f59e0b' : '#ef4444'
 
     return (
-        <div style={styles.page}>
-            <div style={styles.container}>
+        <div className="settings-page">
+            {/* Glowing background blobs */}
+            <div className="blob blob-pink" />
+            <div className="blob blob-mint" />
 
-                <Link to={`/profile/${user?.username}`} style={styles.backBtn}>
+            <div className="settings-container">
+
+                <Link to={`/profile/${user?.username}`} className="settings-back-btn">
                     <ArrowLeft size={16} />
                     Back to Profile
                 </Link>
 
-                <div style={styles.header}>
-                    <div style={styles.headerIcon}>
+                <div className="settings-header">
+                    <div className="settings-header-icon">
                         <SettingsIcon size={22} color="#3b82f6" />
                     </div>
                     <div>
-                        <h1 style={styles.title}>Account Settings</h1>
-                        <p style={styles.subtitle}>
+                        <h1 className="settings-title">Account Settings</h1>
+                        <p className="settings-subtitle">
                             Manage your profile information and security
                         </p>
                     </div>
                 </div>
 
                 {/* Profile Card */}
-                <form onSubmit={handleProfileUpdate} style={styles.card}>
-                    <h3 style={styles.cardTitle}>
-                        <User size={16} />
+                <form onSubmit={handleProfileUpdate} className="settings-card">
+                    <h3 className="settings-card-title">
+                        <User size={16} style={{ color: '#3b82f6' }} />
                         Profile Information
                     </h3>
 
-                    <div style={styles.formGroup}>
-                        <label style={styles.label}>Username</label>
-                        <div style={styles.inputWrapper}>
-                            <User size={16} color="#6b7280" style={styles.icon} />
+                    <div className="settings-form-group">
+                        <label className="settings-label">Username</label>
+                        <div className="settings-input-wrapper">
+                            <User size={16} className="settings-input-icon" />
                             <input
                                 type="text"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                style={styles.input}
+                                className="settings-input"
                             />
                         </div>
                     </div>
 
-                    <div style={styles.formGroup}>
-                        <label style={styles.label}>Email</label>
-                        <div style={styles.inputWrapper}>
-                            <Mail size={16} color="#6b7280" style={styles.icon} />
+                    <div className="settings-form-group">
+                        <label className="settings-label">Email</label>
+                        <div className="settings-input-wrapper">
+                            <Mail size={16} className="settings-input-icon" />
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                style={styles.input}
+                                className="settings-input"
                             />
                         </div>
                     </div>
@@ -146,37 +151,34 @@ export default function SettingsPage() {
                     <button
                         type="submit"
                         disabled={profileLoading}
-                        style={{
-                            ...styles.saveBtn,
-                            opacity: profileLoading ? 0.7 : 1
-                        }}>
+                        className="settings-save-btn">
                         <Save size={15} />
                         {profileLoading ? 'Saving...' : 'Save Changes'}
                     </button>
                 </form>
 
                 {/* Password Card */}
-                <form onSubmit={handlePasswordChange} style={styles.card}>
-                    <h3 style={styles.cardTitle}>
-                        <Lock size={16} />
+                <form onSubmit={handlePasswordChange} className="settings-card">
+                    <h3 className="settings-card-title">
+                        <Lock size={16} style={{ color: '#ef4444' }} />
                         Change Password
                     </h3>
 
-                    <div style={styles.formGroup}>
-                        <label style={styles.label}>Current Password</label>
-                        <div style={styles.inputWrapper}>
-                            <Lock size={16} color="#6b7280" style={styles.icon} />
+                    <div className="settings-form-group">
+                        <label className="settings-label">Current Password</label>
+                        <div className="settings-input-wrapper">
+                            <Lock size={16} className="settings-input-icon" />
                             <input
                                 type={showCurrent ? 'text' : 'password'}
                                 placeholder="Enter current password"
                                 value={currentPassword}
                                 onChange={(e) => setCurrentPassword(e.target.value)}
-                                style={styles.input}
+                                className="settings-input"
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowCurrent(!showCurrent)}
-                                style={styles.eyeBtn}>
+                                className="settings-eye-btn">
                                 {showCurrent
                                     ? <EyeOff size={16} />
                                     : <Eye size={16} />}
@@ -184,56 +186,57 @@ export default function SettingsPage() {
                         </div>
                     </div>
 
-                    <div style={styles.formGroup}>
-                        <label style={styles.label}>New Password</label>
-                        <div style={styles.inputWrapper}>
-                            <Lock size={16} color="#6b7280" style={styles.icon} />
+                    <div className="settings-form-group">
+                        <label className="settings-label">New Password</label>
+                        <div className="settings-input-wrapper">
+                            <Lock size={16} className="settings-input-icon" />
                             <input
                                 type={showNew ? 'text' : 'password'}
                                 placeholder="Minimum 8 characters"
                                 value={newPassword}
                                 onChange={(e) => setNewPassword(e.target.value)}
-                                style={styles.input}
+                                className="settings-input"
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowNew(!showNew)}
-                                style={styles.eyeBtn}>
+                                className="settings-eye-btn">
                                 {showNew
                                     ? <EyeOff size={16} />
                                     : <Eye size={16} />}
                             </button>
                         </div>
                         {newPassword.length > 0 && (
-                            <div style={styles.strengthRow}>
-                                <div style={styles.strengthBarBg}>
-                                    <div style={{
-                                        ...styles.strengthBar,
-                                        width: newPassword.length >= 12 ? '100%'
-                                            : newPassword.length >= 8 ? '66%' : '33%',
-                                        background: strengthColor
-                                    }} />
+                            <div className="settings-strength-row">
+                                <div className="settings-strength-bar-bg">
+                                    <div 
+                                        className="settings-strength-bar"
+                                        style={{
+                                            width: newPassword.length >= 12 ? '100%'
+                                                : newPassword.length >= 8 ? '66%' : '33%',
+                                            background: strengthColor
+                                        }} 
+                                    />
                                 </div>
-                                <span style={{
-                                    ...styles.strengthLabel,
-                                    color: strengthColor
-                                }}>
+                                <span 
+                                    className="settings-strength-label"
+                                    style={{ color: strengthColor }}>
                                     {passwordStrength}
                                 </span>
                             </div>
                         )}
                     </div>
 
-                    <div style={styles.formGroup}>
-                        <label style={styles.label}>Confirm New Password</label>
-                        <div style={styles.inputWrapper}>
-                            <Lock size={16} color="#6b7280" style={styles.icon} />
+                    <div className="settings-form-group">
+                        <label className="settings-label">Confirm New Password</label>
+                        <div className="settings-input-wrapper">
+                            <Lock size={16} className="settings-input-icon" />
                             <input
                                 type="password"
                                 placeholder="Re-enter new password"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                style={styles.input}
+                                className="settings-input"
                             />
                         </div>
                     </div>
@@ -241,10 +244,7 @@ export default function SettingsPage() {
                     <button
                         type="submit"
                         disabled={passwordLoading}
-                        style={{
-                            ...styles.saveBtn,
-                            opacity: passwordLoading ? 0.7 : 1
-                        }}>
+                        className="settings-save-btn">
                         <Save size={15} />
                         {passwordLoading
                             ? 'Updating...' : 'Update Password'}
@@ -253,153 +253,4 @@ export default function SettingsPage() {
             </div>
         </div>
     )
-}
-
-const styles = {
-    page: {
-        minHeight: 'calc(100vh - 64px)',
-        background: '#0a0e1a',
-        padding: '32px 0 60px',
-    },
-    container: {
-        maxWidth: '600px',
-        margin: '0 auto',
-        padding: '0 24px',
-    },
-    backBtn: {
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '6px',
-        color: '#6b7280',
-        fontSize: '14px',
-        marginBottom: '20px',
-        textDecoration: 'none',
-    },
-    header: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '14px',
-        marginBottom: '24px',
-    },
-    headerIcon: {
-        width: '48px',
-        height: '48px',
-        background: 'rgba(59,130,246,0.1)',
-        border: '1px solid rgba(59,130,246,0.2)',
-        borderRadius: '12px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexShrink: 0,
-    },
-    title: {
-        fontSize: '22px',
-        fontWeight: '800',
-        color: '#f9fafb',
-        letterSpacing: '-0.3px',
-    },
-    subtitle: {
-        fontSize: '13px',
-        color: '#6b7280',
-        marginTop: '2px',
-    },
-    card: {
-        background: '#111827',
-        border: '1px solid #1e2d45',
-        borderRadius: '16px',
-        padding: '24px',
-        marginBottom: '20px',
-    },
-    cardTitle: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        fontSize: '15px',
-        fontWeight: '700',
-        color: '#f9fafb',
-        marginBottom: '20px',
-    },
-    formGroup: {
-        marginBottom: '18px',
-    },
-    label: {
-        display: 'block',
-        fontSize: '12px',
-        fontWeight: '700',
-        color: '#9ca3af',
-        textTransform: 'uppercase',
-        letterSpacing: '0.5px',
-        marginBottom: '6px',
-    },
-    inputWrapper: {
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-    },
-    icon: {
-        position: 'absolute',
-        left: '14px',
-        pointerEvents: 'none',
-    },
-    input: {
-        width: '100%',
-        padding: '11px 14px 11px 42px',
-        background: '#0f172a',
-        border: '1px solid #1e2d45',
-        borderRadius: '10px',
-        color: '#f9fafb',
-        fontSize: '14px',
-        fontFamily: 'inherit',
-        boxSizing: 'border-box',
-    },
-    eyeBtn: {
-        position: 'absolute',
-        right: '12px',
-        background: 'none',
-        border: 'none',
-        color: '#6b7280',
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-    },
-    strengthRow: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-        marginTop: '8px',
-    },
-    strengthBarBg: {
-        height: '4px',
-        background: '#1e2d45',
-        borderRadius: '2px',
-        flex: 1,
-        overflow: 'hidden',
-    },
-    strengthBar: {
-        height: '100%',
-        borderRadius: '2px',
-        transition: 'all 0.3s ease',
-    },
-    strengthLabel: {
-        fontSize: '12px',
-        fontWeight: '600',
-        minWidth: '40px',
-    },
-    saveBtn: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '8px',
-        width: '100%',
-        padding: '12px',
-        background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-        border: 'none',
-        borderRadius: '10px',
-        color: 'white',
-        fontSize: '14px',
-        fontWeight: '700',
-        cursor: 'pointer',
-        fontFamily: 'inherit',
-        boxShadow: '0 4px 12px rgba(59,130,246,0.3)',
-    },
 }
