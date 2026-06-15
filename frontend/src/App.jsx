@@ -14,10 +14,16 @@ import ContestDetailPage from './pages/ContestDetailPage'
 import SettingsPage from './pages/SettingsPage'
 import ContestProblemPage from './pages/ContestProblemPage'
 import ContestScoreboardPage from './pages/ContestScoreboardPage'
+import LandingPage from './pages/LandingPage'
 
 const ProtectedRoute = ({ children }) => {
   const { isLoggedIn } = useAuth()
   return isLoggedIn ? children : <Navigate to="/login" />
+}
+
+const HomeRoute = () => {
+  const { isLoggedIn } = useAuth()
+  return isLoggedIn ? <Navigate to="/problems" /> : <LandingPage />
 }
 
 const AdminRoute = ({ children }) => {
@@ -39,7 +45,7 @@ function App() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/" element={<Navigate to="/problems" />} />
+      <Route path="/" element={<HomeRoute />} />
       <Route path="/problems" element={
         <ProtectedRoute>
           <Layout><ProblemListPage /></Layout>

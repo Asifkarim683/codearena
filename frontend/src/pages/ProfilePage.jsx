@@ -76,6 +76,7 @@ export default function ProfilePage() {
                 try {
                     const res = await contestService.getContestById(
                         entry.contestId)
+
                     return {
                         contestId: entry.contestId,
                         title: res.data.title,
@@ -83,6 +84,7 @@ export default function ProfilePage() {
                         score: entry.score,
                         solvedCount: entry.solvedProblemIds.size,
                         totalProblems: res.data.totalProblems,
+                        startTime: res.data.startTime,
                     }
                 } catch {
                     return null
@@ -291,9 +293,14 @@ export default function ProfilePage() {
                                     to={`/contests/${cs.contestId}/scoreboard`}
                                     style={styles.contestStatCard}>
                                     <div style={styles.contestStatTop}>
-                                        <span style={styles.contestStatTitle}>
-                                            {cs.title}
-                                        </span>
+                                        <div>
+                                            <span style={styles.contestStatTitle}>
+                                                {cs.title}
+                                            </span>
+                                            <div style={styles.contestStatDate}>
+                                                {formatDate(cs.startTime)}
+                                            </div>
+                                        </div>
                                         <span style={{
                                             ...styles.contestStatStatus,
                                             color: cs.status === 'ONGOING'
@@ -594,6 +601,12 @@ const styles = {
         marginBottom: '24px',
         textDecoration: 'none',
         transition: 'color 0.15s',
+    },
+
+    contestStatDate: {
+        fontSize: '11px',
+        color: '#6b7280',
+        marginTop: '2px',
     },
 
     // Hero Card

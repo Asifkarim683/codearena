@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 import { Code2, Mail, Lock, LogIn } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 
 export default function LoginPage() {
     const [email, setEmail] = useState('')
@@ -35,6 +36,12 @@ export default function LoginPage() {
     return (
         <div style={styles.container}>
             <div style={styles.card}>
+
+                {/* Back to Home */}
+                <Link to="/" style={styles.backHome}>
+                    <ArrowLeft size={14} />
+                    Back to Home
+                </Link>
 
                 {/* Logo */}
                 <div style={styles.logo}>
@@ -176,6 +183,16 @@ const styles = {
         position: 'relative',
         display: 'flex',
         alignItems: 'center',
+    },
+
+    backHome: {
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '6px',
+        fontSize: '13px',
+        color: '#6b7280',
+        textDecoration: 'none',
+        marginBottom: '24px',
     },
     icon: {
         position: 'absolute',

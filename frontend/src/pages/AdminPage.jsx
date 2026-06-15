@@ -467,7 +467,11 @@ export default function AdminPage() {
                                                 </td>
                                                 <td style={styles.td}>
                                                     <div style={styles.actions}>
-                                                        {user.isActive ? (
+                                                        {user.role === 'ADMIN' ? (
+                                                            <span style={styles.protectedLabel}>
+                                                                Protected
+                                                            </span>
+                                                        ) : user.isActive ? (
                                                             <button
                                                                 onClick={() =>
                                                                     handleDeactivate(user.id)}
@@ -1174,6 +1178,12 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         gap: '10px',
+    },
+    protectedLabel: {
+        fontSize: '11px',
+        fontWeight: '600',
+        color: '#6b7280',
+        fontStyle: 'italic',
     },
     statIconBox: {
         width: '44px',

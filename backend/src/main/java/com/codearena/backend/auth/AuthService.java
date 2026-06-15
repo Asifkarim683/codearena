@@ -58,14 +58,26 @@ public class AuthService {
     public AuthResponse login(LoginRequest request) {
 
         // Authenticate user
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()));
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()));
+        } catch (org.springframework.security.authentication.DisabledException
+                | org.springframework.security.authentication.LockedException e) {
+            throw new RuntimeException(
+                    "Your account has been deactivated. Please contact an administrator.");
+        }
 
         // Get user from database
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Block deactivated users
+        if (!user.isActive()) {
+            throw new RuntimeException(
+                    "Your account has been deactivated. Please contact an administrator.");
+        }
 
         // Generate tokens
         var accessToken = jwtService.generateToken(user);

@@ -108,44 +108,44 @@ export default function ContestProblemPage() {
 
     // Disable copy/paste/cut on the editor
     const handleEditorMount = (editor) => {
-
-        const domNode = editor.getDomNode()
-        if (!domNode) return
-
-        const blockEvent = (e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            if (!pasteBlockedRef.current) {
-                pasteBlockedRef.current = true
-                toast.error('Copy/Paste is disabled during contests')
-                setTimeout(() => { pasteBlockedRef.current = false }, 1500)
-            }
-        }
-
-        domNode.addEventListener('paste', blockEvent, true)
-        domNode.addEventListener('copy', blockEvent, true)
-        domNode.addEventListener('cut', blockEvent, true)
-        domNode.addEventListener('contextmenu', (e) => e.preventDefault(), true)
-
-        // Block Ctrl+C / Ctrl+V / Ctrl+X / Ctrl+Insert / Shift+Insert
-        editor.onKeyDown((e) => {
-            const isCopyPaste =
-                (e.ctrlKey || e.metaKey) &&
-                (e.keyCode === 33 ||
-                    e.keyCode === 52 ||
-                    e.keyCode === 54)
-            if (isCopyPaste) {
-                e.preventDefault()
-                e.stopPropagation()
-                if (!pasteBlockedRef.current) {
-                    pasteBlockedRef.current = true
-                    toast.error('Copy/Paste is disabled during contests')
-                    setTimeout(() => { pasteBlockedRef.current = false }, 1500)
+        /*
+                const domNode = editor.getDomNode()
+                if (!domNode) return
+        
+                const blockEvent = (e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    if (!pasteBlockedRef.current) {
+                        pasteBlockedRef.current = true
+                        toast.error('Copy/Paste is disabled during contests')
+                        setTimeout(() => { pasteBlockedRef.current = false }, 1500)
+                    }
                 }
-            }
-        })
-
-
+        
+                domNode.addEventListener('paste', blockEvent, true)
+                domNode.addEventListener('copy', blockEvent, true)
+                domNode.addEventListener('cut', blockEvent, true)
+                domNode.addEventListener('contextmenu', (e) => e.preventDefault(), true)
+        
+                // Block Ctrl+C / Ctrl+V / Ctrl+X / Ctrl+Insert / Shift+Insert
+                editor.onKeyDown((e) => {
+                    const isCopyPaste =
+                        (e.ctrlKey || e.metaKey) &&
+                        (e.keyCode === 33 ||
+                            e.keyCode === 52 ||
+                            e.keyCode === 54)
+                    if (isCopyPaste) {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        if (!pasteBlockedRef.current) {
+                            pasteBlockedRef.current = true
+                            toast.error('Copy/Paste is disabled during contests')
+                            setTimeout(() => { pasteBlockedRef.current = false }, 1500)
+                        }
+                    }
+                })
+        
+        */
     }
 
     const handleRun = async () => {
