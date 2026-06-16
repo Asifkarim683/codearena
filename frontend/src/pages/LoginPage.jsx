@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 import { Code2, Mail, Lock, LogIn } from 'lucide-react'
 import { ArrowLeft } from 'lucide-react'
+import ContactSupportModal from '../components/ContactSupportModal'
 
 export default function LoginPage() {
     const [email, setEmail] = useState('')
@@ -11,6 +12,7 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false)
     const { login } = useAuth()
     const navigate = useNavigate()
+    const [showSupport, setShowSupport] = useState(false)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -111,6 +113,23 @@ export default function LoginPage() {
                         Register here
                     </Link>
                 </p>
+                {/* Support Link */}
+                <div style={styles.supportRow}>
+                    <span style={styles.supportText}>
+                        Having trouble accessing your account?
+                    </span>
+                    <button
+                        onClick={() => setShowSupport(true)}
+                        style={styles.supportLink}>
+                        Contact Support
+                    </button>
+                </div>
+
+                {showSupport && (
+                    <ContactSupportModal
+                        onClose={() => setShowSupport(false)}
+                    />
+                )}
             </div>
         </div>
     )
@@ -124,6 +143,28 @@ const styles = {
         justifyContent: 'center',
         background: 'radial-gradient(ellipse at top, #1a2235 0%, #0a0e1a 70%)',
         padding: '20px',
+    },
+
+    supportRow: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '6px',
+        marginTop: '16px',
+    },
+    supportText: {
+        fontSize: '12px',
+        color: '#6b7280',
+    },
+    supportLink: {
+        background: 'none',
+        border: 'none',
+        color: '#60a5fa',
+        fontSize: '13px',
+        fontWeight: '600',
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+        textDecoration: 'underline',
     },
     card: {
         background: '#111827',

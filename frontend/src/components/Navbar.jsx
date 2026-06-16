@@ -5,9 +5,10 @@ import toast from 'react-hot-toast'
 import {
     Code2, LayoutDashboard, Trophy, Users,
     LogOut, User, ChevronDown, Shield, Menu, X,
-    Settings
+    Settings, MessageSquare
 } from 'lucide-react'
 import './Navbar.css'
+import ContactSupportModal from './ContactSupportModal'
 
 export default function Navbar() {
     const { user, logout, isAdmin } = useAuth()
@@ -15,6 +16,7 @@ export default function Navbar() {
     const navigate = useNavigate()
     const [dropdownOpen, setDropdownOpen] = useState(false)
     const [mobileOpen, setMobileOpen] = useState(false)
+    const [showSupport, setShowSupport] = useState(false)
 
     const handleLogout = () => {
         setMobileOpen(false)
@@ -130,6 +132,15 @@ export default function Navbar() {
                                             Admin Panel
                                         </Link>
                                     )}
+                                    <button
+                                        onClick={() => {
+                                            setDropdownOpen(false)
+                                            setShowSupport(true)
+                                        }}
+                                        className="navbar-dropdown-item">
+                                        <MessageSquare size={15} />
+                                        Contact Support
+                                    </button>
                                     <div className="navbar-dropdown-divider" />
                                     <button
                                         onClick={handleLogout}
@@ -221,6 +232,15 @@ export default function Navbar() {
                             Settings
                         </Link>
                         <button
+                            onClick={() => {
+                                setMobileOpen(false)
+                                setShowSupport(true)
+                            }}
+                            className="navbar-mobile-link">
+                            <MessageSquare size={18} />
+                            Contact Support
+                        </button>
+                        <button
                             onClick={handleLogout}
                             className="navbar-mobile-link logout">
                             <LogOut size={18} />
@@ -238,6 +258,11 @@ export default function Navbar() {
                         setDropdownOpen(false)
                         setMobileOpen(false)
                     }}
+                />
+            )}
+            {showSupport && (
+                <ContactSupportModal
+                    onClose={() => setShowSupport(false)}
                 />
             )}
         </>

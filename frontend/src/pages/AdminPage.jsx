@@ -10,8 +10,9 @@ import {
     ChevronLeft, ChevronRight, Loader2,
     UserCheck, UserX, Crown, Plus, Trash2,
     LayoutDashboard, FileText, Settings,
-    Trophy, X, Calendar
+    Trophy, X, Calendar, MessageSquare
 } from 'lucide-react'
+import { supportService } from '../services/supportService'
 
 export default function AdminPage() {
     const [activeTab, setActiveTab] = useState('dashboard')
@@ -34,6 +35,12 @@ export default function AdminPage() {
     const [subPage, setSubPage] = useState(0)
     const [totalUserPages, setTotalUserPages] = useState(0)
     const [totalSubPages, setTotalSubPages] = useState(0)
+
+    const [tickets, setTickets] = useState([])
+    const [ticketPage, setTicketPage] = useState(0)
+    const [totalTicketPages, setTotalTicketPages] = useState(0)
+    const [ticketFilter, setTicketFilter] = useState('ALL')
+    const [openTicketCount, setOpenTicketCount] = useState(0)
 
     useEffect(() => {
         fetchStats()
@@ -262,7 +269,48 @@ export default function AdminPage() {
         { id: 'problems', label: 'Problems', icon: Code2 },
         { id: 'contests', label: 'Contests', icon: Trophy },
         { id: 'submissions', label: 'Submissions', icon: FileText },
+        { id: 'support', label: 'Support', icon: MessageSquare, badge: openTicketCount },
     ]
+
+    useEffect(() => {
+        if (activeTab === 'support') fetchTickets()
+    }, [activeTab, ticketPage, ticketFilter])
+
+    useEffect(() => {
+        fetchOpenTicketCount()
+    }, [])
+
+    const fetchOpenTicketCount = async () => {
+        try {
+            const res = await supportService.getOpenCount()
+            setOpenTicketCount(res.data || 0)
+        } catch (error) { }
+    }
+
+    const fetchTickets = async () => {
+        setLoading(true)
+        try {
+            const res = await supportService.getAllTickets(
+                ticketPage, 10, ticketFilter)
+            setTickets(res.data.content || [])
+            setTotalTicketPages(res.data.totalPages || 0)
+        } catch (error) {
+            toast.error('Failed to load tickets')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleResolveTicket = async (id) => {
+        try {
+            await supportService.resolveTicket(id)
+            toast.success('Ticket resolved')
+            fetchTickets()
+            fetchOpenTicketCount()
+        } catch (error) {
+            toast.error('Failed to resolve ticket')
+        }
+    }
 
     return (
         <div style={styles.page}>
@@ -274,7 +322,7 @@ export default function AdminPage() {
                     <span style={styles.sidebarTitle}>Admin Panel</span>
                 </div>
                 <nav style={styles.sidebarNav}>
-                    {sidebarItems.map(({ id, label, icon: Icon }) => (
+                    {sidebarItems.map(({ id, label, icon: Icon, badge }) => (
                         <button
                             key={id}
                             onClick={() => setActiveTab(id)}
@@ -284,6 +332,9 @@ export default function AdminPage() {
                             }}>
                             <Icon size={18} />
                             {label}
+                            {badge > 0 && (
+                                <span style={styles.sidebarBadge}>{badge}</span>
+                            )}
                         </button>
                     ))}
                 </nav>
@@ -767,6 +818,136 @@ export default function AdminPage() {
                     </div>
                 )}
 
+                {/* ── SUPPORT ── */}
+                {activeTab === 'support' && (
+                    <div style={styles.content}>
+                        <div style={styles.contentHeader}>
+                            <div>
+                                <h1 style={styles.pageTitle}>Support Tickets</h1>
+                                <p style={styles.pageSubtitle}>
+                                    Manage user support requests and appeals
+                                </p>
+                            </div>
+                            <div style={styles.ticketFilters}>
+                                {['ALL', 'OPEN', 'RESOLVED'].map(f => (
+                                    <button
+                                        key={f}
+                                        onClick={() => {
+                                            setTicketFilter(f)
+                                            setTicketPage(0)
+                                        }}
+                                        style={{
+                                            ...styles.filterChip,
+                                            ...(ticketFilter === f
+                                                ? styles.filterChipActive : {})
+                                        }}>
+                                        {f === 'ALL' ? 'All' :
+                                            f === 'OPEN' ? `Open (${openTicketCount})` :
+                                                'Resolved'}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div style={styles.tableCard}>
+                            {loading ? (
+                                <div style={styles.loadingDiv}>
+                                    <Loader2 size={32} color="#3b82f6"
+                                        style={{ animation: 'spin 1s linear infinite' }} />
+                                </div>
+                            ) : tickets.length === 0 ? (
+                                <div style={styles.empty}>
+                                    <MessageSquare size={48} color="#374151" />
+                                    <p style={styles.emptyText}>No tickets yet</p>
+                                </div>
+                            ) : (
+                                tickets.map(ticket => (
+                                    <div key={ticket.id} style={styles.ticketCard}>
+                                        <div style={styles.ticketHeader}>
+                                            <div style={styles.ticketLeft}>
+                                                <span style={{
+                                                    ...styles.ticketStatus,
+                                                    color: ticket.status === 'OPEN'
+                                                        ? '#f59e0b' : '#10b981',
+                                                    background: ticket.status === 'OPEN'
+                                                        ? 'rgba(245,158,11,0.1)'
+                                                        : 'rgba(16,185,129,0.1)',
+                                                }}>
+                                                    {ticket.status}
+                                                </span>
+                                                <span style={styles.ticketSubject}>
+                                                    {ticket.subject}
+                                                </span>
+                                            </div>
+                                            <div style={styles.ticketRight}>
+                                                <span style={styles.ticketDate}>
+                                                    {formatDate(ticket.createdAt)}
+                                                </span>
+                                                {ticket.status === 'OPEN' && (
+                                                    <button
+                                                        onClick={() =>
+                                                            handleResolveTicket(ticket.id)}
+                                                        style={styles.resolveBtn}>
+                                                        Mark Resolved
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div style={styles.ticketMeta}>
+                                            <span style={styles.ticketSender}>
+                                                From: <strong style={{ color: '#f9fafb' }}>
+                                                    {ticket.name}
+                                                </strong> ({ticket.email})
+                                            </span>
+                                        </div>
+                                        <p style={styles.ticketMessage}>
+                                            {ticket.message}
+                                        </p>
+                                        {ticket.resolvedAt && (
+                                            <p style={styles.resolvedAt}>
+                                                Resolved on {formatDate(ticket.resolvedAt)}
+                                            </p>
+                                        )}
+                                    </div>
+                                ))
+                            )}
+                        </div>
+
+                        {/* Pagination */}
+                        {totalTicketPages > 1 && (
+                            <div style={styles.pagination}>
+                                <button
+                                    onClick={() =>
+                                        setTicketPage(p => Math.max(0, p - 1))}
+                                    disabled={ticketPage === 0}
+                                    style={{
+                                        ...styles.pageBtn,
+                                        opacity: ticketPage === 0 ? 0.4 : 1
+                                    }}>
+                                    <ChevronLeft size={16} />
+                                    Previous
+                                </button>
+                                <span style={styles.pageInfo}>
+                                    Page {ticketPage + 1} of {totalTicketPages}
+                                </span>
+                                <button
+                                    onClick={() =>
+                                        setTicketPage(p =>
+                                            Math.min(totalTicketPages - 1, p + 1))}
+                                    disabled={ticketPage >= totalTicketPages - 1}
+                                    style={{
+                                        ...styles.pageBtn,
+                                        opacity: ticketPage >= totalTicketPages - 1
+                                            ? 0.4 : 1
+                                    }}>
+                                    Next
+                                    <ChevronRight size={16} />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
+
                 {/* ── SUBMISSIONS ── */}
                 {activeTab === 'submissions' && (
                     <div style={styles.content}>
@@ -1080,6 +1261,111 @@ const styles = {
         padding: '12px',
         gap: '4px',
         flex: 1,
+    },
+    sidebarBadge: {
+        marginLeft: 'auto',
+        background: '#ef4444',
+        color: 'white',
+        fontSize: '11px',
+        fontWeight: '700',
+        padding: '2px 7px',
+        borderRadius: '20px',
+        minWidth: '18px',
+        textAlign: 'center',
+    },
+    ticketFilters: {
+        display: 'flex',
+        gap: '8px',
+    },
+    filterChip: {
+        padding: '7px 16px',
+        background: 'transparent',
+        border: '1px solid #1e2d45',
+        borderRadius: '20px',
+        color: '#6b7280',
+        fontSize: '13px',
+        fontWeight: '600',
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+        transition: 'all 0.2s',
+    },
+    filterChipActive: {
+        background: 'rgba(59,130,246,0.1)',
+        border: '1px solid rgba(59,130,246,0.3)',
+        color: '#60a5fa',
+    },
+    ticketCard: {
+        padding: '20px 24px',
+        borderBottom: '1px solid #1e2d45',
+    },
+    ticketHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '8px',
+        flexWrap: 'wrap',
+        gap: '10px',
+    },
+    ticketLeft: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+    },
+    ticketStatus: {
+        fontSize: '11px',
+        fontWeight: '700',
+        padding: '3px 10px',
+        borderRadius: '20px',
+        textTransform: 'uppercase',
+        letterSpacing: '0.5px',
+    },
+    ticketSubject: {
+        fontSize: '15px',
+        fontWeight: '700',
+        color: '#f9fafb',
+    },
+    ticketRight: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+    },
+    ticketDate: {
+        fontSize: '12px',
+        color: '#6b7280',
+    },
+    resolveBtn: {
+        padding: '6px 14px',
+        background: 'rgba(16,185,129,0.1)',
+        border: '1px solid rgba(16,185,129,0.2)',
+        borderRadius: '8px',
+        color: '#10b981',
+        fontSize: '12px',
+        fontWeight: '600',
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+        transition: 'all 0.2s',
+    },
+    ticketMeta: {
+        marginBottom: '8px',
+    },
+    ticketSender: {
+        fontSize: '12px',
+        color: '#6b7280',
+    },
+    ticketMessage: {
+        fontSize: '14px',
+        color: '#d1d5db',
+        lineHeight: '1.6',
+        background: '#0f172a',
+        border: '1px solid #1e2d45',
+        borderRadius: '8px',
+        padding: '12px 16px',
+        whiteSpace: 'pre-wrap',
+    },
+    resolvedAt: {
+        fontSize: '12px',
+        color: '#10b981',
+        marginTop: '8px',
     },
     sidebarItem: {
         display: 'flex',
