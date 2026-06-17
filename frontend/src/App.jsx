@@ -24,10 +24,6 @@ const ProtectedRoute = ({ children }) => {
   return isLoggedIn ? children : <Navigate to="/login" />
 }
 
-const HomeRoute = () => {
-  const { isLoggedIn } = useAuth()
-  return isLoggedIn ? <Navigate to="/problems" /> : <LandingPage />
-}
 
 const AdminRoute = ({ children }) => {
   const { isLoggedIn, isAdmin } = useAuth()
@@ -48,7 +44,7 @@ function App() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/" element={<HomeRoute />} />
+      <Route path="/" element={<LandingPage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/problems" element={

@@ -42,91 +42,93 @@ export default function LoginPage() {
             <div className="blob blob-pink"></div>
             <div className="blob blob-mint"></div>
 
-            {/* Back to Home */}
-            <Link to="/" style={styles.backHome}>
-                <ArrowLeft size={14} />
-                Back to Home
-            </Link>
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '440px', zIndex: 2 }}>
+                {/* Back to Home */}
+                <Link to="/" style={styles.backHome}>
+                    <ArrowLeft size={14} />
+                    Back to Home
+                </Link>
 
-            <div className="auth-card">
-                {/* Logo */}
-                <div className="auth-logo">
-                    <div className="auth-logo-icon">
-                        <Code2 size={22} color="#3b82f6" />
-                    </div>
-                    <span className="auth-logo-text">CodeArena</span>
-                </div>
-
-                <h2 className="auth-title">Welcome Back</h2>
-                <p className="auth-subtitle">Login to continue solving problems</p>
-
-                <form onSubmit={handleSubmit} className="auth-form">
-                    {/* Email */}
-                    <div className="auth-input-group">
-                        <label className="auth-label">Email</label>
-                        <div className="auth-input-wrapper">
-                            <Mail size={18} className="auth-icon" />
-                            <input
-                                type="email"
-                                placeholder="Enter your email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="auth-input"
-                                required
-                            />
+                <div className="auth-card">
+                    {/* Logo */}
+                    <div className="auth-logo">
+                        <div className="auth-logo-icon">
+                            <Code2 size={22} color="#3b82f6" />
                         </div>
+                        <span className="auth-logo-text">CodeArena</span>
                     </div>
 
-                    {/* Password */}
-                    <div className="auth-input-group">
-                        <label className="auth-label">Password</label>
-                        <div className="auth-input-wrapper">
-                            <Lock size={18} className="auth-icon" />
-                            <input
-                                type="password"
-                                placeholder="Enter your password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="auth-input"
-                                required
-                            />
+                    <h2 className="auth-title">Welcome Back</h2>
+                    <p className="auth-subtitle">Login to continue solving problems</p>
+
+                    <form onSubmit={handleSubmit} className="auth-form">
+                        {/* Email */}
+                        <div className="auth-input-group">
+                            <label className="auth-label">Email</label>
+                            <div className="auth-input-wrapper">
+                                <Mail size={18} className="auth-icon" />
+                                <input
+                                    type="email"
+                                    placeholder="Enter your email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="auth-input"
+                                    required
+                                />
+                            </div>
                         </div>
+
+                        {/* Password */}
+                        <div className="auth-input-group">
+                            <label className="auth-label">Password</label>
+                            <div className="auth-input-wrapper">
+                                <Lock size={18} className="auth-icon" />
+                                <input
+                                    type="password"
+                                    placeholder="Enter your password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="auth-input"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        {/* Submit Button */}
+                        <button type="submit" disabled={loading} className="auth-button">
+                            {loading ? 'Logging in...' : (
+                                <>
+                                    <LogIn size={16} />
+                                    Login
+                                </>
+                            )}
+                        </button>
+                    </form>
+
+                    <p className="auth-footer">
+                        Don't have an account?{' '}
+                        <Link to="/register" className="auth-link">
+                            Register here
+                        </Link>
+                    </p>
+                    {/* Support Link */}
+                    <div style={styles.supportRow}>
+                        <span style={styles.supportText}>
+                            Having trouble accessing your account?
+                        </span>
+                        <button
+                            onClick={() => setShowSupport(true)}
+                            style={styles.supportLink}>
+                            Contact Support
+                        </button>
                     </div>
 
-                    {/* Submit Button */}
-                    <button type="submit" disabled={loading} className="auth-button">
-                        {loading ? 'Logging in...' : (
-                            <>
-                                <LogIn size={16} />
-                                Login
-                            </>
-                        )}
-                    </button>
-                </form>
-
-                <p className="auth-footer">
-                    Don't have an account?{' '}
-                    <Link to="/register" className="auth-link">
-                        Register here
-                    </Link>
-                </p>
-                {/* Support Link */}
-                <div style={styles.supportRow}>
-                    <span style={styles.supportText}>
-                        Having trouble accessing your account?
-                    </span>
-                    <button
-                        onClick={() => setShowSupport(true)}
-                        style={styles.supportLink}>
-                        Contact Support
-                    </button>
+                    {showSupport && (
+                        <ContactSupportModal
+                            onClose={() => setShowSupport(false)}
+                        />
+                    )}
                 </div>
-
-                {showSupport && (
-                    <ContactSupportModal
-                        onClose={() => setShowSupport(false)}
-                    />
-                )}
             </div>
         </div>
     )
