@@ -508,19 +508,13 @@ export default function AdminPage() {
                                                         {formatDate(user.createdAt)}
                                                     </span>
                                                 </td>
-<<<<<<< HEAD
-                                                <td style={styles.td}>
-                                                    <div style={styles.actions}>
+                                                <td className="admin-td">
+                                                    <div className="admin-actions">
                                                         {user.role === 'ADMIN' ? (
                                                             <span style={styles.protectedLabel}>
                                                                 Protected
                                                             </span>
                                                         ) : user.isActive ? (
-=======
-                                                <td className="admin-td">
-                                                    <div className="admin-actions">
-                                                        {user.isActive ? (
->>>>>>> 0986170 (complete overhaul of ui)
                                                             <button
                                                                 onClick={() =>
                                                                     handleDeactivate(user.id)}
@@ -1341,5 +1335,10 @@ const styles = {
         fontSize: '14px',
         color: '#6b7280',
     },
-}
+    protectedLabel: {
+        fontSize: '11px',
+        fontWeight: '600',
+        color: '#6b7280',
+        fontStyle: 'italic',
+    },
 }
