@@ -162,6 +162,4 @@ const styles = {
         cursor: 'pointer',
         fontFamily: 'inherit',
         textDecoration: 'underline',
-    },
-}
 }

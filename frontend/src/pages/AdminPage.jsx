@@ -12,11 +12,8 @@ import {
     LayoutDashboard, FileText, Settings,
     Trophy, X, Calendar, MessageSquare
 } from 'lucide-react'
-<<<<<<< HEAD
 import { supportService } from '../services/supportService'
-=======
 import './AdminPage.css'
->>>>>>> 0986170 (complete overhaul of ui)
 
 export default function AdminPage() {
     const [activeTab, setActiveTab] = useState('dashboard')
