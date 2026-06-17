@@ -15,8 +15,11 @@ CodeArena is a full-stack online coding platform inspired by LeetCode and Hacker
 - Points-based contest scoring (Easy = 100, Medium = 200, Hard = 300)
 - Dedicated contest problem-solving page with copy/paste disabled
 - Contest scoreboard with rankings based on score and submission time (admins excluded)
-- Admin panel for managing users, problems, contests, and submissions
+- Admin panel for managing users, problems, contests, submissions, and support tickets
+- Account activation and deactivation with proper session enforcement
+- Contact Support system — users and guests can submit tickets, admins manage and resolve them
 - Account settings for updating profile details and changing password
+- Animated landing page with feature overview
 - Fully responsive UI
 
 ## Tech Stack
@@ -38,6 +41,7 @@ codearena/
 │       ├── leaderboard/
 │       ├── contest/
 │       ├── admin/
+│       ├── support/
 │       ├── config/
 │       └── common/
 │
@@ -105,14 +109,23 @@ Frontend runs on http://localhost:5173
 
 ## Roles
 
-- USER: solve problems, submit code, view leaderboard, join contests, manage own profile
-- ADMIN: all user capabilities plus manage users, problems, and contests through the admin panel
+- USER: solve problems, submit code, view leaderboard, join contests, manage own profile, contact support
+- ADMIN: all management capabilities through the admin panel — users, problems, contests, submissions, and support tickets
 
 To promote a user to admin, run in MySQL:
 
 ```sql
 UPDATE users SET role = 'ADMIN' WHERE email = 'user@example.com';
 ```
+
+## Account Management
+
+Admins can activate or deactivate user accounts from the Admin Panel.
+
+- Deactivated users cannot log in and receive a clear error message
+- If a user is deactivated while already logged in, their session is invalidated immediately on the next request
+- Admins cannot deactivate themselves or other admin accounts
+- Deactivated users can still submit a support ticket from the login page to appeal
 
 ## Judge Engine
 
@@ -132,11 +145,20 @@ Contests group a set of problems within a start and end time window.
 
 - Each problem carries points based on its difficulty: Easy = 100, Medium = 200, Hard = 300
 - During an ongoing contest, problems are solved through a dedicated contest page where copy, paste, cut, and right-click are disabled
-- A submission only counts toward a contest if it is made through this page and the contest is ongoing
+- A submission only counts toward a contest if it is made through the contest page while the contest is ongoing
 - A user's contest score is the sum of points for each problem they get Accepted on (only the first Accepted submission per problem counts)
 - The contest scoreboard ranks participants by score, then by earliest last-accepted submission time as a tiebreaker
 - Admin accounts are excluded from both the global leaderboard and contest scoreboards
 - User profiles show a Contest Performance section summarizing score and problems solved per contest
+
+## Support System
+
+- Any user (including guests and deactivated users) can submit a support ticket from the login page
+- Logged-in users (non-admin) can submit tickets via the Contact Support option in the navbar
+- Admins manage all tickets in the Admin Panel under the Support tab
+- Tickets can be filtered by status (Open / Resolved)
+- The sidebar shows a live count of open tickets
+- Admins can mark tickets as resolved
 
 ## API Endpoints
 
@@ -153,4 +175,9 @@ Contests group a set of problems within a start and end time window.
 | GET | /api/v1/contests/{id}/scoreboard | Get contest scoreboard |
 | PUT | /api/v1/users/me | Update profile |
 | PUT | /api/v1/users/me/password | Change password |
+| POST | /api/v1/support | Submit a support ticket (public) |
+| GET | /api/v1/support/admin | View all support tickets (admin) |
+| PUT | /api/v1/support/admin/{id}/resolve | Resolve a ticket (admin) |
 | GET | /api/v1/admin/stats | Admin dashboard stats |
+| PUT | /api/v1/admin/users/{id}/deactivate | Deactivate a user (admin) |
+| PUT | /api/v1/admin/users/{id}/activate | Activate a user (admin) |

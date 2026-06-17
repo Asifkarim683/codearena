@@ -132,15 +132,17 @@ export default function Navbar() {
                                             Admin Panel
                                         </Link>
                                     )}
-                                    <button
-                                        onClick={() => {
-                                            setDropdownOpen(false)
-                                            setShowSupport(true)
-                                        }}
-                                        className="navbar-dropdown-item">
-                                        <MessageSquare size={15} />
-                                        Contact Support
-                                    </button>
+                                    {!isAdmin && (
+                                        <button
+                                            onClick={() => {
+                                                setDropdownOpen(false)
+                                                setShowSupport(true)
+                                            }}
+                                            className="navbar-dropdown-item">
+                                            <MessageSquare size={15} />
+                                            Contact Support
+                                        </button>
+                                    )}
                                     <div className="navbar-dropdown-divider" />
                                     <button
                                         onClick={handleLogout}
@@ -231,15 +233,17 @@ export default function Navbar() {
                             <Settings size={18} />
                             Settings
                         </Link>
-                        <button
-                            onClick={() => {
-                                setMobileOpen(false)
-                                setShowSupport(true)
-                            }}
-                            className="navbar-mobile-link">
-                            <MessageSquare size={18} />
-                            Contact Support
-                        </button>
+                        {!isAdmin && (
+                            <button
+                                onClick={() => {
+                                    setMobileOpen(false)
+                                    setShowSupport(true)
+                                }}
+                                className="navbar-mobile-link">
+                                <MessageSquare size={18} />
+                                Contact Support
+                            </button>
+                        )}
                         <button
                             onClick={handleLogout}
                             className="navbar-mobile-link logout">
