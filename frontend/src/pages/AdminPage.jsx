@@ -322,13 +322,8 @@ export default function AdminPage() {
                     <Shield size={20} color="#3b82f6" />
                     <span className="admin-sidebar-title">Admin Panel</span>
                 </div>
-<<<<<<< HEAD
-                <nav style={styles.sidebarNav}>
-                    {sidebarItems.map(({ id, label, icon: Icon, badge }) => (
-=======
                 <nav className="admin-sidebar-nav">
-                    {sidebarItems.map(({ id, label, icon: Icon }) => (
->>>>>>> 0986170 (complete overhaul of ui)
+                    {sidebarItems.map(({ id, label, icon: Icon, badge }) => (
                         <button
                             key={id}
                             onClick={() => setActiveTab(id)}
